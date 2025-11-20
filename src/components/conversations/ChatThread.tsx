@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, MoreVertical, Tag, UserPlus, ArrowLeft, User } from "lucide-react";
+import { Search, MoreVertical, Tag, UserPlus } from "lucide-react";
 import { MessageBubble } from "./MessageBubble";
 import { Composer } from "./Composer";
 import { AISuggestion } from "./AISuggestion";
@@ -10,11 +10,9 @@ import { format } from "date-fns";
 
 interface ChatThreadProps {
   conversation: any;
-  onBack?: () => void;
-  onToggleProfile?: () => void;
 }
 
-export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThreadProps) => {
+export const ChatThread = ({ conversation }: ChatThreadProps) => {
   const messages = demoMessages[conversation.id as keyof typeof demoMessages] || [];
 
   // Group messages by date
@@ -31,18 +29,6 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
       <div className="border-b border-border bg-card p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Back button for mobile */}
-            {onBack && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onBack}
-                className="md:hidden"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            )}
-            
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl">
               {conversation.customer.avatar}
             </div>
@@ -58,19 +44,7 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Profile toggle for mobile */}
-            {onToggleProfile && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onToggleProfile}
-                className="md:hidden"
-              >
-                <User className="h-4 w-4" />
-              </Button>
-            )}
-            
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Button variant="ghost" size="icon">
               <Search className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon">
