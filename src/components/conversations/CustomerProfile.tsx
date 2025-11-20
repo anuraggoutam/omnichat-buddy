@@ -3,22 +3,34 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe } from "lucide-react";
+import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe, X } from "lucide-react";
 import { demoOrders } from "@/lib/mockData";
 
 interface CustomerProfileProps {
   customer: any;
+  onClose?: () => void;
 }
 
-export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
+export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => {
   const customerOrders = demoOrders.filter(
     (order) => order.customer.id === customer.id
   );
 
   return (
-    <div className="w-[340px] border-l border-border bg-card flex flex-col">
-      <div className="p-4 border-b border-border">
+    <div className="w-full md:w-[340px] border-l border-border bg-card flex flex-col h-full">
+      <div className="p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-sm">Customer Profile</h3>
+        {/* Close button for mobile */}
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="md:hidden"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        )}
       </div>
 
       <ScrollArea className="flex-1">
