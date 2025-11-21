@@ -14,7 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contacts: {
+        Row: {
+          avatar_url: string | null
+          channel: string
+          created_at: string | null
+          email: string | null
+          id: string
+          is_vip: boolean | null
+          last_active: string | null
+          lifetime_value: number | null
+          name: string
+          notes: string | null
+          phone: string | null
+          preferred_language: string | null
+          tags: string[] | null
+          tenant_id: string
+          total_orders: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          channel?: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_vip?: boolean | null
+          last_active?: string | null
+          lifetime_value?: number | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          preferred_language?: string | null
+          tags?: string[] | null
+          tenant_id: string
+          total_orders?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          channel?: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_vip?: boolean | null
+          last_active?: string | null
+          lifetime_value?: number | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          preferred_language?: string | null
+          tags?: string[] | null
+          tenant_id?: string
+          total_orders?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          assigned_to: string | null
+          channel: string
+          contact_id: string
+          created_at: string | null
+          id: string
+          last_message_at: string | null
+          status: string | null
+          tags: string[] | null
+          tenant_id: string
+          unread_count: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          channel: string
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          tenant_id: string
+          unread_count?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          channel?: string
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          tenant_id?: string
+          unread_count?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          id: string
+          metadata: Json | null
+          role: string
+          status: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          id?: string
+          metadata?: Json | null
+          role: string
+          status?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          id?: string
+          metadata?: Json | null
+          role?: string
+          status?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_name: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
