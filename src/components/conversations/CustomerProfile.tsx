@@ -76,7 +76,7 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
                   <TrendingUp className="h-4 w-4" />
                   Lifetime Value
                 </div>
-                <span className="font-semibold">₹{customer.ltv.toLocaleString()}</span>
+                <span className="font-semibold">₹{(customer.ltv ?? customer.lifetimeValue ?? 0).toLocaleString()}</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between">
@@ -100,7 +100,7 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
                   <DollarSign className="h-4 w-4" />
                   Avg Order Value
                 </div>
-                <span className="font-semibold">₹{customer.averageOrderValue?.toLocaleString() || 0}</span>
+                <span className="font-semibold">₹{(customer.averageOrderValue ?? 0).toLocaleString()}</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between">
