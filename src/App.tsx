@@ -19,6 +19,7 @@ import Workflows from "./pages/Workflows";
 import Leads from "./pages/Leads";
 import LeadsKanban from "./pages/LeadsKanban";
 import PipelineSettings from "./pages/PipelineSettings";
+import Channels from "./pages/Channels";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -165,10 +166,7 @@ const App = () => (
             path="/channels"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Channels</h1>
-                  <p className="text-muted-foreground mt-2">Connect WhatsApp, Instagram, Facebook, Email & more - coming soon...</p>
-                </div>
+                <Channels />
               </AppLayout>
             }
           />
