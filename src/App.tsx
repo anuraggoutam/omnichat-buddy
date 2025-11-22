@@ -16,6 +16,8 @@ import Templates from "./pages/Templates";
 import Campaigns from "./pages/Campaigns";
 import AIEngine from "./pages/AIEngine";
 import Workflows from "./pages/Workflows";
+import Leads from "./pages/Leads";
+import LeadsKanban from "./pages/LeadsKanban";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -130,10 +132,15 @@ const App = () => (
             path="/leads"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Leads</h1>
-                  <p className="text-muted-foreground mt-2">Manage and qualify your sales leads - coming soon...</p>
-                </div>
+                <Leads />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/leads/kanban"
+            element={
+              <AppLayout>
+                <LeadsKanban />
               </AppLayout>
             }
           />
