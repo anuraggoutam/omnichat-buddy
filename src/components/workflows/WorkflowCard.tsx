@@ -133,10 +133,11 @@ export function WorkflowCard({
           {workflow.lastRun}
         </div>
         <Badge
+          variant={workflow.status === "Active" ? "default" : "secondary"}
           className={
             workflow.status === "Active"
               ? "bg-success text-success-foreground"
-              : "bg-muted text-muted-foreground"
+              : ""
           }
         >
           {workflow.status}

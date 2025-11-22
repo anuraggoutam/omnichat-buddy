@@ -29,6 +29,7 @@ import { Search, MoreVertical, Edit, Ban, Trash2, Key } from "lucide-react";
 import { mockUsers, mockRoles } from "@/lib/mockUserManagement";
 import { EditUserModal } from "./EditUserModal";
 import { DeleteUserModal } from "./DeleteUserModal";
+import { UserDetailDrawer } from "./UserDetailDrawer";
 import { toast } from "sonner";
 
 export function UsersTab() {
@@ -37,6 +38,7 @@ export function UsersTab() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [editingUser, setEditingUser] = useState<string | null>(null);
   const [deletingUser, setDeletingUser] = useState<string | null>(null);
+  const [viewingUser, setViewingUser] = useState<string | null>(null);
 
   const filteredUsers = mockUsers.filter((user) => {
     const matchesSearch =
@@ -106,16 +108,32 @@ export function UsersTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarFallback>{user.avatar}</AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{user.name}</span>
+            {filteredUsers.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center">
+                  <div className="flex flex-col items-center justify-center py-8">
+                    <div className="inline-flex p-3 rounded-full bg-muted mb-3">
+                      <Search className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm text-muted-foreground">No users found</p>
                   </div>
                 </TableCell>
+              </TableRow>
+            ) : (
+              filteredUsers.map((user) => (
+                <TableRow 
+                  key={user.id} 
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => setViewingUser(user.id)}
+                >
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarFallback>{user.avatar}</AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">{user.name}</span>
+                    </div>
+                  </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
                   <Badge variant="secondary">{user.role}</Badge>
@@ -134,43 +152,69 @@ export function UsersTab() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{user.lastActive}</TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => setEditingUser(user.id)}>
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit User
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleResetPassword(user.name)}>
-                        <Key className="h-4 w-4 mr-2" />
-                        Reset Password
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleSuspend(user.id, user.name)}>
-                        <Ban className="h-4 w-4 mr-2" />
-                        Suspend
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setDeletingUser(user.id)}
-                        className="text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingUser(user.id);
+                        }}>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation();
+                          handleResetPassword(user.name);
+                        }}>
+                          <Key className="h-4 w-4 mr-2" />
+                          Reset Password
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation();
+                          handleSuspend(user.id, user.name);
+                        }}>
+                          <Ban className="h-4 w-4 mr-2" />
+                          Suspend
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingUser(user.id);
+                          }}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
 
+      <UserDetailDrawer
+        userId={viewingUser}
+        open={!!viewingUser}
+        onClose={() => setViewingUser(null)}
+        onEdit={(userId) => {
+          setViewingUser(null);
+          setEditingUser(userId);
+        }}
+        onDelete={(userId) => {
+          setViewingUser(null);
+          setDeletingUser(userId);
+        }}
+      />
       <EditUserModal
         userId={editingUser}
         onClose={() => setEditingUser(null)}

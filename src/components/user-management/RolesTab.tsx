@@ -5,15 +5,21 @@ import { Badge } from "@/components/ui/badge";
 import { Users, Shield, Edit } from "lucide-react";
 import { mockRoles } from "@/lib/mockUserManagement";
 import { EditRoleModal } from "./EditRoleModal";
+import { RoleDetailDrawer } from "./RoleDetailDrawer";
 
 export function RolesTab() {
   const [editingRole, setEditingRole] = useState<string | null>(null);
+  const [viewingRole, setViewingRole] = useState<string | null>(null);
 
   return (
     <div className="space-y-4">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {mockRoles.map((role) => (
-          <Card key={role.id}>
+          <Card 
+            key={role.id} 
+            className="cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => setViewingRole(role.id)}
+          >
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -22,7 +28,10 @@ export function RolesTab() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setEditingRole(role.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingRole(role.id);
+                  }}
                 >
                   <Edit className="h-4 w-4" />
                 </Button>
@@ -40,7 +49,10 @@ export function RolesTab() {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => setEditingRole(role.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingRole(role.id);
+                }}
               >
                 Edit Permissions
               </Button>
@@ -49,6 +61,15 @@ export function RolesTab() {
         ))}
       </div>
 
+      <RoleDetailDrawer
+        roleId={viewingRole}
+        open={!!viewingRole}
+        onClose={() => setViewingRole(null)}
+        onEdit={(roleId) => {
+          setViewingRole(null);
+          setEditingRole(roleId);
+        }}
+      />
       <EditRoleModal
         roleId={editingRole}
         onClose={() => setEditingRole(null)}
