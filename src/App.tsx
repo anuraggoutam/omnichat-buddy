@@ -14,6 +14,7 @@ import Tasks from "./pages/Tasks";
 import Broadcasts from "./pages/Broadcasts";
 import Templates from "./pages/Templates";
 import Campaigns from "./pages/Campaigns";
+import AIEngine from "./pages/AIEngine";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -112,10 +113,7 @@ const App = () => (
             path="/ai-engine"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">AI Engine</h1>
-                  <p className="text-muted-foreground mt-2">AI agents, auto-replies, and smart suggestions - coming soon...</p>
-                </div>
+                <AIEngine />
               </AppLayout>
             }
           />
