@@ -10,6 +10,7 @@ import Orders from "./pages/Orders";
 import Products from "./pages/Products";
 import Customers from "./pages/Customers";
 import TeamInbox from "./pages/TeamInbox";
+import Tasks from "./pages/Tasks";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -76,10 +77,7 @@ const App = () => (
             path="/tasks"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Tasks & To-Dos</h1>
-                  <p className="text-muted-foreground mt-2">Track your team's tasks and follow-ups - coming soon...</p>
-                </div>
+                <Tasks />
               </AppLayout>
             }
           />
