@@ -15,6 +15,7 @@ import Broadcasts from "./pages/Broadcasts";
 import Templates from "./pages/Templates";
 import Campaigns from "./pages/Campaigns";
 import AIEngine from "./pages/AIEngine";
+import Workflows from "./pages/Workflows";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -121,10 +122,7 @@ const App = () => (
             path="/workflows"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Workflows</h1>
-                  <p className="text-muted-foreground mt-2">Visual automation builder - coming soon...</p>
-                </div>
+                <Workflows />
               </AppLayout>
             }
           />
