@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ConversationItem } from "./ConversationItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Channel, LeadSource } from "@/lib/mockData";
 
 interface ConversationListProps {
   conversations: any[];
@@ -21,7 +22,11 @@ const filters = [
   { id: "hot-leads", label: "Hot Leads" },
   { id: "pending-payment", label: "Pending Payment" },
   { id: "vip", label: "VIP" },
-  { id: "returns", label: "Return Requests" },
+  { id: "whatsapp", label: "🟢 WA" },
+  { id: "instagram", label: "🟣 IG" },
+  { id: "facebook", label: "🔵 FB" },
+  { id: "email", label: "✉️ Email" },
+  { id: "website", label: "💬 Site" },
 ];
 
 export const ConversationList = ({
@@ -41,6 +46,11 @@ export const ConversationList = ({
     if (filter === "hot-leads" && !conv.tags.includes("Hot Lead")) return false;
     if (filter === "pending-payment" && !conv.tags.includes("Pending Payment")) return false;
     if (filter === "vip" && !conv.tags.includes("VIP")) return false;
+    if (filter === "whatsapp" && conv.channel !== "whatsapp") return false;
+    if (filter === "instagram" && conv.channel !== "instagram") return false;
+    if (filter === "facebook" && conv.channel !== "facebook") return false;
+    if (filter === "email" && conv.channel !== "email") return false;
+    if (filter === "website" && conv.channel !== "website") return false;
     return true;
   });
 

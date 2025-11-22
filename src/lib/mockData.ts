@@ -1,5 +1,9 @@
 // Mock data for OmniChat OS Demo - "Bakery Bliss"
 
+export type Channel = "whatsapp" | "instagram" | "facebook" | "email" | "website";
+export type LeadSource = "website" | "facebook_ads" | "instagram_ads" | "google_ads" | "referral" | "organic";
+export type MessageType = "text" | "voice" | "image" | "document" | "system";
+
 export const demoTenant = {
   id: "bakery-bliss-001",
   name: "Bakery Bliss",
@@ -22,6 +26,8 @@ export const demoCustomers = [
     tags: ["VIP", "Regular"],
     city: "Mumbai",
     language: "en",
+    averageOrderValue: 850,
+    preferredProducts: ["Chocolate Truffle Cake", "Red Velvet Cupcakes"],
   },
   {
     id: "cust-002",
@@ -33,6 +39,8 @@ export const demoCustomers = [
     tags: ["Hot Lead"],
     city: "Delhi",
     language: "hi",
+    averageOrderValue: 640,
+    preferredProducts: ["Black Forest Cake"],
   },
   {
     id: "cust-003",
@@ -44,6 +52,8 @@ export const demoCustomers = [
     tags: ["VIP", "Bulk Orders"],
     city: "Bangalore",
     language: "en",
+    averageOrderValue: 1240,
+    preferredProducts: ["Red Velvet Cupcakes", "Croissants"],
   },
   {
     id: "cust-004",
@@ -55,6 +65,8 @@ export const demoCustomers = [
     tags: ["New"],
     city: "Pune",
     language: "en",
+    averageOrderValue: 925,
+    preferredProducts: ["Butterscotch Pastry"],
   },
   {
     id: "cust-005",
@@ -66,6 +78,8 @@ export const demoCustomers = [
     tags: ["Regular"],
     city: "Hyderabad",
     language: "en",
+    averageOrderValue: 700,
+    preferredProducts: ["Black Forest Cake", "Cookies"],
   },
 ];
 
@@ -141,6 +155,8 @@ export const demoConversations = [
     unread: 0,
     tags: ["Happy Customer"],
     status: "resolved",
+    channel: "whatsapp" as Channel,
+    leadSource: "website" as LeadSource,
   },
   {
     id: "conv-002",
@@ -150,6 +166,8 @@ export const demoConversations = [
     unread: 2,
     tags: ["Hot Lead"],
     status: "active",
+    channel: "whatsapp" as Channel,
+    leadSource: "facebook_ads" as LeadSource,
   },
   {
     id: "conv-003",
@@ -159,6 +177,8 @@ export const demoConversations = [
     unread: 1,
     tags: ["Bulk Order", "VIP"],
     status: "active",
+    channel: "instagram" as Channel,
+    leadSource: "instagram_ads" as LeadSource,
   },
   {
     id: "conv-004",
@@ -168,6 +188,8 @@ export const demoConversations = [
     unread: 0,
     tags: [],
     status: "active",
+    channel: "email" as Channel,
+    leadSource: "google_ads" as LeadSource,
   },
   {
     id: "conv-005",
@@ -177,6 +199,8 @@ export const demoConversations = [
     unread: 1,
     tags: ["Pending Payment"],
     status: "pending",
+    channel: "website" as Channel,
+    leadSource: "organic" as LeadSource,
   },
 ];
 
@@ -235,6 +259,7 @@ export const demoMessages = {
       content: "Hi! I want to order a chocolate cake for birthday",
       timestamp: "2024-01-18T10:00:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
     {
       id: "msg-001-2",
@@ -242,6 +267,7 @@ export const demoMessages = {
       content: "Hello! 🎂 I'd be happy to help you order a birthday cake. We have Chocolate Truffle Cake (₹850) and Black Forest Cake (₹920). Both are 1kg. Which one would you prefer?",
       timestamp: "2024-01-18T10:01:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
     {
       id: "msg-001-3",
@@ -249,6 +275,7 @@ export const demoMessages = {
       content: "Chocolate Truffle please",
       timestamp: "2024-01-18T10:02:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
     {
       id: "msg-001-4",
@@ -256,6 +283,7 @@ export const demoMessages = {
       content: "Perfect choice! I've added Chocolate Truffle Cake to your order. Would you like to add a custom message on the cake? Also, when do you need it delivered?",
       timestamp: "2024-01-18T10:03:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
     {
       id: "msg-001-5",
@@ -263,20 +291,41 @@ export const demoMessages = {
       content: "Yes, write 'Happy Birthday Rohan' and deliver tomorrow by 6 PM",
       timestamp: "2024-01-18T10:05:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
     {
       id: "msg-001-6",
-      role: "assistant",
-      content: "Wonderful! 🎉 Your order is confirmed:\n\n🎂 Chocolate Truffle Cake - ₹850\n📝 Message: 'Happy Birthday Rohan'\n🚚 Delivery: Jan 19, by 6 PM\n💰 Total: ₹850\n\nPaying via UPI/Card? I'll send you a payment link.",
+      role: "system",
+      content: "Order #ORD-2401-1234 created • ₹850",
       timestamp: "2024-01-18T10:06:00Z",
       status: "read",
+      type: "system" as MessageType,
+      metadata: { orderId: "ORD-2401-1234", amount: 850 },
     },
     {
       id: "msg-001-7",
+      role: "assistant",
+      content: "Wonderful! 🎉 Your order is confirmed:\n\n🎂 Chocolate Truffle Cake - ₹850\n📝 Message: 'Happy Birthday Rohan'\n🚚 Delivery: Jan 19, by 6 PM\n💰 Total: ₹850\n\nPaying via UPI/Card? I'll send you a payment link.",
+      timestamp: "2024-01-18T10:06:30Z",
+      status: "read",
+      type: "text" as MessageType,
+    },
+    {
+      id: "msg-001-8",
+      role: "customer",
+      content: "voice_note_001.ogg",
+      timestamp: "2024-01-18T10:08:00Z",
+      status: "read",
+      type: "voice" as MessageType,
+      metadata: { duration: 12 },
+    },
+    {
+      id: "msg-001-9",
       role: "customer",
       content: "Thank you! The cake was amazing 🎉",
       timestamp: "2024-01-19T10:30:00Z",
       status: "read",
+      type: "text" as MessageType,
     },
   ],
   "conv-002": [
@@ -286,6 +335,7 @@ export const demoMessages = {
       content: "Do you deliver to Rohini?",
       timestamp: "2024-01-19T09:45:00Z",
       status: "delivered",
+      type: "text" as MessageType,
     },
   ],
   "conv-003": [
@@ -295,6 +345,7 @@ export const demoMessages = {
       content: "I need 50 cupcakes for corporate event",
       timestamp: "2024-01-19T08:20:00Z",
       status: "delivered",
+      type: "text" as MessageType,
     },
   ],
 };
@@ -378,4 +429,94 @@ export const storeHealth = {
     score: 96,
     status: "excellent",
   },
+};
+
+// Activity timeline mock data
+export const activityTimeline = {
+  "cust-001": [
+    {
+      id: "act-001-1",
+      type: "message_opened",
+      content: "Opened WhatsApp message",
+      timestamp: "2024-01-19T10:29:00Z",
+      icon: "📱",
+    },
+    {
+      id: "act-001-2",
+      type: "order_delivered",
+      content: "Order #ORD-2401-1234 delivered",
+      timestamp: "2024-01-19T15:00:00Z",
+      icon: "📦",
+    },
+    {
+      id: "act-001-3",
+      type: "payment_completed",
+      content: "Payment received • ₹850",
+      timestamp: "2024-01-18T10:07:00Z",
+      icon: "💰",
+    },
+    {
+      id: "act-001-4",
+      type: "ai_reply",
+      content: "AI Auto-Reply: Product recommendation sent",
+      timestamp: "2024-01-18T10:01:00Z",
+      icon: "✨",
+    },
+  ],
+  "cust-002": [
+    {
+      id: "act-002-1",
+      type: "clicked_link",
+      content: "Clicked Facebook Ad: Diwali Offer",
+      timestamp: "2024-01-19T09:40:00Z",
+      icon: "🔗",
+    },
+    {
+      id: "act-002-2",
+      type: "message_sent",
+      content: "Sent first message",
+      timestamp: "2024-01-19T09:45:00Z",
+      icon: "💬",
+    },
+  ],
+  "cust-003": [
+    {
+      id: "act-003-1",
+      type: "instagram_view",
+      content: "Viewed Instagram Story: Cupcake Promo",
+      timestamp: "2024-01-19T08:15:00Z",
+      icon: "📸",
+    },
+    {
+      id: "act-003-2",
+      type: "message_sent",
+      content: "Sent bulk order inquiry",
+      timestamp: "2024-01-19T08:20:00Z",
+      icon: "💬",
+    },
+  ],
+};
+
+// Internal notes mock data
+export const internalNotes = {
+  "conv-001": [
+    {
+      id: "note-001-1",
+      author: "Sarah",
+      authorAvatar: "👩‍💼",
+      content: "Customer mentioned it's their son's birthday. Follow up in a year!",
+      timestamp: "2024-01-18T10:10:00Z",
+      mentions: [],
+    },
+  ],
+  "conv-002": [
+    {
+      id: "note-002-1",
+      author: "John",
+      authorAvatar: "👨‍💼",
+      content: "@Sarah This looks like a hot lead from our Facebook campaign. Priority follow-up needed.",
+      timestamp: "2024-01-19T09:50:00Z",
+      mentions: ["Sarah"],
+    },
+  ],
 };

@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe } from "lucide-react";
-import { demoOrders } from "@/lib/mockData";
+import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe, DollarSign, Package } from "lucide-react";
+import { demoOrders, activityTimeline } from "@/lib/mockData";
+import { ActivityTimeline } from "./ActivityTimeline";
 
 interface CustomerProfileProps {
   customer: any;
@@ -14,9 +15,10 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
   const customerOrders = demoOrders.filter(
     (order) => order.customer.id === customer.id
   );
+  const activities = activityTimeline[customer.id as keyof typeof activityTimeline] || [];
 
   return (
-    <div className="w-[340px] border-l border-border bg-card flex flex-col">
+    <div className="w-[360px] border-l border-border bg-card flex flex-col">
       <div className="p-4 border-b border-border">
         <h3 className="font-semibold text-sm">Customer Profile</h3>
       </div>
@@ -95,6 +97,14 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
               <Separator />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <DollarSign className="h-4 w-4" />
+                  Avg Order Value
+                </div>
+                <span className="font-semibold">₹{customer.averageOrderValue?.toLocaleString() || 0}</span>
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Globe className="h-4 w-4" />
                   Language
                 </div>
@@ -115,12 +125,27 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
               <p className="text-sm text-muted-foreground">
                 This customer often responds between 6–9 PM. Best time to send offers.
               </p>
-              <div className="flex flex-wrap gap-1 mt-2">
-                <Badge variant="secondary" className="text-xs">Loves Cakes</Badge>
-                <Badge variant="secondary" className="text-xs">Buys Weekly</Badge>
+              <div className="flex flex-wrap gap-1 mt-3">
+                {customer.preferredProducts?.slice(0, 2).map((product: string) => (
+                  <Badge key={product} variant="secondary" className="text-xs">
+                    {product}
+                  </Badge>
+                ))}
               </div>
             </CardContent>
           </Card>
+
+          {/* Activity Timeline */}
+          {activities.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Activity Timeline</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ActivityTimeline activities={activities} />
+              </CardContent>
+            </Card>
+          )}
 
           {/* Order History */}
           <Card>

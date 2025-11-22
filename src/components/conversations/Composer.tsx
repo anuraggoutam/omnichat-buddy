@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Smile, Paperclip, Send, ShoppingBag, FileText, CreditCard, Package } from "lucide-react";
+import { Smile, Paperclip, Send, ShoppingBag, FileText, CreditCard, Package, Tag, Calendar, Gift } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export const Composer = () => {
@@ -27,22 +27,34 @@ export const Composer = () => {
   return (
     <div className="border-t border-border bg-card">
       {/* Quick Actions */}
-      <div className="flex items-center gap-2 p-3 border-b border-border">
-        <Button variant="outline" size="sm" className="gap-2">
+      <div className="flex items-center gap-2 p-3 border-b border-border overflow-x-auto">
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
           <ShoppingBag className="h-4 w-4" />
           Add Product
         </Button>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
           <FileText className="h-4 w-4" />
           Template
         </Button>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
           <CreditCard className="h-4 w-4" />
-          Payment Link
+          Payment
         </Button>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
           <Package className="h-4 w-4" />
-          Create Order
+          Order
+        </Button>
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
+          <Gift className="h-4 w-4" />
+          Coupon
+        </Button>
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
+          <Calendar className="h-4 w-4" />
+          Schedule
+        </Button>
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
+          <Tag className="h-4 w-4" />
+          Catalog
         </Button>
       </div>
 

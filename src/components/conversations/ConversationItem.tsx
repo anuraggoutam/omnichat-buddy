@@ -2,6 +2,8 @@ import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { CheckCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChannelBadge } from "./ChannelBadge";
+import { LeadSourceBadge } from "./LeadSourceBadge";
 
 interface ConversationItemProps {
   conversation: any;
@@ -14,7 +16,7 @@ export const ConversationItem = ({
   isSelected,
   onClick,
 }: ConversationItemProps) => {
-  const { customer, lastMessage, timestamp, unread, tags, status } = conversation;
+  const { customer, lastMessage, timestamp, unread, tags, status, channel, leadSource } = conversation;
 
   return (
     <div
@@ -59,10 +61,16 @@ export const ConversationItem = ({
             )}
           </div>
 
+          {/* Channel & Lead Source */}
+          <div className="flex items-center gap-2 mb-2">
+            <ChannelBadge channel={channel} size="sm" />
+            <LeadSourceBadge source={leadSource} />
+          </div>
+
           {/* Tags & Unread */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-wrap gap-1">
-              {tags.slice(0, 2).map((tag: string) => (
+              {tags.slice(0, 1).map((tag: string) => (
                 <Badge key={tag} variant="secondary" className="text-xs">
                   {tag}
                 </Badge>
