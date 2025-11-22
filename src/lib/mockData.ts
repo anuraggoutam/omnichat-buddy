@@ -752,3 +752,110 @@ export const internalNotes = {
     },
   ],
 };
+
+// Tasks Mock Data
+export const mockTasks = [
+  {
+    id: "TASK-001",
+    title: "Follow up with Priya about her order",
+    description: "Call the customer regarding delayed delivery.",
+    status: "To Do" as const,
+    priority: "High" as const,
+    assignedTo: "Aman Gupta",
+    dueDate: "2025-11-25",
+    relatedTo: {
+      type: "Order" as const,
+      refId: "ORD-2312",
+      name: "Chocolate Truffle Cake Order"
+    },
+    tags: ["Follow-up", "Urgent"],
+    createdAt: "2025-11-22",
+    createdBy: "Aman Gupta",
+    activities: [
+      { id: "act-1", action: "Task created", user: "Aman Gupta", timestamp: "2025-11-22T10:00:00Z" },
+      { id: "act-2", action: "Priority changed to High", user: "Aman Gupta", timestamp: "2025-11-22T10:05:00Z" },
+    ],
+    notes: [
+      { id: "note-1", author: "Aman Gupta", content: "Customer mentioned urgent delivery needed for birthday party", timestamp: "2025-11-22T10:10:00Z" }
+    ]
+  },
+  {
+    id: "TASK-002",
+    title: "Create Black Friday broadcast",
+    description: "Prepare a new WhatsApp template for promo.",
+    status: "In Progress" as const,
+    priority: "Medium" as const,
+    assignedTo: "Riya Verma",
+    dueDate: "2025-11-26",
+    relatedTo: {
+      type: "Marketing" as const,
+      refId: "BR-129",
+      name: "Black Friday Campaign"
+    },
+    tags: ["Campaign"],
+    createdAt: "2025-11-20",
+    createdBy: "Riya Verma",
+    activities: [
+      { id: "act-1", action: "Task created", user: "Riya Verma", timestamp: "2025-11-20T09:00:00Z" },
+      { id: "act-2", action: "Status changed to In Progress", user: "Riya Verma", timestamp: "2025-11-21T14:00:00Z" },
+    ],
+    notes: []
+  },
+  {
+    id: "TASK-003",
+    title: "Update product pricing",
+    description: "Fix pricing inconsistency in dashboard.",
+    status: "Completed" as const,
+    priority: "Low" as const,
+    assignedTo: "Karan Singh",
+    dueDate: "2025-11-22",
+    relatedTo: null,
+    tags: ["Internal"],
+    createdAt: "2025-11-19",
+    createdBy: "Karan Singh",
+    activities: [
+      { id: "act-1", action: "Task created", user: "Karan Singh", timestamp: "2025-11-19T11:00:00Z" },
+      { id: "act-2", action: "Status changed to Completed", user: "Karan Singh", timestamp: "2025-11-22T16:00:00Z" },
+    ],
+    notes: []
+  },
+  {
+    id: "TASK-004",
+    title: "Respond to bulk order inquiry",
+    description: "Ananya needs quote for 50 cupcakes",
+    status: "To Do" as const,
+    priority: "High" as const,
+    assignedTo: "Riya Verma",
+    dueDate: "2025-11-23",
+    relatedTo: {
+      type: "Customer" as const,
+      refId: "CUS-003",
+      name: "Ananya Desai"
+    },
+    tags: ["Follow-up", "Urgent"],
+    createdAt: "2025-11-22",
+    createdBy: "Aman Gupta",
+    activities: [
+      { id: "act-1", action: "Task created", user: "Aman Gupta", timestamp: "2025-11-22T11:00:00Z" },
+    ],
+    notes: []
+  },
+  {
+    id: "TASK-005",
+    title: "Update inventory levels",
+    description: "Stock count for all products",
+    status: "In Progress" as const,
+    priority: "Medium" as const,
+    assignedTo: "Karan Singh",
+    dueDate: "2025-11-24",
+    relatedTo: null,
+    tags: ["Internal"],
+    createdAt: "2025-11-21",
+    createdBy: "Karan Singh",
+    activities: [
+      { id: "act-1", action: "Task created", user: "Karan Singh", timestamp: "2025-11-21T10:00:00Z" },
+      { id: "act-2", action: "Status changed to In Progress", user: "Karan Singh", timestamp: "2025-11-22T09:00:00Z" },
+    ],
+    notes: []
+  },
+];
