@@ -6,8 +6,9 @@ import { PipelineStageRow } from "@/components/pipeline/PipelineStageRow";
 import { AddStageModal } from "@/components/pipeline/AddStageModal";
 import { DeleteConfirmModal } from "@/components/pipeline/DeleteConfirmModal";
 import { StagePreview } from "@/components/pipeline/StagePreview";
-import { defaultPipeline, Pipeline, PipelineStage } from "@/lib/mockPipeline";
-import { Plus, RotateCcw, GripVertical } from "lucide-react";
+import { PipelineTemplateModal } from "@/components/pipeline/PipelineTemplateModal";
+import { defaultPipeline, Pipeline, PipelineStage, PipelineTemplate } from "@/lib/mockPipeline";
+import { Plus, RotateCcw, GripVertical, LayoutTemplate } from "lucide-react";
 import { toast } from "sonner";
 
 export default function PipelineSettings() {
@@ -17,6 +18,7 @@ export default function PipelineSettings() {
   const [deleteStage, setDeleteStage] = useState<PipelineStage | null>(null);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [templateModalOpen, setTemplateModalOpen] = useState(false);
 
   const handleAddStage = (stage: Omit<PipelineStage, "id">) => {
     const newStage: PipelineStage = {
@@ -67,6 +69,20 @@ export default function PipelineSettings() {
     toast.success("Pipeline reset to default");
   };
 
+  const handleSelectTemplate = (template: PipelineTemplate) => {
+    const newStages: PipelineStage[] = template.stages.map((stage, index) => ({
+      ...stage,
+      id: `stage_${Date.now()}_${index}`,
+    }));
+    setPipeline({
+      ...pipeline,
+      name: template.name,
+      description: template.description,
+      stages: newStages,
+    });
+    toast.success(`Applied ${template.name} template`);
+  };
+
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
   };
@@ -108,9 +124,13 @@ export default function PipelineSettings() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setTemplateModalOpen(true)}>
+            <LayoutTemplate className="h-4 w-4 mr-2" />
+            Use Template
+          </Button>
           <Button variant="outline" size="sm" onClick={handleResetToDefault}>
             <RotateCcw className="h-4 w-4 mr-2" />
-            Reset to Default
+            Reset
           </Button>
           <Button onClick={() => setAddModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
@@ -227,6 +247,12 @@ export default function PipelineSettings() {
         onClose={() => setDeleteStage(null)}
         onConfirm={() => deleteStage && handleDeleteStage(deleteStage.id)}
         stageName={deleteStage?.name || ""}
+      />
+
+      <PipelineTemplateModal
+        open={templateModalOpen}
+        onClose={() => setTemplateModalOpen(false)}
+        onSelectTemplate={handleSelectTemplate}
       />
     </div>
   );

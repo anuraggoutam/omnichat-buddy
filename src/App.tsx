@@ -157,10 +157,7 @@ const App = () => (
             path="/pipeline"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Sales Pipeline</h1>
-                  <p className="text-muted-foreground mt-2">Track deals through your sales stages - coming soon...</p>
-                </div>
+                <PipelineSettings />
               </AppLayout>
             }
           />
