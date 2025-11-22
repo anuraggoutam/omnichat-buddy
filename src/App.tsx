@@ -9,6 +9,7 @@ import Conversations from "./pages/Conversations";
 import Orders from "./pages/Orders";
 import Products from "./pages/Products";
 import Customers from "./pages/Customers";
+import TeamInbox from "./pages/TeamInbox";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -67,10 +68,7 @@ const App = () => (
             path="/team-inbox"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Team Inbox</h1>
-                  <p className="text-muted-foreground mt-2">Manage team assignments and collaboration - coming soon...</p>
-                </div>
+                <TeamInbox />
               </AppLayout>
             }
           />
