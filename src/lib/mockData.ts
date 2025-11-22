@@ -384,6 +384,7 @@ export const demoConversations = [
     timestamp: "2024-01-19T10:30:00Z",
     tags: ["VIP", "Regular"],
     status: "active",
+    leadSource: "organic" as LeadSource,
   },
   {
     id: "conv-002",
@@ -398,6 +399,7 @@ export const demoConversations = [
     timestamp: "2024-01-19T09:45:00Z",
     tags: ["Hot Lead"],
     status: "active",
+    leadSource: "instagram_ads" as LeadSource,
   },
   {
     id: "conv-003",
@@ -412,6 +414,7 @@ export const demoConversations = [
     timestamp: "2024-01-19T08:20:00Z",
     tags: ["Bulk Order", "VIP"],
     status: "active",
+    leadSource: "facebook_ads" as LeadSource,
   },
 ];
 

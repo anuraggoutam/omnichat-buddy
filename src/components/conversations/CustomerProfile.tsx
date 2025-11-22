@@ -153,28 +153,34 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
               <CardTitle className="text-sm">Order History</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {customerOrders.slice(0, 3).map((order) => (
-                <div key={order.id} className="space-y-1">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{order.id}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {order.items.length} item{order.items.length > 1 ? "s" : ""}
-                      </p>
+              {customerOrders.length > 0 ? (
+                customerOrders.slice(0, 3).map((order) => (
+                  <div key={order.id} className="space-y-1">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{order.id}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {order.items?.length || 0} item{(order.items?.length || 0) > 1 ? "s" : ""}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold">₹{order.total}</p>
+                        <Badge variant="secondary" className="text-xs">
+                          {order.paymentStatus}
+                        </Badge>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold">₹{order.total}</p>
-                      <Badge variant="secondary" className="text-xs">
-                        {order.paymentStatus}
-                      </Badge>
-                    </div>
+                    <Button variant="link" className="h-auto p-0 text-xs">
+                      View order →
+                    </Button>
+                    {customerOrders.indexOf(order) < 2 && <Separator className="mt-3" />}
                   </div>
-                  <Button variant="link" className="h-auto p-0 text-xs">
-                    View order →
-                  </Button>
-                  {customerOrders.indexOf(order) < 2 && <Separator className="mt-3" />}
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No orders yet
+                </p>
+              )}
             </CardContent>
           </Card>
 
