@@ -13,6 +13,7 @@ import TeamInbox from "./pages/TeamInbox";
 import Tasks from "./pages/Tasks";
 import Broadcasts from "./pages/Broadcasts";
 import Templates from "./pages/Templates";
+import Campaigns from "./pages/Campaigns";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -103,10 +104,7 @@ const App = () => (
             path="/campaigns"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Campaigns</h1>
-                  <p className="text-muted-foreground mt-2">Multi-step automation campaigns and funnels - coming soon...</p>
-                </div>
+                <Campaigns />
               </AppLayout>
             }
           />
