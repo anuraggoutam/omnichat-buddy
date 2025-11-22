@@ -26,7 +26,7 @@ const Conversations = () => {
   };
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden relative">
       {/* Left Panel - Conversation List */}
       <div className={`${selectedConversation ? 'hidden md:flex' : 'flex'} w-full md:w-auto`}>
         <ConversationList
@@ -42,7 +42,7 @@ const Conversations = () => {
 
       {/* Middle Panel - Chat Thread */}
       {selectedConversation ? (
-        <div className={`flex-1 ${!selectedConversation ? 'hidden' : 'flex'}`}>
+        <div className={`flex-1 ${!selectedConversation ? 'hidden' : 'flex'} flex-col overflow-hidden`}>
           <ChatThread 
             conversation={selectedConversation} 
             onBack={handleBack}
@@ -56,11 +56,18 @@ const Conversations = () => {
       )}
 
       {/* Right Panel - Customer Profile */}
+      {selectedConversation && showProfile && (
+        <CustomerProfile 
+          customer={selectedConversation.customer}
+          onClose={() => setShowProfile(false)}
+        />
+      )}
+      
+      {/* Desktop always show profile */}
       {selectedConversation && (
-        <div className={`${showProfile ? 'flex' : 'hidden lg:flex'}`}>
+        <div className="hidden lg:flex">
           <CustomerProfile 
             customer={selectedConversation.customer}
-            onClose={() => setShowProfile(false)}
           />
         </div>
       )}

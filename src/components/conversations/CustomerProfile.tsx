@@ -19,8 +19,8 @@ export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => 
   const activities = activityTimeline[customer.id as keyof typeof activityTimeline] || [];
 
   return (
-    <div className="w-full lg:w-[360px] border-l border-border bg-card flex flex-col absolute lg:relative inset-0 lg:inset-auto z-50 lg:z-auto">
-      <div className="p-4 border-b border-border flex items-center justify-between">
+    <div className="fixed lg:relative inset-0 lg:inset-auto w-full lg:w-[360px] border-l border-border bg-card flex flex-col z-50 lg:z-auto">
+      <div className="p-4 border-b border-border flex items-center justify-between flex-shrink-0">
         <h3 className="font-semibold text-sm">Customer Profile</h3>
         {onClose && (
           <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden">
@@ -29,7 +29,7 @@ export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => 
         )}
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 h-full">
         <div className="p-4 space-y-4">
           {/* Customer Card */}
           <Card>
