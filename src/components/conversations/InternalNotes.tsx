@@ -28,9 +28,9 @@ export const InternalNotes = ({ notes }: InternalNotesProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Notes List */}
-      <div className="flex-1 overflow-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {notes.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <StickyNote className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -59,12 +59,12 @@ export const InternalNotes = ({ notes }: InternalNotesProps) => {
       </div>
 
       {/* Add Note */}
-      <div className="border-t border-border p-4">
+      <div className="border-t border-border p-4 flex-shrink-0">
         <Textarea
           placeholder="Add an internal note... (Use @name to mention)"
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
-          className="mb-2 min-h-[80px]"
+          className="mb-2 min-h-[60px] resize-none"
         />
         <Button onClick={handleAddNote} size="sm" className="w-full">
           <StickyNote className="h-4 w-4 mr-2" />

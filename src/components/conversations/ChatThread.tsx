@@ -86,15 +86,15 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
         </div>
 
         {/* Chat/Notes Toggle */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "chat" | "notes")} className="px-4">
-          <TabsList className="w-full grid grid-cols-2">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "chat" | "notes")} className="px-4 flex flex-col h-full">
+          <TabsList className="w-full grid grid-cols-2 flex-shrink-0">
             <TabsTrigger value="chat" className="gap-2">
               <MessageSquare className="h-4 w-4" />
-              Chat
+              <span className="hidden sm:inline">Chat</span>
             </TabsTrigger>
             <TabsTrigger value="notes" className="gap-2">
               <StickyNote className="h-4 w-4" />
-              Internal Notes
+              <span className="hidden sm:inline">Internal Notes</span>
               {notes.length > 0 && (
                 <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                   {notes.length}
@@ -102,61 +102,64 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
               )}
             </TabsTrigger>
           </TabsList>
-        </Tabs>
-      </div>
 
-      {/* Content */}
-      {activeTab === "chat" ? (
-        <>
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-4">
-            <div className="max-w-4xl mx-auto space-y-6">
-              {Object.entries(groupedMessages).map(([date, msgs]: [string, any]) => (
-                <div key={date}>
-                  {/* Date Separator */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-px flex-1 bg-border" />
-                    <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                      {date}
-                    </span>
-                    <div className="h-px flex-1 bg-border" />
-                  </div>
+          <TabsContent value="chat" className="flex-1 flex flex-col mt-0 h-full overflow-hidden">
+            {/* Messages */}
+            <ScrollArea className="flex-1 p-4">
+              <div className="max-w-4xl mx-auto space-y-6">
+                {Object.entries(groupedMessages).map(([date, msgs]: [string, any]) => (
+                  <div key={date}>
+                    {/* Date Separator */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-px flex-1 bg-border" />
+                      <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                        {date}
+                      </span>
+                      <div className="h-px flex-1 bg-border" />
+                    </div>
 
-                  {/* Messages for this date */}
-                  <div className="space-y-4">
-                    {msgs.map((msg: any) => (
-                      <MessageBubble key={msg.id} message={msg} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {/* Typing Indicator */}
-              {conversation.unread > 0 && (
-                <div className="flex gap-2 animate-fade-in">
-                  <div className="max-w-[70%] bg-muted text-foreground rounded-2xl px-4 py-3 rounded-tl-none">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
-                      <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
-                      <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
+                    {/* Messages for this date */}
+                    <div className="space-y-4">
+                      {msgs.map((msg: any) => (
+                        <MessageBubble key={msg.id} message={msg} />
+                      ))}
                     </div>
                   </div>
-                </div>
-              )}
+                ))}
+
+                {/* Typing Indicator */}
+                {conversation.unread > 0 && (
+                  <div className="flex gap-2 animate-fade-in">
+                    <div className="max-w-[70%] bg-muted text-foreground rounded-2xl px-4 py-3 rounded-tl-none">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
+                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
+                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+
+            {/* AI Suggestion (if available) */}
+            {conversation.status === "active" && conversation.unread > 0 && (
+              <div className="flex-shrink-0">
+                <AISuggestion />
+              </div>
+            )}
+
+            {/* Composer */}
+            <div className="flex-shrink-0">
+              <Composer />
             </div>
-          </ScrollArea>
+          </TabsContent>
 
-          {/* AI Suggestion (if available) */}
-          {conversation.status === "active" && conversation.unread > 0 && (
-            <AISuggestion />
-          )}
-
-          {/* Composer */}
-          <Composer />
-        </>
-      ) : (
-        <InternalNotes notes={notes} />
-      )}
+          <TabsContent value="notes" className="flex-1 mt-0 h-full overflow-hidden">
+            <InternalNotes notes={notes} />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
