@@ -15,7 +15,7 @@ const sourceConfig = {
 };
 
 export const LeadSourceBadge = ({ source }: LeadSourceBadgeProps) => {
-  const config = sourceConfig[source];
+  const config = sourceConfig[source] || sourceConfig.organic; // Fallback to organic if source not found
 
   return (
     <Badge variant="outline" className={`text-xs border-0 ${config.color}`}>
