@@ -859,3 +859,138 @@ export const mockTasks = [
     notes: []
   },
 ];
+
+export const mockBroadcasts = [
+  {
+    id: "BR-001",
+    title: "Diwali Mega Sale",
+    messagePreview: "Get 40% off on all items! 🎉",
+    fullMessage: "🪔 Happy Diwali! 🪔\n\nCelebrate the festival of lights with our MEGA SALE!\n\nGet 40% OFF on all items using code: DIWALI40\n\nOffer valid till Oct 31st. Shop now!",
+    status: "Completed",
+    audience: "All Customers (245)",
+    audienceSegment: "All Customers",
+    audienceCount: 245,
+    template: "Promo Template",
+    sent: 245,
+    delivered: 231,
+    read: 190,
+    clicks: 87,
+    failed: 14,
+    createdAt: "2025-10-28",
+    scheduledAt: "2025-10-29 10:00 AM",
+    createdBy: "Aman Gupta"
+  },
+  {
+    id: "BR-002",
+    title: "Abandoned Cart Reminder",
+    messagePreview: "You left something in your cart! 🛒",
+    fullMessage: "Hi {{name}}! 👋\n\nWe noticed you left some items in your cart.\n\nYour cart contains:\n• {{item1}}\n• {{item2}}\n\nComplete your purchase now and get FREE shipping!",
+    status: "Sending",
+    audience: "Abandoned Cart Users (89)",
+    audienceSegment: "Abandoned Cart",
+    audienceCount: 89,
+    template: "Abandoned Cart",
+    sent: 42,
+    delivered: 30,
+    read: 21,
+    clicks: 12,
+    failed: 2,
+    createdAt: "2025-11-20",
+    scheduledAt: "2025-11-20 9:00 AM",
+    createdBy: "Riya Verma"
+  },
+  {
+    id: "BR-003",
+    title: "Loyalty Program Launch",
+    messagePreview: "Join our reward program! ⭐",
+    fullMessage: "Exciting News! 🎊\n\nWe're launching our VIP Loyalty Program!\n\nAs a valued customer, you're invited to join our exclusive rewards program.\n\n✨ Earn points on every purchase\n✨ Get exclusive discounts\n✨ Early access to sales\n\nJoin now!",
+    status: "Draft",
+    audience: "VIP Customers (40)",
+    audienceSegment: "VIP Customers",
+    audienceCount: 40,
+    template: "Greeting Template",
+    sent: 0,
+    delivered: 0,
+    read: 0,
+    clicks: 0,
+    failed: 0,
+    createdAt: "2025-11-22",
+    scheduledAt: null,
+    createdBy: "Aman Gupta"
+  },
+  {
+    id: "BR-004",
+    title: "Black Friday Preview",
+    messagePreview: "Early access to Black Friday deals! 🔥",
+    fullMessage: "BLACK FRIDAY IS HERE! 🔥\n\nGet early access to our biggest sale of the year!\n\n50-70% OFF on everything\n\nUse code: BF2025\n\nSale starts Nov 29th at midnight!",
+    status: "Scheduled",
+    audience: "High-Value Customers (156)",
+    audienceSegment: "High-Value",
+    audienceCount: 156,
+    template: "Promo Template",
+    sent: 0,
+    delivered: 0,
+    read: 0,
+    clicks: 0,
+    failed: 0,
+    createdAt: "2025-11-22",
+    scheduledAt: "2025-11-29 12:00 AM",
+    createdBy: "Karan Singh"
+  },
+  {
+    id: "BR-005",
+    title: "New Product Launch",
+    messagePreview: "Check out our new collection! ✨",
+    fullMessage: "NEW ARRIVALS ALERT! ✨\n\nWe just launched our Winter Collection 2025!\n\n🧥 Trendy winter wear\n🧣 Cozy accessories\n👢 Stylish boots\n\nBe the first to shop! Limited stock available.",
+    status: "Failed",
+    audience: "New Customers (78)",
+    audienceSegment: "New Customers",
+    audienceCount: 78,
+    template: "Order Update",
+    sent: 78,
+    delivered: 45,
+    read: 32,
+    clicks: 8,
+    failed: 33,
+    createdAt: "2025-11-18",
+    scheduledAt: "2025-11-19 11:00 AM",
+    createdBy: "Riya Verma"
+  }
+];
+
+export const mockBroadcastTemplates = [
+  {
+    id: "TMPL-001",
+    name: "Promo Template",
+    category: "Marketing",
+    variables: ["discount", "code", "expiry"]
+  },
+  {
+    id: "TMPL-002",
+    name: "Order Update",
+    category: "Transactional",
+    variables: ["orderId", "status", "trackingLink"]
+  },
+  {
+    id: "TMPL-003",
+    name: "Abandoned Cart",
+    category: "Marketing",
+    variables: ["name", "item1", "item2"]
+  },
+  {
+    id: "TMPL-004",
+    name: "Greeting Template",
+    category: "Engagement",
+    variables: ["name"]
+  }
+];
+
+export const mockAudienceSegments = [
+  { id: "SEG-001", name: "All Customers", count: 1247 },
+  { id: "SEG-002", name: "New Customers", count: 312 },
+  { id: "SEG-003", name: "Returning Customers", count: 935 },
+  { id: "SEG-004", name: "VIP Customers", count: 40 },
+  { id: "SEG-005", name: "High-Value", count: 156 },
+  { id: "SEG-006", name: "Abandoned Cart", count: 89 },
+  { id: "SEG-007", name: "Inactive (30+ days)", count: 234 }
+];
