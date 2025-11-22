@@ -7,6 +7,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Conversations from "./pages/Conversations";
 import Orders from "./pages/Orders";
+import Products from "./pages/Products";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -49,10 +50,7 @@ const App = () => (
             path="/products"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Products</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
-                </div>
+                <Products />
               </AppLayout>
             }
           />
