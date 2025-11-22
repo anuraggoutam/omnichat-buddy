@@ -108,8 +108,8 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
 
           <TabsContent value="chat" className="flex-1 flex flex-col mt-0 h-full overflow-hidden">
             {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="max-w-4xl mx-auto space-y-6">
+            <ScrollArea className="flex-1 overflow-y-auto">
+              <div className="p-4 max-w-4xl mx-auto space-y-6">
                 {Object.entries(groupedMessages).map(([date, msgs]: [string, any]) => (
                   <div key={date}>
                     {/* Date Separator */}
@@ -147,7 +147,7 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
 
             {/* AI Suggestion (if available) */}
             {conversation.status === "active" && conversation.unread > 0 && (
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 border-t border-border">
                 <AISuggestion />
               </div>
             )}
