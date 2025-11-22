@@ -11,6 +11,7 @@ import Products from "./pages/Products";
 import Customers from "./pages/Customers";
 import TeamInbox from "./pages/TeamInbox";
 import Tasks from "./pages/Tasks";
+import Broadcasts from "./pages/Broadcasts";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -85,10 +86,7 @@ const App = () => (
             path="/broadcasts"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Broadcasts</h1>
-                  <p className="text-muted-foreground mt-2">Send bulk messages to your customers - coming soon...</p>
-                </div>
+                <Broadcasts />
               </AppLayout>
             }
           />
