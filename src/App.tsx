@@ -24,6 +24,7 @@ import Marketplace from "./pages/Marketplace";
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
+import Billing from "./pages/Billing";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -210,10 +211,7 @@ const App = () => (
             path="/billing"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Billing</h1>
-                  <p className="text-muted-foreground mt-2">Manage your subscription and payments - coming soon...</p>
-                </div>
+                <Billing />
               </AppLayout>
             }
           />
