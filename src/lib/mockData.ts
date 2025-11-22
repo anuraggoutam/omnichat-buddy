@@ -1288,3 +1288,262 @@ export const mockCampaigns = [
     revenue: "₹89,400"
   }
 ];
+
+// AI Engine Mock Data
+export const mockAIPersonas = [
+  {
+    id: "ai_01",
+    name: "Sales Assistant",
+    description: "Helps convert leads into customers with persuasive replies and product recommendations.",
+    type: "Sales",
+    channels: ["whatsapp", "instagram"],
+    status: "Active" as const,
+    tone: "Professional",
+    language: "English",
+    emojiUsage: true,
+    maxMessageLength: 500,
+    knowledgeBase: true,
+    autoResponses: 12,
+    conversationsHandled: 342,
+    avgResponseTime: "2.1s",
+    successRate: "87%",
+    createdAt: "2025-01-15",
+    updatedAt: "2025-02-18"
+  },
+  {
+    id: "ai_02",
+    name: "Customer Support Bot",
+    description: "Handles FAQs, complaints, order tracking, and general support queries 24/7.",
+    type: "Support",
+    channels: ["whatsapp"],
+    status: "Paused" as const,
+    tone: "Friendly",
+    language: "English",
+    emojiUsage: true,
+    maxMessageLength: 300,
+    knowledgeBase: true,
+    autoResponses: 25,
+    conversationsHandled: 156,
+    avgResponseTime: "1.8s",
+    successRate: "92%",
+    createdAt: "2025-01-20",
+    updatedAt: "2025-02-17"
+  },
+  {
+    id: "ai_03",
+    name: "Lead Qualification Bot",
+    description: "Automatically identifies hot leads based on conversation intent and customer behavior.",
+    type: "Lead Gen",
+    channels: ["instagram", "whatsapp", "web"],
+    status: "Active" as const,
+    tone: "Professional",
+    language: "English",
+    emojiUsage: false,
+    maxMessageLength: 400,
+    knowledgeBase: false,
+    autoResponses: 8,
+    conversationsHandled: 89,
+    avgResponseTime: "3.2s",
+    successRate: "78%",
+    createdAt: "2025-02-01",
+    updatedAt: "2025-02-15"
+  },
+  {
+    id: "ai_04",
+    name: "Booking Assistant",
+    description: "Helps customers schedule appointments and manage bookings seamlessly.",
+    type: "Booking",
+    channels: ["whatsapp", "web"],
+    status: "Active" as const,
+    tone: "Friendly",
+    language: "English",
+    emojiUsage: true,
+    maxMessageLength: 350,
+    knowledgeBase: true,
+    autoResponses: 15,
+    conversationsHandled: 234,
+    avgResponseTime: "2.5s",
+    successRate: "94%",
+    createdAt: "2025-01-10",
+    updatedAt: "2025-02-18"
+  }
+];
+
+export const mockKnowledgeBase = [
+  {
+    id: "kb_01",
+    title: "Shipping & Delivery FAQs",
+    articles: 12,
+    category: "Logistics",
+    status: "Active" as const,
+    lastUpdated: "2025-02-18",
+    views: 1247
+  },
+  {
+    id: "kb_02",
+    title: "Returns & Refunds Policy",
+    articles: 8,
+    category: "Customer Service",
+    status: "Active" as const,
+    lastUpdated: "2025-02-15",
+    views: 892
+  },
+  {
+    id: "kb_03",
+    title: "Product Information",
+    articles: 25,
+    category: "Products",
+    status: "Active" as const,
+    lastUpdated: "2025-02-17",
+    views: 2341
+  },
+  {
+    id: "kb_04",
+    title: "Pricing & Payment Options",
+    articles: 6,
+    category: "Billing",
+    status: "Inactive" as const,
+    lastUpdated: "2025-01-20",
+    views: 456
+  },
+  {
+    id: "kb_05",
+    title: "Account Management",
+    articles: 10,
+    category: "User Support",
+    status: "Active" as const,
+    lastUpdated: "2025-02-16",
+    views: 678
+  }
+];
+
+export const mockAutoActions = [
+  {
+    id: "action_01",
+    name: "Auto-tag Hot Lead",
+    description: "Automatically tag customers as 'Hot Lead' when they ask for pricing",
+    trigger: "Keyword",
+    triggerValue: "price, pricing, cost, how much",
+    action: "Tag",
+    actionValue: "Hot Lead",
+    status: "Active" as const,
+    timesTriggered: 234,
+    createdAt: "2025-01-15"
+  },
+  {
+    id: "action_02",
+    name: "Send Catalog Auto-Reply",
+    description: "Send product catalog when customer asks about products",
+    trigger: "Intent",
+    triggerValue: "Product Inquiry",
+    action: "Reply",
+    actionValue: "Here's our latest catalog! 📚",
+    status: "Active" as const,
+    timesTriggered: 567,
+    createdAt: "2025-01-20"
+  },
+  {
+    id: "action_03",
+    name: "Assign to Sales Team",
+    description: "Route to sales team when intent is 'Buy Now'",
+    trigger: "Intent",
+    triggerValue: "Purchase Intent",
+    action: "Assign",
+    actionValue: "Sales Team",
+    status: "Active" as const,
+    timesTriggered: 123,
+    createdAt: "2025-02-01"
+  },
+  {
+    id: "action_04",
+    name: "Delay Response for VIP",
+    description: "Add 5-second delay for VIP customers to simulate human response",
+    trigger: "Customer Attribute",
+    triggerValue: "is_vip = true",
+    action: "Delay",
+    actionValue: "5 seconds",
+    status: "Paused" as const,
+    timesTriggered: 45,
+    createdAt: "2025-01-25"
+  },
+  {
+    id: "action_05",
+    name: "Track High-Value Intent",
+    description: "Send webhook when customer shows high purchase intent",
+    trigger: "Intent",
+    triggerValue: "High Purchase Intent",
+    action: "Webhook",
+    actionValue: "https://api.example.com/track",
+    status: "Active" as const,
+    timesTriggered: 89,
+    createdAt: "2025-02-05"
+  }
+];
+
+export const mockRoutingRules = [
+  {
+    id: "rule_01",
+    name: "Refund Requests to Support",
+    description: "Route all refund requests to customer support team",
+    condition: "Message contains",
+    conditionValue: "refund, return money, money back",
+    action: "Route to Team",
+    actionValue: "Support Team",
+    priority: "High" as const,
+    status: "Active" as const,
+    timesTriggered: 156,
+    createdAt: "2025-01-10"
+  },
+  {
+    id: "rule_02",
+    name: "High Lead Score to Senior Sales",
+    description: "Assign leads with score > 70 to senior sales representatives",
+    condition: "Lead Score",
+    conditionValue: "> 70",
+    action: "Assign to Agent",
+    actionValue: "Senior Sales",
+    priority: "High" as const,
+    status: "Active" as const,
+    timesTriggered: 78,
+    createdAt: "2025-01-15"
+  },
+  {
+    id: "rule_03",
+    name: "Bulk Orders to Manager",
+    description: "Route bulk order inquiries (>50 items) to manager",
+    condition: "Quantity mentioned",
+    conditionValue: "> 50",
+    action: "Route to Agent",
+    actionValue: "Aman Gupta",
+    priority: "Medium" as const,
+    status: "Active" as const,
+    timesTriggered: 34,
+    createdAt: "2025-01-20"
+  },
+  {
+    id: "rule_04",
+    name: "Complaint Keywords to Support",
+    description: "Flag complaints and route to support priority queue",
+    condition: "Sentiment",
+    conditionValue: "Negative",
+    action: "Route to Team",
+    actionValue: "Support Team (Priority)",
+    priority: "High" as const,
+    status: "Active" as const,
+    timesTriggered: 245,
+    createdAt: "2025-02-01"
+  },
+  {
+    id: "rule_05",
+    name: "After Hours to AI Only",
+    description: "Handle all conversations with AI after business hours",
+    condition: "Time",
+    conditionValue: "Outside 9 AM - 6 PM",
+    action: "AI Only",
+    actionValue: "Customer Support Bot",
+    priority: "Low" as const,
+    status: "Paused" as const,
+    timesTriggered: 892,
+    createdAt: "2025-01-25"
+  }
+];
