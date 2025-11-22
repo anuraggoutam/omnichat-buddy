@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, MoreVertical, Tag, UserPlus, MessageSquare, StickyNote, Sparkles } from "lucide-react";
+import { Search, MoreVertical, Tag, UserPlus, MessageSquare, StickyNote, Sparkles, ArrowLeft, Info } from "lucide-react";
 import { MessageBubble } from "./MessageBubble";
 import { Composer } from "./Composer";
 import { AISuggestion } from "./AISuggestion";
@@ -14,9 +14,11 @@ import { format } from "date-fns";
 
 interface ChatThreadProps {
   conversation: any;
+  onBack?: () => void;
+  onToggleProfile?: () => void;
 }
 
-export const ChatThread = ({ conversation }: ChatThreadProps) => {
+export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThreadProps) => {
   const [activeTab, setActiveTab] = useState<"chat" | "notes">("chat");
   const messages = demoMessages[conversation.id as keyof typeof demoMessages] || [];
   const notes = internalNotes[conversation.id as keyof typeof internalNotes] || [];
@@ -34,38 +36,47 @@ export const ChatThread = ({ conversation }: ChatThreadProps) => {
       {/* Header */}
       <div className="border-b border-border bg-card">
         <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {onBack && (
+              <Button variant="ghost" size="icon" onClick={onBack} className="md:hidden flex-shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            )}
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl flex-shrink-0">
               {conversation.customer.avatar}
             </div>
-            <div>
-              <h3 className="font-semibold">{conversation.customer.name}</h3>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold truncate">{conversation.customer.name}</h3>
               <div className="flex items-center gap-2">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground truncate">
                   {conversation.customer.phone}
                 </p>
                 <ChannelBadge channel={conversation.channel} size="sm" />
               </div>
             </div>
-            <Badge variant={conversation.status === "resolved" ? "secondary" : "default"}>
-              {conversation.status === "active" ? "Open" : conversation.status}
-            </Badge>
-            {conversation.status === "active" && conversation.unread > 0 && (
-              <Badge className="bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800">
-                <Sparkles className="h-3 w-3 mr-1" />
-                AI Assist
+            <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+              <Badge variant={conversation.status === "resolved" ? "secondary" : "default"}>
+                {conversation.status === "active" ? "Open" : conversation.status}
               </Badge>
-            )}
+              {conversation.status === "active" && conversation.unread > 0 && (
+                <Badge className="bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  AI Assist
+                </Badge>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Button variant="ghost" size="icon" className="hidden sm:flex">
               <Search className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <UserPlus className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon">
+            {onToggleProfile && (
+              <Button variant="ghost" size="icon" onClick={onToggleProfile} className="lg:hidden">
+                <Info className="h-4 w-4" />
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" className="hidden md:flex">
               <Tag className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon">

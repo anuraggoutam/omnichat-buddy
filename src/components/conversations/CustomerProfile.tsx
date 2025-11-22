@@ -3,24 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe, DollarSign, Package } from "lucide-react";
+import { StickyNote, Star, Ban, Trash2, TrendingUp, ShoppingCart, Clock, Globe, DollarSign, Package, X } from "lucide-react";
 import { demoOrders, activityTimeline } from "@/lib/mockData";
 import { ActivityTimeline } from "./ActivityTimeline";
 
 interface CustomerProfileProps {
   customer: any;
+  onClose?: () => void;
 }
 
-export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
+export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => {
   const customerOrders = demoOrders.filter(
     (order) => order.customer.id === customer.id
   );
   const activities = activityTimeline[customer.id as keyof typeof activityTimeline] || [];
 
   return (
-    <div className="w-[360px] border-l border-border bg-card flex flex-col">
-      <div className="p-4 border-b border-border">
+    <div className="w-full lg:w-[360px] border-l border-border bg-card flex flex-col absolute lg:relative inset-0 lg:inset-auto z-50 lg:z-auto">
+      <div className="p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-sm">Customer Profile</h3>
+        {onClose && (
+          <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden">
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       <ScrollArea className="flex-1">

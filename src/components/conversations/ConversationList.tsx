@@ -55,7 +55,7 @@ export const ConversationList = ({
   });
 
   return (
-    <div className="w-[280px] border-r border-border bg-card flex flex-col">
+    <div className="w-full md:w-[320px] lg:w-[280px] border-r border-border bg-card flex flex-col">
       {/* Search */}
       <div className="p-4 border-b border-border">
         <div className="relative">

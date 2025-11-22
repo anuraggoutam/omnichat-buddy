@@ -10,36 +10,59 @@ const Conversations = () => {
   );
   const [filter, setFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showProfile, setShowProfile] = useState(false);
 
   const selectedConversation = demoConversations.find(
     (c) => c.id === selectedConversationId
   );
 
+  const handleSelectConversation = (id: string) => {
+    setSelectedConversationId(id);
+  };
+
+  const handleBack = () => {
+    setSelectedConversationId(null);
+    setShowProfile(false);
+  };
+
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       {/* Left Panel - Conversation List */}
-      <ConversationList
-        conversations={demoConversations}
-        selectedId={selectedConversationId}
-        onSelect={setSelectedConversationId}
-        filter={filter}
-        onFilterChange={setFilter}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
+      <div className={`${selectedConversation ? 'hidden md:flex' : 'flex'} w-full md:w-auto`}>
+        <ConversationList
+          conversations={demoConversations}
+          selectedId={selectedConversationId}
+          onSelect={handleSelectConversation}
+          filter={filter}
+          onFilterChange={setFilter}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+      </div>
 
       {/* Middle Panel - Chat Thread */}
       {selectedConversation ? (
-        <ChatThread conversation={selectedConversation} />
+        <div className={`flex-1 ${!selectedConversation ? 'hidden' : 'flex'}`}>
+          <ChatThread 
+            conversation={selectedConversation} 
+            onBack={handleBack}
+            onToggleProfile={() => setShowProfile(!showProfile)}
+          />
+        </div>
       ) : (
-        <div className="flex-1 flex items-center justify-center text-muted-foreground">
+        <div className="hidden md:flex flex-1 items-center justify-center text-muted-foreground">
           Select a conversation to start chatting
         </div>
       )}
 
       {/* Right Panel - Customer Profile */}
       {selectedConversation && (
-        <CustomerProfile customer={selectedConversation.customer} />
+        <div className={`${showProfile ? 'flex' : 'hidden lg:flex'}`}>
+          <CustomerProfile 
+            customer={selectedConversation.customer}
+            onClose={() => setShowProfile(false)}
+          />
+        </div>
       )}
     </div>
   );
