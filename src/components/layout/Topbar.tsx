@@ -1,54 +1,33 @@
-import { Bell, Plus, Search, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/hooks/useAuth";
+import { TopbarUserMenu } from "./TopbarUserMenu";
 
 export function Topbar() {
-  const { signOut } = useAuth();
-  
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-      <SidebarTrigger className="-ml-2" />
-      
-      <div className="flex-1 flex items-center gap-4 max-w-2xl">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search conversations, orders, customers..."
-            className="w-full pl-10 bg-muted/50"
-          />
+    <header className="border-b border-sidebar-border bg-background px-4 py-3">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger />
         </div>
-      </div>
 
-      <div className="flex items-center gap-2">
-        <Button size="sm" className="gap-2">
-          <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">New Broadcast</span>
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="relative hidden md:block w-96">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search conversations, orders, products..."
+              className="pl-9 bg-muted/50"
+            />
+          </div>
 
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <Badge
-            variant="destructive"
-            className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-          >
-            3
-          </Badge>
-        </Button>
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="h-5 w-5" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
+          </Button>
 
-        <Button variant="ghost" size="icon" onClick={signOut} title="Logout">
-          <LogOut className="h-5 w-5" />
-        </Button>
-
-        <Avatar className="h-9 w-9 cursor-pointer">
-          <AvatarFallback className="bg-primary text-primary-foreground">
-            BB
-          </AvatarFallback>
-        </Avatar>
+          <TopbarUserMenu />
+        </div>
       </div>
     </header>
   );
