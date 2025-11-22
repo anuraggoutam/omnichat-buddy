@@ -82,6 +82,13 @@ All colors MUST be HSL.
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Channel-specific colors */
+    --channel-whatsapp: 142 70% 49%;
+    --channel-instagram: 300 100% 50%;
+    --channel-facebook: 221 83% 53%;
+    --channel-email: 0 0% 50%;
+    --channel-website: 243 75% 65%;
   }
 
   .dark {
