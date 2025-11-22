@@ -58,7 +58,7 @@ const aiToolsItems = [
 ];
 
 const salesCrmItems = [
-  { title: "Leads", url: "/leads", icon: Target, badge: "Optional" },
+  { title: "Leads", url: "/leads", icon: Target },
   { title: "Pipeline", url: "/pipeline", icon: TrendingUp, badge: "Optional" },
 ];
 
