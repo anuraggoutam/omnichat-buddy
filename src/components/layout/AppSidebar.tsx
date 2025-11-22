@@ -59,7 +59,7 @@ const aiToolsItems = [
 
 const salesCrmItems = [
   { title: "Leads", url: "/leads", icon: Target },
-  { title: "Pipeline", url: "/pipeline", icon: TrendingUp, badge: "Optional" },
+  { title: "Pipeline", url: "/settings/pipeline", icon: TrendingUp },
 ];
 
 const integrationsItems = [
@@ -195,11 +195,6 @@ export function AppSidebar() {
                     >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
-                      {item.badge && !isCollapsed && (
-                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                          {item.badge}
-                        </span>
-                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

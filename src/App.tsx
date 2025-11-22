@@ -18,6 +18,7 @@ import AIEngine from "./pages/AIEngine";
 import Workflows from "./pages/Workflows";
 import Leads from "./pages/Leads";
 import LeadsKanban from "./pages/LeadsKanban";
+import PipelineSettings from "./pages/PipelineSettings";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -141,6 +142,14 @@ const App = () => (
             element={
               <AppLayout>
                 <LeadsKanban />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/settings/pipeline"
+            element={
+              <AppLayout>
+                <PipelineSettings />
               </AppLayout>
             }
           />
