@@ -20,6 +20,7 @@ import Leads from "./pages/Leads";
 import LeadsKanban from "./pages/LeadsKanban";
 import PipelineSettings from "./pages/PipelineSettings";
 import Channels from "./pages/Channels";
+import Marketplace from "./pages/Marketplace";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -174,10 +175,7 @@ const App = () => (
             path="/marketplace"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Marketplace</h1>
-                  <p className="text-muted-foreground mt-2">Browse integrations and extensions - coming soon...</p>
-                </div>
+                <Marketplace />
               </AppLayout>
             }
           />
