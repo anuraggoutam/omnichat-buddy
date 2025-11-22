@@ -25,6 +25,7 @@ import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Billing from "./pages/Billing";
+import UserManagement from "./pages/UserManagement";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -219,10 +220,7 @@ const App = () => (
             path="/user-management"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">User Management</h1>
-                  <p className="text-muted-foreground mt-2">Control team access and permissions - coming soon...</p>
-                </div>
+                <UserManagement />
               </AppLayout>
             }
           />
