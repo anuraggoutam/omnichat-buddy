@@ -129,21 +129,13 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
                     </div>
                   </div>
                 ))}
-
-                {/* Typing Indicator */}
-                {conversation.unread > 0 && (
-                  <div className="flex gap-2 animate-fade-in">
-                    <div className="max-w-[70%] bg-muted text-foreground rounded-2xl px-4 py-3 rounded-tl-none">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
-                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
-                        <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </ScrollArea>
+
+            {/* Composer */}
+            <div className="flex-shrink-0">
+              <Composer />
+            </div>
 
             {/* AI Suggestion (if available) */}
             {conversation.status === "active" && conversation.unread > 0 && (
@@ -151,11 +143,6 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
                 <AISuggestion />
               </div>
             )}
-
-            {/* Composer */}
-            <div className="flex-shrink-0">
-              <Composer />
-            </div>
           </TabsContent>
 
           <TabsContent value="notes" className="flex-1 mt-0 h-full overflow-hidden">
