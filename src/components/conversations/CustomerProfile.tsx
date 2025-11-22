@@ -41,7 +41,7 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
               </div>
 
               <div className="flex flex-wrap gap-2 justify-center mb-4">
-                {customer.tags.map((tag: string) => (
+                {(customer.tags || []).map((tag: string) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
@@ -126,7 +126,7 @@ export const CustomerProfile = ({ customer }: CustomerProfileProps) => {
                 This customer often responds between 6–9 PM. Best time to send offers.
               </p>
               <div className="flex flex-wrap gap-1 mt-3">
-                {customer.preferredProducts?.slice(0, 2).map((product: string) => (
+                {(customer.preferredProducts || []).slice(0, 2).map((product: string) => (
                   <Badge key={product} variant="secondary" className="text-xs">
                     {product}
                   </Badge>
