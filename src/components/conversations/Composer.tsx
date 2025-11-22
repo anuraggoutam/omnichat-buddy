@@ -25,47 +25,47 @@ export const Composer = () => {
   };
 
   return (
-    <div className="border-t border-border bg-card">
+    <div className="border-t border-border bg-card flex-shrink-0">
       {/* Quick Actions */}
-      <div className="flex items-center gap-2 p-3 border-b border-border overflow-x-auto">
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <ShoppingBag className="h-4 w-4" />
-          Add Product
+      <div className="flex items-center gap-2 p-2 sm:p-3 border-b border-border overflow-x-auto scrollbar-hide">
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <ShoppingBag className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Add Product</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <FileText className="h-4 w-4" />
-          Template
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Template</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <CreditCard className="h-4 w-4" />
-          Payment
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Payment</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <Package className="h-4 w-4" />
-          Order
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <Package className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Order</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <Gift className="h-4 w-4" />
-          Coupon
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <Gift className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Coupon</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <Calendar className="h-4 w-4" />
-          Schedule
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Schedule</span>
         </Button>
-        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0">
-          <Tag className="h-4 w-4" />
-          Catalog
+        <Button variant="outline" size="sm" className="gap-2 flex-shrink-0 text-xs sm:text-sm">
+          <Tag className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Catalog</span>
         </Button>
       </div>
 
       {/* Message Input */}
-      <div className="p-4">
-        <div className="flex items-end gap-2">
-          <Button variant="ghost" size="icon" className="flex-shrink-0">
-            <Smile className="h-5 w-5" />
+      <div className="p-2 sm:p-4">
+        <div className="flex items-end gap-1 sm:gap-2">
+          <Button variant="ghost" size="icon" className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10">
+            <Smile className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="flex-shrink-0">
-            <Paperclip className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10">
+            <Paperclip className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
           
           <Textarea
@@ -73,7 +73,7 @@ export const Composer = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="min-h-[44px] max-h-32 resize-none"
+            className="min-h-[40px] sm:min-h-[44px] max-h-32 resize-none text-sm"
             rows={1}
           />
           
@@ -81,9 +81,9 @@ export const Composer = () => {
             size="icon"
             onClick={handleSend}
             disabled={!message.trim()}
-            className="flex-shrink-0"
+            className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10"
           >
-            <Send className="h-5 w-5" />
+            <Send className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
       </div>
