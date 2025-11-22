@@ -192,7 +192,7 @@ const Products = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-1">
-                            {product.channels.map((channel) => {
+                            {product.channel.map((channel) => {
                               const badge = getChannelBadge(channel);
                               return (
                                 <Badge key={channel} className={badge.color}>
