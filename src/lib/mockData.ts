@@ -1547,3 +1547,240 @@ export const mockRoutingRules = [
     createdAt: "2025-01-25"
   }
 ];
+
+// Workflows Mock Data
+export const mockWorkflows = [
+  {
+    id: "wf_01",
+    name: "New Lead Welcome Flow",
+    description: "Sends welcome message and tags lead automatically when they first message.",
+    trigger: "WhatsApp: Message Received",
+    triggerType: "whatsapp_message",
+    steps: 4,
+    status: "Active" as const,
+    lastRun: "10 minutes ago",
+    totalRuns: 342,
+    successRate: "94%",
+    category: "Lead Generation",
+    createdAt: "2025-01-15",
+    updatedAt: "2025-02-18",
+    createdBy: "Aman Gupta"
+  },
+  {
+    id: "wf_02",
+    name: "Instagram Comment Auto-Reply",
+    description: "Automatically replies to Instagram comments containing pricing keywords.",
+    trigger: "Instagram: Comment Contains Keyword",
+    triggerType: "instagram_comment",
+    steps: 3,
+    status: "Paused" as const,
+    lastRun: "2 days ago",
+    totalRuns: 156,
+    successRate: "89%",
+    category: "Marketing Automation",
+    createdAt: "2025-01-20",
+    updatedAt: "2025-02-16",
+    createdBy: "Riya Verma"
+  },
+  {
+    id: "wf_03",
+    name: "Order Confirmation Flow",
+    description: "Sends automatic thank you message and order summary when order is created.",
+    trigger: "Order Created",
+    triggerType: "order_created",
+    steps: 5,
+    status: "Active" as const,
+    lastRun: "1 hour ago",
+    totalRuns: 567,
+    successRate: "98%",
+    category: "Order Automation",
+    createdAt: "2025-01-10",
+    updatedAt: "2025-02-18",
+    createdBy: "Karan Singh"
+  },
+  {
+    id: "wf_04",
+    name: "Lead Qualification Sequence",
+    description: "Multi-step flow to qualify leads based on responses and behavior.",
+    trigger: "Tag Applied: Hot Lead",
+    triggerType: "tag_applied",
+    steps: 7,
+    status: "Active" as const,
+    lastRun: "5 minutes ago",
+    totalRuns: 234,
+    successRate: "87%",
+    category: "Lead Generation",
+    createdAt: "2025-02-01",
+    updatedAt: "2025-02-18",
+    createdBy: "Aman Gupta"
+  },
+  {
+    id: "wf_05",
+    name: "Abandoned Cart Recovery",
+    description: "Sends reminder messages to customers who abandoned their shopping cart.",
+    trigger: "WhatsApp: Message Contains Keyword",
+    triggerType: "whatsapp_keyword",
+    steps: 6,
+    status: "Active" as const,
+    lastRun: "30 minutes ago",
+    totalRuns: 89,
+    successRate: "76%",
+    category: "Marketing Automation",
+    createdAt: "2025-01-25",
+    updatedAt: "2025-02-17",
+    createdBy: "Riya Verma"
+  }
+];
+
+export const mockWorkflowSteps = {
+  wf_01: [
+    {
+      id: "st_01",
+      type: "sendMessage",
+      channel: "whatsapp",
+      content: "Hey! 👋 Thanks for reaching out. Welcome to Bakery Bliss! How can I help you today?"
+    },
+    {
+      id: "st_02",
+      type: "addTag",
+      tag: "new_lead"
+    },
+    {
+      id: "st_03",
+      type: "delay",
+      duration: "2 minutes"
+    },
+    {
+      id: "st_04",
+      type: "assignTeam",
+      team: "Sales"
+    }
+  ],
+  wf_02: [
+    {
+      id: "st_01",
+      type: "checkKeyword",
+      keywords: ["price", "cost", "how much"]
+    },
+    {
+      id: "st_02",
+      type: "sendMessage",
+      channel: "instagram",
+      content: "Thanks for your interest! Check your DM for our pricing details 💰"
+    },
+    {
+      id: "st_03",
+      type: "addTag",
+      tag: "pricing_inquiry"
+    }
+  ],
+  wf_03: [
+    {
+      id: "st_01",
+      type: "sendMessage",
+      channel: "whatsapp",
+      content: "Thank you for your order! 🎉 Your order {{order_id}} has been confirmed."
+    },
+    {
+      id: "st_02",
+      type: "delay",
+      duration: "5 minutes"
+    },
+    {
+      id: "st_03",
+      type: "sendMessage",
+      channel: "whatsapp",
+      content: "Your order is being prepared and will be shipped soon. Track it here: {{tracking_link}}"
+    },
+    {
+      id: "st_04",
+      type: "addTag",
+      tag: "order_confirmed"
+    },
+    {
+      id: "st_05",
+      type: "addNote",
+      note: "Order confirmation flow completed"
+    }
+  ]
+};
+
+export const mockWorkflowRuns = [
+  {
+    id: "run_01",
+    workflowId: "wf_01",
+    timestamp: "2025-02-18 14:30:25",
+    status: "Success" as const,
+    stepCount: 4,
+    triggerSource: "+91 98765 11111",
+    duration: "2.3s"
+  },
+  {
+    id: "run_02",
+    workflowId: "wf_01",
+    timestamp: "2025-02-18 14:15:10",
+    status: "Success" as const,
+    stepCount: 4,
+    triggerSource: "+91 99223 88331",
+    duration: "2.1s"
+  },
+  {
+    id: "run_03",
+    workflowId: "wf_01",
+    timestamp: "2025-02-18 13:45:30",
+    status: "Failed" as const,
+    stepCount: 2,
+    triggerSource: "+91 98903 99020",
+    duration: "1.2s"
+  },
+  {
+    id: "run_04",
+    workflowId: "wf_03",
+    timestamp: "2025-02-18 13:20:45",
+    status: "Success" as const,
+    stepCount: 5,
+    triggerSource: "ORD-2401-1234",
+    duration: "5.4s"
+  },
+  {
+    id: "run_05",
+    workflowId: "wf_03",
+    timestamp: "2025-02-18 12:55:20",
+    status: "Success" as const,
+    stepCount: 5,
+    triggerSource: "ORD-2401-1235",
+    duration: "5.2s"
+  }
+];
+
+export const mockTriggerTypes = [
+  {
+    category: "WhatsApp",
+    triggers: [
+      { id: "whatsapp_message", name: "Message Received", icon: "💬" },
+      { id: "whatsapp_keyword", name: "Message Contains Keyword", icon: "🔑" },
+      { id: "whatsapp_contact", name: "New Contact Added", icon: "👤" }
+    ]
+  },
+  {
+    category: "Instagram",
+    triggers: [
+      { id: "instagram_comment", name: "New Comment", icon: "💬" },
+      { id: "instagram_dm", name: "DM Received", icon: "📩" }
+    ]
+  },
+  {
+    category: "Orders",
+    triggers: [
+      { id: "order_created", name: "Order Created", icon: "📦" },
+      { id: "order_updated", name: "Order Updated", icon: "🔄" }
+    ]
+  },
+  {
+    category: "CRM",
+    triggers: [
+      { id: "tag_applied", name: "Tag Applied", icon: "🏷️" },
+      { id: "tag_removed", name: "Tag Removed", icon: "❌" }
+    ]
+  }
+];
