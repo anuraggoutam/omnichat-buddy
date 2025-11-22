@@ -42,7 +42,7 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             )}
-            <div 
+            <div
               className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl flex-shrink-0 cursor-pointer"
               onClick={onToggleProfile}
             >
@@ -87,9 +87,16 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
             </Button>
           </div>
         </div>
+      </div>
 
+      {/* Chat / Notes Area */}
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Chat/Notes Toggle */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "chat" | "notes")} className="px-4 flex flex-col h-full">
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as "chat" | "notes")}
+          className="px-4 flex flex-col flex-1 min-h-0"
+        >
           <TabsList className="w-full grid grid-cols-2 flex-shrink-0">
             <TabsTrigger value="chat" className="gap-2">
               <MessageSquare className="h-4 w-4" />
@@ -99,14 +106,20 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
               <StickyNote className="h-4 w-4" />
               <span className="hidden sm:inline">Internal Notes</span>
               {notes.length > 0 && (
-                <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                <Badge
+                  variant="secondary"
+                  className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                >
                   {notes.length}
                 </Badge>
               )}
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="flex-1 flex flex-col mt-0 h-full overflow-hidden">
+          <TabsContent
+            value="chat"
+            className="flex-1 flex flex-col mt-0 h-full overflow-hidden"
+          >
             {/* Messages */}
             <ScrollArea className="flex-1 overflow-y-auto">
               <div className="p-4 max-w-4xl mx-auto space-y-6">
@@ -145,7 +158,10 @@ export const ChatThread = ({ conversation, onBack, onToggleProfile }: ChatThread
             )}
           </TabsContent>
 
-          <TabsContent value="notes" className="flex-1 mt-0 h-full overflow-hidden">
+          <TabsContent
+            value="notes"
+            className="flex-1 mt-0 h-full overflow-hidden"
+          >
             <InternalNotes notes={notes} />
           </TabsContent>
         </Tabs>
