@@ -994,3 +994,161 @@ export const mockAudienceSegments = [
   { id: "SEG-006", name: "Abandoned Cart", count: 89 },
   { id: "SEG-007", name: "Inactive (30+ days)", count: 234 }
 ];
+
+export const mockChatTemplates = [
+  {
+    id: "TMP-001",
+    name: "Welcome Message",
+    category: "Automated Flows",
+    channel: "WhatsApp",
+    content: "Hi {{customer_name}}! 👋\n\nWelcome to Bakery Bliss! We're thrilled to have you here.\n\nBrowse our delicious range of cakes, pastries, and desserts. Need help? Just reply to this message!\n\nHappy shopping! 🎂",
+    variables: ["customer_name"],
+    updatedAt: "2025-02-10",
+    createdAt: "2025-01-15",
+    createdBy: "Aman Gupta",
+    usageCount: 245
+  },
+  {
+    id: "TMP-002",
+    name: "Order Confirmation",
+    category: "Quick Replies",
+    channel: "Instagram",
+    content: "Thank you for your order! 🎉\n\nOrder ID: {{order_id}}\nTotal Amount: ₹{{amount}}\n\nYour delicious treats will be ready soon. We'll notify you once they're out for delivery!\n\nTrack your order: {{tracking_link}}",
+    variables: ["order_id", "amount", "tracking_link"],
+    updatedAt: "2025-02-08",
+    createdAt: "2025-01-10",
+    createdBy: "Riya Verma",
+    usageCount: 412
+  },
+  {
+    id: "TMP-003",
+    name: "Payment Reminder",
+    category: "Automated Flows",
+    channel: "WhatsApp",
+    content: "Hi {{customer_name}},\n\nFriendly reminder: Your order {{order_id}} is pending payment.\n\nAmount due: ₹{{amount}}\n\nComplete payment here: {{payment_link}}\n\nNeed assistance? Reply to this message.",
+    variables: ["customer_name", "order_id", "amount", "payment_link"],
+    updatedAt: "2025-02-07",
+    createdAt: "2025-01-20",
+    createdBy: "Karan Singh",
+    usageCount: 89
+  },
+  {
+    id: "TMP-004",
+    name: "Delivery Update",
+    category: "Quick Replies",
+    channel: "WhatsApp",
+    content: "Great news! 🚚\n\nYour order {{order_id}} is out for delivery!\n\nExpected delivery: {{delivery_time}}\n\nDelivery partner: {{partner_name}}\nContact: {{partner_phone}}\n\nTrack live: {{tracking_link}}",
+    variables: ["order_id", "delivery_time", "partner_name", "partner_phone", "tracking_link"],
+    updatedAt: "2025-02-06",
+    createdAt: "2025-01-12",
+    createdBy: "Aman Gupta",
+    usageCount: 378
+  },
+  {
+    id: "TMP-005",
+    name: "Product Inquiry Response",
+    category: "Support Replies",
+    channel: "Facebook",
+    content: "Thanks for your interest in our products!\n\nOur {{agent_name}} will be happy to help you with:\n\n✓ Product details\n✓ Customization options\n✓ Pricing & offers\n✓ Delivery information\n\nWhat would you like to know more about?",
+    variables: ["agent_name"],
+    updatedAt: "2025-02-05",
+    createdAt: "2025-01-08",
+    createdBy: "Riya Verma",
+    usageCount: 156
+  },
+  {
+    id: "TMP-006",
+    name: "Birthday Greeting",
+    category: "Broadcast Messages",
+    channel: "WhatsApp",
+    content: "🎉 Happy Birthday {{customer_name}}! 🎂\n\nWishing you a day filled with joy and sweetness!\n\nAs our birthday gift to you, enjoy 25% OFF on your next order. Use code: BDAY25\n\nValid for 7 days. Make it special! 🎁",
+    variables: ["customer_name"],
+    updatedAt: "2025-02-04",
+    createdAt: "2025-01-25",
+    createdBy: "Aman Gupta",
+    usageCount: 67
+  },
+  {
+    id: "TMP-007",
+    name: "Bulk Order Quote",
+    category: "Sales Script",
+    channel: "Instagram",
+    content: "Thank you for your bulk order inquiry!\n\nWe'd love to help you with your order of {{quantity}} items.\n\nOur team will prepare a custom quote including:\n• Special bulk pricing\n• Delivery timeline\n• Customization options\n\nExpect our quote within 24 hours!",
+    variables: ["quantity"],
+    updatedAt: "2025-02-03",
+    createdAt: "2025-01-18",
+    createdBy: "Karan Singh",
+    usageCount: 34
+  },
+  {
+    id: "TMP-008",
+    name: "Feedback Request",
+    category: "Automated Flows",
+    channel: "WhatsApp",
+    content: "Hi {{customer_name}}! 🌟\n\nWe hope you enjoyed your order!\n\nYour feedback means the world to us. Could you take 30 seconds to rate your experience?\n\nRate us: {{feedback_link}}\n\nThank you for choosing Bakery Bliss! 💚",
+    variables: ["customer_name", "feedback_link"],
+    updatedAt: "2025-02-02",
+    createdAt: "2025-01-05",
+    createdBy: "Riya Verma",
+    usageCount: 198
+  },
+  {
+    id: "TMP-009",
+    name: "Cart Abandonment",
+    category: "Automated Flows",
+    channel: "WhatsApp",
+    content: "Hey {{customer_name}}! 🛒\n\nYou left some goodies in your cart:\n\n{{cart_items}}\n\nTotal: ₹{{cart_total}}\n\nComplete your order now and get FREE delivery! Offer valid for 24 hours.\n\nCheckout here: {{checkout_link}}",
+    variables: ["customer_name", "cart_items", "cart_total", "checkout_link"],
+    updatedAt: "2025-02-01",
+    createdAt: "2025-01-22",
+    createdBy: "Aman Gupta",
+    usageCount: 142
+  },
+  {
+    id: "TMP-010",
+    name: "Out of Stock Alert",
+    category: "Support Replies",
+    channel: "Unified Chat",
+    content: "We're sorry, but {{product_name}} is currently out of stock. 😔\n\nWould you like to:\n\n1️⃣ Get notified when it's back\n2️⃣ See similar products\n3️⃣ Pre-order for next batch\n\nReply with your choice or contact {{agent_name}} for help!",
+    variables: ["product_name", "agent_name"],
+    updatedAt: "2025-01-31",
+    createdAt: "2025-01-14",
+    createdBy: "Karan Singh",
+    usageCount: 78
+  }
+];
+
+export const templateCategories = [
+  "All",
+  "Automated Flows",
+  "Quick Replies",
+  "Broadcast Messages",
+  "Sales Script",
+  "Support Replies"
+];
+
+export const templateChannels = [
+  "All Channels",
+  "WhatsApp",
+  "Instagram",
+  "Facebook",
+  "Unified Chat"
+];
+
+export const templateVariables = [
+  { value: "{{customer_name}}", label: "Customer Name" },
+  { value: "{{order_id}}", label: "Order ID" },
+  { value: "{{amount}}", label: "Amount" },
+  { value: "{{agent_name}}", label: "Agent Name" },
+  { value: "{{tracking_link}}", label: "Tracking Link" },
+  { value: "{{payment_link}}", label: "Payment Link" },
+  { value: "{{delivery_time}}", label: "Delivery Time" },
+  { value: "{{partner_name}}", label: "Partner Name" },
+  { value: "{{partner_phone}}", label: "Partner Phone" },
+  { value: "{{quantity}}", label: "Quantity" },
+  { value: "{{feedback_link}}", label: "Feedback Link" },
+  { value: "{{cart_items}}", label: "Cart Items" },
+  { value: "{{cart_total}}", label: "Cart Total" },
+  { value: "{{checkout_link}}", label: "Checkout Link" },
+  { value: "{{product_name}}", label: "Product Name" }
+];

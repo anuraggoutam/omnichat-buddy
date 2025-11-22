@@ -12,6 +12,7 @@ import Customers from "./pages/Customers";
 import TeamInbox from "./pages/TeamInbox";
 import Tasks from "./pages/Tasks";
 import Broadcasts from "./pages/Broadcasts";
+import Templates from "./pages/Templates";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -94,10 +95,7 @@ const App = () => (
             path="/templates"
             element={
               <AppLayout>
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Chat Templates</h1>
-                  <p className="text-muted-foreground mt-2">Pre-built message templates for quick replies - coming soon...</p>
-                </div>
+                <Templates />
               </AppLayout>
             }
           />
