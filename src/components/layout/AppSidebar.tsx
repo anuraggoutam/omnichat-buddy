@@ -12,6 +12,15 @@ import {
   Settings,
   Workflow,
   Sparkles,
+  Inbox,
+  CheckSquare,
+  Target,
+  TrendingUp,
+  Plug,
+  FileText,
+  CreditCard,
+  Shield,
+  Zap,
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,18 +42,40 @@ const mainNavItems = [
   { title: "Orders", url: "/orders", icon: ShoppingCart },
   { title: "Products", url: "/products", icon: Package },
   { title: "Customers", url: "/customers", icon: Users },
+  { title: "Team Inbox", url: "/team-inbox", icon: Inbox, badge: "Optional" },
+  { title: "Tasks", url: "/tasks", icon: CheckSquare, badge: "Optional" },
 ];
 
 const marketingItems = [
   { title: "Broadcasts", url: "/broadcasts", icon: Megaphone },
-  { title: "Templates", url: "/templates", icon: MessageCircle },
+  { title: "Chat Templates", url: "/templates", icon: MessageCircle },
+  { title: "Campaigns", url: "/campaigns", icon: Zap, badge: "NEW" },
 ];
 
-const toolsItems = [
+const aiToolsItems = [
   { title: "AI Engine", url: "/ai-engine", icon: Sparkles },
   { title: "Workflows", url: "/workflows", icon: Workflow },
+];
+
+const salesCrmItems = [
+  { title: "Leads", url: "/leads", icon: Target, badge: "Optional" },
+  { title: "Pipeline", url: "/pipeline", icon: TrendingUp, badge: "Optional" },
+];
+
+const integrationsItems = [
+  { title: "Channels", url: "/channels", icon: Plug },
   { title: "Marketplace", url: "/marketplace", icon: ShoppingBag },
+];
+
+const insightsItems = [
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
+  { title: "Reports", url: "/reports", icon: FileText, badge: "NEW" },
+];
+
+const adminItems = [
+  { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Billing", url: "/billing", icon: CreditCard, badge: "NEW" },
+  { title: "User Management", url: "/user-management", icon: Shield },
 ];
 
 export function AppSidebar() {
@@ -70,6 +101,7 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="custom-scrollbar">
+        {/* Main */}
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -84,6 +116,11 @@ export function AppSidebar() {
                     >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
+                      {item.badge && !isCollapsed && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                          {item.badge}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -92,6 +129,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Marketing */}
         <SidebarGroup>
           <SidebarGroupLabel>Marketing</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -106,6 +144,11 @@ export function AppSidebar() {
                     >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
+                      {item.badge && !isCollapsed && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                          {item.badge}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -114,11 +157,12 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* AI Tools */}
         <SidebarGroup>
-          <SidebarGroupLabel>Tools</SidebarGroupLabel>
+          <SidebarGroupLabel>AI Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {toolsItems.map((item) => (
+              {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink
@@ -136,21 +180,109 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-auto">
+        {/* Sales / CRM */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Sales / CRM</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink
-                    to="/settings"
-                    className="hover:bg-sidebar-accent"
-                    activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
-                  >
-                    <Settings className="h-4 w-4" />
-                    <span>Settings</span>
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {salesCrmItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to={item.url}
+                      className="hover:bg-sidebar-accent"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                      {item.badge && !isCollapsed && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                          {item.badge}
+                        </span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Integrations */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Integrations</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {integrationsItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to={item.url}
+                      className="hover:bg-sidebar-accent"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Insights */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Insights</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {insightsItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to={item.url}
+                      className="hover:bg-sidebar-accent"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                      {item.badge && !isCollapsed && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                          {item.badge}
+                        </span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Admin */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adminItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to={item.url}
+                      className="hover:bg-sidebar-accent"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                      {item.badge && !isCollapsed && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                          {item.badge}
+                        </span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

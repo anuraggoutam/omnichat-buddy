@@ -68,12 +68,34 @@ const App = () => (
             }
           />
           <Route
+            path="/team-inbox"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Team Inbox</h1>
+                  <p className="text-muted-foreground mt-2">Manage team assignments and collaboration - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Tasks & To-Dos</h1>
+                  <p className="text-muted-foreground mt-2">Track your team's tasks and follow-ups - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
             path="/broadcasts"
             element={
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">Broadcasts</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">Send bulk messages to your customers - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -83,8 +105,19 @@ const App = () => (
             element={
               <AppLayout>
                 <div className="p-6">
-                  <h1 className="text-2xl font-bold">Templates</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <h1 className="text-2xl font-bold">Chat Templates</h1>
+                  <p className="text-muted-foreground mt-2">Pre-built message templates for quick replies - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/campaigns"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Campaigns</h1>
+                  <p className="text-muted-foreground mt-2">Multi-step automation campaigns and funnels - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -95,7 +128,7 @@ const App = () => (
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">AI Engine</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">AI agents, auto-replies, and smart suggestions - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -106,7 +139,40 @@ const App = () => (
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">Workflows</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">Visual automation builder - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/leads"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Leads</h1>
+                  <p className="text-muted-foreground mt-2">Manage and qualify your sales leads - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/pipeline"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Sales Pipeline</h1>
+                  <p className="text-muted-foreground mt-2">Track deals through your sales stages - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/channels"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Channels</h1>
+                  <p className="text-muted-foreground mt-2">Connect WhatsApp, Instagram, Facebook, Email & more - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -117,7 +183,7 @@ const App = () => (
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">Marketplace</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">Browse integrations and extensions - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -128,7 +194,18 @@ const App = () => (
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">Analytics</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">Track performance and insights - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Reports</h1>
+                  <p className="text-muted-foreground mt-2">Detailed exports, logs, and chat history - coming soon...</p>
                 </div>
               </AppLayout>
             }
@@ -139,7 +216,29 @@ const App = () => (
               <AppLayout>
                 <div className="p-6">
                   <h1 className="text-2xl font-bold">Settings</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                  <p className="text-muted-foreground mt-2">Configure your account and preferences - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/billing"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Billing</h1>
+                  <p className="text-muted-foreground mt-2">Manage your subscription and payments - coming soon...</p>
+                </div>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/user-management"
+            element={
+              <AppLayout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">User Management</h1>
+                  <p className="text-muted-foreground mt-2">Control team access and permissions - coming soon...</p>
                 </div>
               </AppLayout>
             }
