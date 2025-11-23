@@ -15,8 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Lead, mockAgents } from "@/lib/mockLeads";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 interface BulkActionModalProps {
   open: boolean;
@@ -24,6 +25,7 @@ interface BulkActionModalProps {
   selectedCount: number;
   actionType: "assign" | "stage" | "delete" | null;
   onConfirm: (data: { agentId?: string; stage?: Lead["stage"] }) => void;
+  isLoading?: boolean;
 }
 
 export function BulkActionModal({
@@ -32,9 +34,17 @@ export function BulkActionModal({
   selectedCount,
   actionType,
   onConfirm,
+  isLoading,
 }: BulkActionModalProps) {
   const [selectedAgent, setSelectedAgent] = useState("");
   const [selectedStage, setSelectedStage] = useState<Lead["stage"]>("New");
+
+  useEffect(() => {
+    if (open) {
+      setSelectedAgent("");
+      setSelectedStage("New");
+    }
+  }, [open]);
 
   const handleConfirm = () => {
     if (actionType === "assign") {
@@ -48,7 +58,7 @@ export function BulkActionModal({
     } else if (actionType === "delete") {
       onConfirm({});
     }
-    onClose();
+    // The parent component will close the modal on success
   };
 
   return (
@@ -66,7 +76,7 @@ export function BulkActionModal({
           {actionType === "assign" && (
             <div className="space-y-2">
               <Label>Select Agent</Label>
-              <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+              <Select value={selectedAgent} onValueChange={setSelectedAgent} disabled={isLoading}>
                 <SelectTrigger>
                   <SelectValue placeholder="Choose an agent..." />
                 </SelectTrigger>
@@ -84,7 +94,7 @@ export function BulkActionModal({
           {actionType === "stage" && (
             <div className="space-y-2">
               <Label>Select Stage</Label>
-              <Select value={selectedStage} onValueChange={(v) => setSelectedStage(v as Lead["stage"])}>
+              <Select value={selectedStage} onValueChange={(v) => setSelectedStage(v as Lead["stage"])} disabled={isLoading}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -109,13 +119,15 @@ export function BulkActionModal({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
           <Button
             onClick={handleConfirm}
             variant={actionType === "delete" ? "destructive" : "default"}
+            disabled={isLoading}
           >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Confirm
           </Button>
         </DialogFooter>

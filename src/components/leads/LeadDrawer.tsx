@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Lead, mockAgents } from "@/lib/mockLeads";
 import {
   Sheet,
@@ -30,6 +30,7 @@ import {
   ExternalLink,
   CheckCircle2,
   Clock,
+  Loader2,
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -38,7 +39,8 @@ interface LeadDrawerProps {
   lead: Lead | null;
   open: boolean;
   onClose: () => void;
-  onUpdateLead: (lead: Lead) => void;
+  onUpdateLead: (data: Partial<Lead>) => void;
+  isUpdating?: boolean;
 }
 
 const stageColors = {
@@ -50,67 +52,64 @@ const stageColors = {
   "Closed Lost": "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20",
 };
 
-export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProps) {
+export function LeadDrawer({ lead, open, onClose, onUpdateLead, isUpdating }: LeadDrawerProps) {
   const [newNote, setNewNote] = useState("");
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [localLead, setLocalLead] = useState(lead);
+  
+  useEffect(() => {
+    setLocalLead(lead);
+  }, [lead]);
 
-  if (!lead) return null;
+  if (!localLead) return null;
 
-  const agent = mockAgents.find((a) => a.id === lead.assignedAgentId);
+  const agent = mockAgents.find((a) => a.id === localLead.assignedAgentId);
 
   const handleStageChange = (newStage: Lead["stage"]) => {
-    onUpdateLead({ ...lead, stage: newStage });
-    toast.success(`Lead stage changed to ${newStage}`);
+    onUpdateLead({ stage: newStage });
   };
 
   const handleAgentChange = (agentId: string) => {
-    onUpdateLead({ ...lead, assignedAgentId: agentId });
-    toast.success("Lead assigned successfully");
+    onUpdateLead({ assignedAgentId: agentId === "unassigned" ? undefined : agentId });
   };
 
   const handleAddNote = () => {
     if (!newNote.trim()) return;
-    const updatedLead = {
-      ...lead,
-      notes: [
-        ...lead.notes,
-        {
-          id: `note_${Date.now()}`,
-          author: "Current User",
-          text: newNote,
-          createdAt: new Date().toISOString(),
-        },
-      ],
+    const newNoteObject = {
+      id: `note_${Date.now()}`,
+      author: "Current User", // This should come from auth context
+      text: newNote,
+      createdAt: new Date().toISOString(),
     };
-    onUpdateLead(updatedLead);
+    onUpdateLead({ notes: [...localLead.notes, newNoteObject] });
     setNewNote("");
-    toast.success("Note added");
   };
 
   const handleAddTask = () => {
     if (!newTaskTitle.trim()) return;
-    const updatedLead = {
-      ...lead,
-      tasks: [
-        ...lead.tasks,
-        {
-          id: `task_${Date.now()}`,
-          title: newTaskTitle,
-          status: "pending" as const,
-          assignedTo: lead.assignedAgentId || mockAgents[0].id,
-          dueDate: new Date(Date.now() + 86400000).toISOString(),
-        },
-      ],
+    const newTaskObject = {
+      id: `task_${Date.now()}`,
+      title: newTaskTitle,
+      status: "pending" as const,
+      assignedTo: localLead.assignedAgentId || mockAgents[0].id,
+      dueDate: new Date(Date.now() + 86400000).toISOString(),
     };
-    onUpdateLead(updatedLead);
+    onUpdateLead({ tasks: [...localLead.tasks, newTaskObject] });
     setNewTaskTitle("");
-    toast.success("Task created");
   };
-
+  
   const handlePromoteToCustomer = () => {
     handleStageChange("Closed Won");
     toast.success("Lead promoted to customer!");
   };
+
+
+  const renderSubmitButton = (text: string, onClick: () => void) => (
+    <Button onClick={onClick} size="sm" disabled={isUpdating}>
+      {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {text}
+    </Button>
+  )
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
@@ -120,34 +119,34 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
             <div className="flex items-center gap-3">
               <Avatar className="h-12 w-12">
                 <AvatarFallback>
-                  {lead.name
+                  {localLead.name
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <SheetTitle className="text-xl">{lead.name}</SheetTitle>
+                <SheetTitle className="text-xl">{localLead.name}</SheetTitle>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className={stageColors[lead.stage]}>{lead.stage}</Badge>
+                  <Badge className={stageColors[localLead.stage]}>{localLead.stage}</Badge>
                   <Badge
                     variant="outline"
                     className={
-                      lead.leadScore >= 70
+                      localLead.leadScore >= 70
                         ? "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
-                        : lead.leadScore >= 40
+                        : localLead.leadScore >= 40
                           ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400"
                           : "border-gray-500/20 bg-gray-500/10 text-gray-700 dark:text-gray-400"
                     }
                   >
-                    Score: {lead.leadScore}
+                    Score: {localLead.leadScore}
                   </Badge>
                 </div>
               </div>
             </div>
             <div className="text-right">
               <div className="text-lg font-semibold">
-                ${lead.leadValue.toLocaleString()}
+                ${localLead.leadValue.toLocaleString()}
               </div>
               <div className="text-xs text-muted-foreground">Lead Value</div>
             </div>
@@ -180,22 +179,22 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                {lead.phone}
+                {localLead.phone}
               </div>
-              {lead.email && (
+              {localLead.email && (
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Mail className="h-4 w-4" />
-                  {lead.email}
+                  {localLead.email}
                 </div>
               )}
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Tag className="h-4 w-4" />
-                Source: <Badge variant="outline">{lead.source}</Badge>
+                Source: <Badge variant="outline">{localLead.source}</Badge>
               </div>
-              {lead.utm && (
+              {localLead.utm && (
                 <div className="text-xs text-muted-foreground pl-6">
-                  Campaign: {lead.utm.campaign} | Source: {lead.utm.source} | Medium:{" "}
-                  {lead.utm.medium}
+                  Campaign: {localLead.utm.campaign} | Source: {localLead.utm.source} | Medium:{" "}
+                  {localLead.utm.medium}
                 </div>
               )}
             </div>
@@ -205,8 +204,9 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
           <div className="space-y-3">
             <Label>Assigned Agent</Label>
             <Select
-              value={lead.assignedAgentId || "unassigned"}
+              value={localLead.assignedAgentId || "unassigned"}
               onValueChange={handleAgentChange}
+              disabled={isUpdating}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -225,7 +225,7 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
           {/* Stage */}
           <div className="space-y-3">
             <Label>Lead Stage</Label>
-            <Select value={lead.stage} onValueChange={handleStageChange}>
+            <Select value={localLead.stage} onValueChange={handleStageChange} disabled={isUpdating}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -241,11 +241,11 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
           </div>
 
           {/* Tags */}
-          {lead.tags.length > 0 && (
+          {localLead.tags.length > 0 && (
             <div className="space-y-3">
               <Label>Tags</Label>
               <div className="flex flex-wrap gap-2">
-                {lead.tags.map((tag) => (
+                {localLead.tags.map((tag) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
@@ -275,7 +275,7 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-xs text-muted-foreground">Lead Score</div>
-                  <div className="text-2xl font-semibold">{lead.leadScore}</div>
+                  <div className="text-2xl font-semibold">{localLead.leadScore}</div>
                   <div className="text-xs text-muted-foreground mt-1">
                     Based on engagement and profile
                   </div>
@@ -283,20 +283,20 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
                 <div>
                   <div className="text-xs text-muted-foreground">Lead Value</div>
                   <div className="text-2xl font-semibold">
-                    ${lead.leadValue.toLocaleString()}
+                    ${localLead.leadValue.toLocaleString()}
                   </div>
                 </div>
               </div>
               <div>
                 <div className="text-xs text-muted-foreground">Created</div>
                 <div className="font-medium">
-                  {format(new Date(lead.createdAt), "PPP")}
+                  {format(new Date(localLead.createdAt), "PPP")}
                 </div>
               </div>
             </TabsContent>
 
             <TabsContent value="timeline" className="space-y-3 mt-4">
-              {lead.timeline.map((event) => (
+              {localLead.timeline.map((event) => (
                 <div key={event.id} className="flex gap-3 pb-3 border-b last:border-0">
                   <div className="bg-primary/10 rounded-full p-2 h-fit">
                     <Calendar className="h-4 w-4 text-primary" />
@@ -318,13 +318,12 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   rows={3}
+                  disabled={isUpdating}
                 />
-                <Button onClick={handleAddNote} size="sm">
-                  Add Note
-                </Button>
+                {renderSubmitButton("Add Note", handleAddNote)}
               </div>
               <div className="space-y-3">
-                {lead.notes.map((note) => (
+                {localLead.notes.map((note) => (
                   <div key={note.id} className="bg-muted/50 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-2">
                       <Avatar className="h-6 w-6">
@@ -352,13 +351,12 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
                   placeholder="Task title..."
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
+                  disabled={isUpdating}
                 />
-                <Button onClick={handleAddTask} size="sm">
-                  Add Task
-                </Button>
+                 {renderSubmitButton("Add Task", handleAddTask)}
               </div>
               <div className="space-y-2">
-                {lead.tasks.map((task) => (
+                {localLead.tasks.map((task) => (
                   <div
                     key={task.id}
                     className="flex items-center gap-3 p-3 rounded-lg border bg-card"
@@ -387,7 +385,8 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead }: LeadDrawerProp
 
           {/* Actions */}
           <div className="space-y-2 pt-4 border-t">
-            <Button onClick={handlePromoteToCustomer} className="w-full">
+            <Button onClick={handlePromoteToCustomer} className="w-full" disabled={isUpdating}>
+              {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Promote to Customer
             </Button>
             <Button variant="outline" className="w-full">

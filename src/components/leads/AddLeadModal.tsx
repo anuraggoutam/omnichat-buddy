@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,21 +18,36 @@ import {
 } from "@/components/ui/select";
 import { Lead } from "@/lib/mockLeads";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+type NewLeadData = Omit<
+  Lead,
+  "id" | "createdAt" | "tags" | "leadScore" | "assignedAgentId" | "stage" | "notes" | "timeline" | "tasks"
+>;
 
 interface AddLeadModalProps {
   open: boolean;
   onClose: () => void;
-  onAddLead: (lead: Lead) => void;
+  onAddLead: (lead: NewLeadData) => void;
+  isAdding?: boolean;
 }
 
-export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    source: "Manual" as Lead["source"],
-    leadValue: "0",
-  });
+const initialFormData = {
+  name: "",
+  phone: "",
+  email: "",
+  source: "Manual" as Lead["source"],
+  leadValue: 0,
+};
+
+export function AddLeadModal({ open, onClose, onAddLead, isAdding }: AddLeadModalProps) {
+  const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (open) {
+      setFormData(initialFormData);
+    }
+  }, [open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,40 +57,10 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
       return;
     }
 
-    const newLead: Lead = {
-      id: `lead_${Date.now()}`,
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email || null,
-      source: formData.source,
-      leadValue: parseInt(formData.leadValue) || 0,
-      createdAt: new Date().toISOString(),
-      tags: [],
-      leadScore: 50,
-      assignedAgentId: null,
-      stage: "New",
-      notes: [],
-      timeline: [
-        {
-          id: `tl_${Date.now()}`,
-          type: "created",
-          text: "Lead created",
-          createdAt: new Date().toISOString(),
-        },
-      ],
-      tasks: [],
-    };
-
-    onAddLead(newLead);
-    toast.success("Lead added successfully");
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      source: "Manual",
-      leadValue: "0",
+    onAddLead({
+        ...formData,
+        email: formData.email || null,
     });
-    onClose();
   };
 
   return (
@@ -93,6 +78,7 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="John Doe"
               required
+              disabled={isAdding}
             />
           </div>
 
@@ -105,6 +91,7 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               placeholder="+1234567890"
               required
+              disabled={isAdding}
             />
           </div>
 
@@ -116,6 +103,7 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="john@example.com"
+              disabled={isAdding}
             />
           </div>
 
@@ -126,6 +114,7 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
               onValueChange={(value: Lead["source"]) =>
                 setFormData({ ...formData, source: value })
               }
+              disabled={isAdding}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -149,18 +138,22 @@ export function AddLeadModal({ open, onClose, onAddLead }: AddLeadModalProps) {
               type="number"
               value={formData.leadValue}
               onChange={(e) =>
-                setFormData({ ...formData, leadValue: e.target.value })
+                setFormData({ ...formData, leadValue: parseInt(e.target.value) || 0 })
               }
               placeholder="0"
               min="0"
+              disabled={isAdding}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={isAdding}>
               Cancel
             </Button>
-            <Button type="submit">Add Lead</Button>
+            <Button type="submit" disabled={isAdding}>
+              {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Add Lead
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

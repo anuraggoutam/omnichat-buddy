@@ -1,554 +1,98 @@
+# OmniChat Buddy - Web Application
 
-📦 OmniFlow AI – README.md
+This is the web application for OmniChat Buddy, a SaaS platform for multi-channel communication, marketing, and business automation.
 
-The All-In-One AI-Powered Communication, Marketing & Business Automation Suite
+## Tech Stack
 
-
----
-
-🚀 Overview
-
-OmniFlow AI is a unified, AI-powered business operating system designed for:
-✔ Service-based businesses
-✔ Consultants
-✔ Agencies
-✔ Coaches
-✔ E-commerce sellers
-✔ Local businesses
-✔ SaaS founders
-
-The platform combines WhatsApp marketing, multichannel chat, CRM, automation, AI agents, fulfillment workflows, and analytics into one clean system — replacing 5–10 tools that businesses usually juggle.
-
-Think Interakt + Wati + Deropo + Hubspot Lite + Manychat AI + ClickUp Mini — all fused into one.
-
-Our goal is not just competing, but dominating with features others don’t even imagine.
-
+- **Framework:** [React](https://react.dev/) with [Vite](https://vitejs.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **UI:** [Shadcn UI](https://ui.shadcn.com/), [Tailwind CSS](https://tailwindcss.com/), [Lucide React](https://lucide.dev/guide/packages/lucide-react)
+- **Routing:** [React Router](https://reactrouter.com/)
+- **Data Fetching & State:** [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **Authentication:** [Supabase](https://supabase.com/)
 
 ---
 
-🧵 Core Philosophy
+## Getting Started
 
-One platform for all communication (WhatsApp, Instagram, Facebook, Email)
+Follow these instructions to set up and run the project on your local machine.
 
-One feed for all chats = Unified Inbox
+### Prerequisites
 
-One place for marketing → automation + broadcasts
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [Bun](https://bun.sh/) (optional, but recommended for faster dependency management)
+- A [Supabase](https://supabase.com/) account and a new project.
 
-One place for fulfillment → orders + customers
+### Setup
 
-AI presence everywhere
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd omnichat-buddy
+    ```
 
-Scalable architecture with clean modular code
+2.  **Install dependencies:**
+    ```bash
+    # Using npm
+    npm install
 
-Modern UI via Lovable + AI
+    # Or using bun
+    bun install
+    ```
 
-Cost-efficient infra with maximum margins
+3.  **Set up environment variables:**
+    - Copy the example environment file:
+      ```bash
+      cp .env.example .env.local
+      ```
+    - Open `.env.local` and add your Supabase project URL and anon key. You can find these in your Supabase project's "API" settings.
+      ```env
+      VITE_SUPABASE_URL="your-supabase-url"
+      VITE_SUPABASE_PUBLISHABLE_KEY="your-supabase-anon-key"
+      ```
 
+4.  **Run the development server:**
+    ```bash
+    # Using npm
+    npm run dev
 
-
----
-
-🔥 Final Feature Specification (MVP + Unique Boosters)
-
-This is the master list — confirmed, refined, and future-proof.
-
-
----
-
-💬 1. Unified Conversations Hub (Omnichannel Inbox)
-
-All customer chats in ONE place:
-
-Supported Channels:
-
-WhatsApp Cloud API
-
-Instagram DM
-
-Facebook Page Inbox
-
-Email (IMAP/SMTP basic integration)
-
-Website Chat Widget
-
-
-Features:
-
-Unified customer identity across channels
-
-Identify customer source (FB ad, Insta post, WhatsApp campaign, Email link, etc.)
-
-Real-time typing indicators
-
-Quick replies
-
-Media support (images, docs, video notes)
-
-Multi-agent (team members) handling
-
-Assign conversation to team
-
-Internal notes
-
-AI-suggested replies
-
-Conversation tags
-
-Conversation priority
-
-Auto-translation for multilingual chat
-
-
-> Goal: Become better than Interakt, Wati & Deropo with a powerful omnichannel experience.
-
-
-
+    # Or using bun
+    bun run dev
+    ```
+    The application should now be running on `http://localhost:5173` (or another port if 5173 is in use).
 
 ---
 
-📣 2. WhatsApp Marketing Suite (Better Than Deropo)
+## Project Architecture
 
-Core Tools
+- **`src/pages`**: Contains the top-level component for each page/route in the application.
+- **`src/components`**: Contains all reusable components, organized by feature (e.g., `leads`, `layout`, `ui`).
+- **`src/lib`**: Contains shared libraries, utilities (`utils.ts`), and the API service layer (`api/`).
+- **`src/integrations`**: Contains code for integrating with third-party services like Supabase.
+- **`src/App.tsx`**: The main application component where routing is defined.
 
-Bulk WhatsApp sending (Smart throttling, Rotation)
+### Key Architectural Patterns
 
-Campaign Manager
-
-Segmentation (tags, city, rating, frequency, etc.)
-
-Import/export contacts
-
-Smart Sender Queue (avoid blocks)
-
-Pre-built campaign templates
-
-
-Visual Campaign Builder
-
-Drag-and-drop flow builder for:
-
-Drip sequences
-
-Follow-up sequences
-
-WhatsApp chat funnels
-
-Lead nurture flows
-
-
-
-AI Features
-
-AI message writer
-
-Auto A/B suggestions
-
-Predictive send-time optimization (simple rule engine)
-
-
-> This section alone beats Deropo in value + automation.
-
-
-
+- **Routing:** The app uses `react-router-dom` for all routing. A nested route structure is used with a `ProtectedLayout` to ensure that all business-related routes require authentication.
+- **Authentication:** User authentication is handled by Supabase. The `src/components/ProtectedRoute.tsx` component checks for an active session and redirects to the `/auth` page if the user is not logged in.
+- **Data Fetching:** Data fetching is managed by `@tanstack/react-query`. API calls are centralized in the `src/lib/api/` directory.
+- **UI:** The UI is built using Shadcn UI, which is a collection of reusable components built on top of Tailwind CSS and Radix UI.
 
 ---
 
-🛒 3. Orders & Sales Module
+## Current Status & Next Steps
 
-For e-commerce + service providers + consultants.
+This project is currently a **high-fidelity prototype**.
 
-Features:
+### What's Working:
+- **UI/UX:** Most of the user interface is built and visually functional.
+- **Authentication:** User sign-up, sign-in, and session management with Supabase are fully functional.
+- **Routing:** All application routes are defined and protected by authentication.
+- **Leads Page:** The Leads page has been refactored to use a mock API layer with `react-query`, serving as a template for other pages.
 
-Create orders manually from chats
+### What's NOT Working (Next Steps):
+- **Backend Integration:** The application is **not connected to a real backend API**. All data, except for user authentication, is currently mocked or returns empty from the placeholder API service in `src/lib/api/`. The immediate next step is to build out a backend and connect the frontend API services to it.
+- **Feature Completeness:** Many features outlined in the product specification (such as workflows, campaigns, AI engine) are only UI shells. The business logic needs to be implemented.
+- **Placeholder Actions:** Many buttons and actions (e.g., "Create Order", "Start Workflow") are placeholders and do not have any functionality.
 
-Cart builder inside chat
-
-Auto payment link generation
-
-Payment status tracking
-
-Status updates via WhatsApp
-
-Invoice generator
-
-Order timelines
-
-Customer purchase history
-
-
-
----
-
-🧑‍🤝‍🧑 4. Customers (Mini-CRM)
-
-360° customer profile
-
-Notes, tags, interests
-
-Communication history
-
-Purchase timeline
-
-Lifetime value
-
-Customer source tracking
-
-Segment builder
-
-Smart audience lists for marketing
-
-
-
----
-
-📦 5. Products / Services Module
-
-Supports both:
-✔ Physical products
-✔ Digital services
-
-Features:
-
-Product catalog
-
-Variants
-
-Service packages
-
-Subscription services (simple logic)
-
-Auto-attachment inside chat
-
-Payment CTA buttons
-
-
-
----
-
-📈 6. Marketing Automation
-
-This is where we differentiate.
-
-Tools:
-
-Campaign scheduling
-
-Customer segmentation
-
-Personalization variables
-
-Send-time optimization
-
-Basic funnel analytics
-
-Entry/exit triggers
-
-
-Supported Trigger Events:
-
-New customer
-
-Abandoned chat
-
-Order placed
-
-Order completed
-
-Tag added
-
-Lead followed up
-
-
-
----
-
-💡 7. AI Engine (Our Secret Sauce)
-
-AI Capabilities:
-
-Auto-reply AI (WhatsApp + Insta + FB)
-
-Lead qualification AI
-
-Customer intent detection
-
-Smart reply suggestions
-
-AI content writer (captions, messages, descriptions)
-
-AI knowledge base FAQ bot
-
-Summaries for long conversations
-
-Auto-create tasks from chats
-
-
-Unique Sell Point (USP):
-
-👉 "AI that works across all channels, not just WhatsApp."
-
-
----
-
-🧰 8. Tools Module
-
-URL shortener with tracking
-
-QR generator
-
-Image compressor
-
-Caption generator
-
-Hashtag generator
-
-Business name generator
-
-Re-engagement flow builder
-
-
-
----
-
-🧩 9. Workflows (AI + Automation Hybrid)
-
-Drag & drop builder for:
-
-Auto-route conversations
-
-Auto-tag customers
-
-Auto-send WhatsApp messages
-
-Auto-assign to team
-
-Auto-create order drafts
-
-Auto-followup for 24h
-
-Auto-categorize leads
-
-
-> Think “Manychat but simplified + WhatsApp + Omni chat”.
-
-
-
-
----
-
-🛍 10. Marketplace
-
-Optional future revenue stream:
-
-WhatsApp template packs
-
-Conversation templates
-
-Marketing presets
-
-Automation templates
-
-Business niche-specific kits (ecom, hotel, tutor, astrologer etc.)
-
-
-
----
-
-📊 11. Analytics Suite
-
-Fully visual dashboard:
-
-Campaign performance
-
-Conversation metrics
-
-Team performance
-
-Funnel conversion
-
-Lead source analytics
-
-Customer value analysis
-
-Revenue dashboard
-
-Response time analytics
-
-
-
----
-
-🌐 Architecture Overview (Production Ready)
-
-Frontend
-
-Next.js (App Router)
-
-Tailwind
-
-Shadcn UI
-
-RTK Query
-
-JWT + Refresh tokens
-
-Real-time via WebSockets
-
-
-Backend
-
-Node.js + TypeScript
-
-Express / NestJS (modular)
-
-Microservice-ready structure
-
-Redis for queues + caching
-
-Resend / Nodemailer for email
-
-Meta WhatsApp Cloud API
-
-Instagram + Facebook Messaging APIs
-
-S3/Cloudflare R2 for file storage
-
-
-Database
-
-MongoDB (sharded ready architecture)
-
-Collections:
-
-users
-
-teams
-
-chats
-
-messages
-
-campaigns
-
-templates
-
-customers
-
-orders
-
-products
-
-segments
-
-workflows
-
-logs
-
-
-
-
----
-
-🪜 Development Roadmap
-
-MVP (2–4 weeks)
-
-Unified Inbox (WhatsApp + Insta + FB)
-
-Campaign sender
-
-Products
-
-Customers
-
-Orders
-
-Basic AI auto-reply
-
-Templates
-
-Tools
-
-Basic workflow automation
-
-Analytics basics
-
-Team roles
-
-
-Phase 2 (Growth)
-
-Advanced AI engine
-
-Instagram automation
-
-FB automation
-
-Multi-agent auto-routing
-
-Knowledge base bot
-
-Advanced segmentation
-
-
-Phase 3 (Domination)
-
-Template marketplace
-
-Agency white labeling
-
-Subscription packages
-
-Automation library
-
-
-
----
-
-🌟 Unique Features We Offer (USP List)
-
-🟡 1. Real Omnichannel (Deropo doesn’t have this)
-
-WhatsApp + Instagram DM + Facebook + Email in one inbox.
-
-🔵 2. Customer source tracking
-
-Know EXACTLY:
-
-Which ad they clicked
-
-Which platform they came from
-
-Which funnel they touched
-
-
-🔥 3. Workflow automation better than competitors
-
-Drip, follow-ups, re-engagement, journey builder.
-
-🧠 4. AI everywhere
-
-Replies, content, routing, tags, summaries — everything with AI.
-
-🟣 5. Orders + automation
-
-Chat → cart → payment → confirmation → tracking.
-
-🟢 6. Mini-CRM integrated deeply
-
-No other system offers this level of integration.
-
-🛠 7. Value-packed Tools module
-
-Utility tools that businesses use daily.
-
-
----
-
-📌 Conclusion
-
-This README is your single source of truth.
-Yeh project Deropo ko peeche chhod deta hai,
-Interakt ko obsolete kar deta hai,
-Aur tumhare product ko real business OS bana deta hai.
-
+This README provides a starting point for developing the full application and connecting it to a live backend.
