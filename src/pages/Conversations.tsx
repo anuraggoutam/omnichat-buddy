@@ -67,7 +67,7 @@ const Conversations = () => {
   // Mobile: Single panel navigation with smooth transitions
   if (isMobile) {
     return (
-      <div className="flex h-screen bg-[#e5ddd5] dark:bg-[#0b141a] overflow-hidden relative">
+      <div className="flex h-full bg-[#e5ddd5] dark:bg-[#0b141a] overflow-hidden relative" style={{ height: 'calc(100vh - 64px)', maxHeight: 'calc(100vh - 64px)' }}>
         {/* Conversation List - Mobile */}
         <div
           className={cn(
@@ -129,10 +129,10 @@ const Conversations = () => {
   // Tablet: Two panels (list + chat, profile as drawer)
   if (breakpoint === "tablet") {
     return (
-      <div className="flex h-screen bg-background overflow-hidden">
+      <div className="flex h-full bg-[#e5ddd5] dark:bg-[#0b141a] overflow-hidden" style={{ height: 'calc(100vh - 64px)', maxHeight: 'calc(100vh - 64px)' }}>
         {/* Left Panel - Conversation List */}
         <div className={cn(
-          "flex-shrink-0",
+          "flex-shrink-0 bg-white dark:bg-[#111b21] border-r border-border/50",
           selectedConversation ? "w-[320px]" : "w-full"
         )}>
           <ConversationList
@@ -148,7 +148,7 @@ const Conversations = () => {
 
         {/* Middle Panel - Chat Thread */}
         {selectedConversation ? (
-          <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+          <div className="flex-1 flex flex-col overflow-hidden min-w-0 bg-[#e5ddd5] dark:bg-[#0b141a] h-full">
             <ChatThread
               conversation={selectedConversation}
               onBack={handleBack}
@@ -156,16 +156,17 @@ const Conversations = () => {
             />
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
+          <div className="flex-1 flex items-center justify-center text-muted-foreground bg-[#e5ddd5] dark:bg-[#0b141a]">
             <div className="text-center">
-              <p className="text-sm">Select a conversation to start chatting</p>
+              <div className="mb-4 text-6xl opacity-20">💬</div>
+              <p className="text-sm font-medium">Select a conversation to start chatting</p>
             </div>
           </div>
         )}
 
         {/* Right Panel - Customer Profile (Drawer on Tablet) */}
         {selectedConversation && showProfile && (
-          <div className="absolute right-0 top-0 bottom-0 w-[360px] z-50 animate-slide-left">
+          <div className="absolute right-0 top-0 bottom-0 w-[360px] z-50 animate-slide-left bg-white dark:bg-[#111b21] border-l border-border/50 shadow-xl">
             <CustomerProfile
               customer={selectedConversation.customer}
               onClose={() => setShowProfile(false)}
@@ -178,7 +179,7 @@ const Conversations = () => {
 
   // Desktop: Three panels side-by-side
   return (
-    <div className="flex h-screen bg-[#e5ddd5] dark:bg-[#0b141a] overflow-hidden">
+    <div className="flex h-full bg-[#e5ddd5] dark:bg-[#0b141a] overflow-hidden" style={{ height: 'calc(100vh - 64px)', maxHeight: 'calc(100vh - 64px)' }}>
       {/* Left Panel - Conversation List */}
       <div className={cn(
         "flex-shrink-0 border-r border-border/50 bg-white dark:bg-[#111b21]",
@@ -197,7 +198,7 @@ const Conversations = () => {
 
       {/* Middle Panel - Chat Thread */}
       {selectedConversation ? (
-        <div className="flex-1 flex flex-col overflow-hidden min-w-0 bg-[#e5ddd5] dark:bg-[#0b141a]">
+        <div className="flex-1 flex flex-col overflow-hidden min-w-0 bg-[#e5ddd5] dark:bg-[#0b141a] h-full">
           <ChatThread
             conversation={selectedConversation}
             onBack={handleBack}

@@ -19,11 +19,16 @@ export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => 
   const activities = activityTimeline[customer.id as keyof typeof activityTimeline] || [];
 
   return (
-    <div className="fixed lg:relative inset-0 lg:inset-auto w-full lg:w-[360px] border-l border-border bg-card flex flex-col z-50 lg:z-auto h-full">
-      <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between flex-shrink-0">
-        <h3 className="font-semibold text-sm sm:text-base">Customer Profile</h3>
+    <div className="fixed lg:relative inset-0 lg:inset-auto w-full lg:w-[360px] border-l border-border/50 bg-white dark:bg-[#111b21] flex flex-col z-50 lg:z-auto h-full">
+      <div className="p-3 sm:p-4 border-b border-border/50 bg-[#f0f2f5] dark:bg-[#202c33] flex items-center justify-between flex-shrink-0">
+        <h3 className="font-semibold text-sm sm:text-base text-[#111b21] dark:text-[#e9edef]">Customer Profile</h3>
         {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden h-9 w-9">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onClose} 
+            className="lg:hidden h-9 w-9 rounded-full hover:bg-[#e9edef] dark:hover:bg-[#2a3942] text-[#54656f] dark:text-[#8696a0]"
+          >
             <X className="h-4 w-4" />
           </Button>
         )}
