@@ -29,20 +29,20 @@ export default function Analytics() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="page-padding space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold">Analytics</h1>
-          <p className="text-muted-foreground mt-1">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold">Analytics</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Track performance across sales, conversations, leads, and campaigns
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-[180px]">
-              <Calendar className="h-4 w-4 mr-2" />
+            <SelectTrigger className="w-full sm:w-[150px] h-9 sm:h-10 text-xs sm:text-sm">
+              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -54,7 +54,7 @@ export default function Analytics() {
           </Select>
 
           <Select value={channelFilter} onValueChange={setChannelFilter}>
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-full sm:w-[140px] h-9 sm:h-10 text-xs sm:text-sm">
               <SelectValue placeholder="All Channels" />
             </SelectTrigger>
             <SelectContent>
@@ -66,19 +66,19 @@ export default function Analytics() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="sm" onClick={() => handleExport("csv")}>
-            <Download className="h-4 w-4 mr-2" />
-            CSV
+          <Button variant="outline" size="sm" onClick={() => handleExport("csv")} className="text-xs sm:text-sm">
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">CSV</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => handleExport("pdf")}>
-            <Download className="h-4 w-4 mr-2" />
-            PDF
+          <Button variant="outline" size="sm" onClick={() => handleExport("pdf")} className="text-xs sm:text-sm">
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">PDF</span>
           </Button>
         </div>
       </div>
 
       {/* Top Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         <StatCard
           title="Total Conversations"
           value={mockTopMetrics.totalConversations.value.toLocaleString()}

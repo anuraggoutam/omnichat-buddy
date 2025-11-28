@@ -194,7 +194,7 @@ export default function Leads() {
   }
 
   return (
-    <div className="p-6">
+    <div className="page-padding">
        <input
         type="file"
         ref={importFileRef}
@@ -202,56 +202,59 @@ export default function Leads() {
         accept=".csv"
         onChange={handleFileSelected}
       />
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Leads</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold">Leads</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Manage and track your sales leads
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleImportClick}>
-              <Upload className="h-4 w-4 mr-2" />
-              Import CSV
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button variant="outline" size="sm" onClick={handleImportClick} className="text-xs sm:text-sm">
+              <Upload className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Import CSV</span>
+              <span className="sm:hidden">Import</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={handleExport}>
-              <Download className="h-4 w-4 mr-2" />
-              Export
+            <Button variant="outline" size="sm" onClick={handleExport} className="text-xs sm:text-sm">
+              <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Export</span>
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => navigate("/leads/kanban")}
+              className="text-xs sm:text-sm"
             >
-              <LayoutGrid className="h-4 w-4 mr-2" />
-              Kanban
+              <LayoutGrid className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Kanban</span>
             </Button>
-            <Button onClick={() => setAddModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Lead
+            <Button onClick={() => setAddModalOpen(true)} size="sm" className="text-xs sm:text-sm">
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Add Lead</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="p-4">
-            <div className="text-2xl font-bold">{isLoading ? <Skeleton className="h-8 w-1/2" /> : stats.total}</div>
-            <div className="text-xs text-muted-foreground">Total Leads</div>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <Card className="p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold">{isLoading ? <Skeleton className="h-6 sm:h-8 w-1/2" /> : stats.total}</div>
+            <div className="text-xs text-muted-foreground mt-1">Total Leads</div>
           </Card>
-          <Card className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{isLoading ? <Skeleton className="h-8 w-1/2" /> : stats.newToday}</div>
-            <div className="text-xs text-muted-foreground">New Today</div>
+          <Card className="p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">{isLoading ? <Skeleton className="h-6 sm:h-8 w-1/2" /> : stats.newToday}</div>
+            <div className="text-xs text-muted-foreground mt-1">New Today</div>
           </Card>
-          <Card className="p-4">
-            <div className="text-2xl font-bold text-orange-600">{isLoading ? <Skeleton className="h-8 w-1/2" /> : stats.hot}</div>
-            <div className="text-xs text-muted-foreground">Hot Leads</div>
+          <Card className="p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-orange-600">{isLoading ? <Skeleton className="h-6 sm:h-8 w-1/2" /> : stats.hot}</div>
+            <div className="text-xs text-muted-foreground mt-1">Hot Leads</div>
           </Card>
-          <Card className="p-4">
-            <div className="text-2xl font-bold text-green-600">{isLoading ? <Skeleton className="h-8 w-1/2" /> : `${stats.conversion}%`}</div>
-            <div className="text-xs text-muted-foreground">Conversion Rate</div>
+          <Card className="p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-green-600">{isLoading ? <Skeleton className="h-6 sm:h-8 w-1/2" /> : `${stats.conversion}%`}</div>
+            <div className="text-xs text-muted-foreground mt-1">Conversion Rate</div>
           </Card>
         </div>
 
@@ -274,16 +277,17 @@ export default function Leads() {
 
         {/* Bulk Actions */}
         {selectedLeads.length > 0 && (
-          <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg border border-primary/10">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-primary/5 rounded-lg border border-primary/10">
             <span className="text-sm font-medium">
               {selectedLeads.length} lead(s) selected
             </span>
-            <div className="flex gap-2 ml-auto">
+            <div className="flex gap-2 flex-wrap w-full sm:w-auto sm:ml-auto">
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "assign" })}
                 disabled={bulkUpdateMutation.isLoading}
+                className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Assign Agent
               </Button>
@@ -291,7 +295,8 @@ export default function Leads() {
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "stage" })}
-                 disabled={bulkUpdateMutation.isLoading}
+                disabled={bulkUpdateMutation.isLoading}
+                className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Change Stage
               </Button>
@@ -299,7 +304,8 @@ export default function Leads() {
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "delete" })}
-                 disabled={bulkUpdateMutation.isLoading}
+                disabled={bulkUpdateMutation.isLoading}
+                className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Delete
               </Button>
@@ -328,16 +334,17 @@ export default function Leads() {
         )}
 
         {/* Pagination */}
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="text-xs sm:text-sm text-muted-foreground">
             Showing {leads.length} of {totalCount} leads
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
+              className="flex-1 sm:flex-initial text-xs sm:text-sm"
             >
               Previous
             </Button>
@@ -346,6 +353,7 @@ export default function Leads() {
               size="sm"
               onClick={() => setPage((p) => p + 1)}
               disabled={page * PAGE_SIZE >= totalCount}
+              className="flex-1 sm:flex-initial text-xs sm:text-sm"
             >
               Next
             </Button>

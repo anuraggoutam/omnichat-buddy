@@ -19,18 +19,18 @@ export const CustomerProfile = ({ customer, onClose }: CustomerProfileProps) => 
   const activities = activityTimeline[customer.id as keyof typeof activityTimeline] || [];
 
   return (
-    <div className="fixed lg:relative inset-0 lg:inset-auto w-full lg:w-[360px] border-l border-border bg-card flex flex-col z-50 lg:z-auto">
-      <div className="p-4 border-b border-border flex items-center justify-between flex-shrink-0">
-        <h3 className="font-semibold text-sm">Customer Profile</h3>
+    <div className="fixed lg:relative inset-0 lg:inset-auto w-full lg:w-[360px] border-l border-border bg-card flex flex-col z-50 lg:z-auto h-full">
+      <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between flex-shrink-0">
+        <h3 className="font-semibold text-sm sm:text-base">Customer Profile</h3>
         {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden">
+          <Button variant="ghost" size="icon" onClick={onClose} className="lg:hidden h-9 w-9">
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
 
-      <ScrollArea className="flex-1 h-full">
-        <div className="p-4 space-y-4">
+      <ScrollArea className="flex-1 h-full custom-scrollbar">
+        <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
           {/* Customer Card */}
           <Card>
             <CardContent className="pt-6">

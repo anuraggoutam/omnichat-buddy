@@ -42,7 +42,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
     >
       <div
         className={cn(
-          "max-w-[70%] rounded-2xl px-4 py-2 shadow-sm transition-smooth",
+          "max-w-[85%] sm:max-w-[70%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm transition-smooth",
           isCustomer
             ? "bg-muted text-foreground rounded-tl-none"
             : isAI
@@ -57,7 +57,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
           </div>
         )}
         
-        <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+        <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">{message.content}</p>
         
         <div className="flex items-center justify-end gap-1 mt-1">
           <span className="text-xs opacity-70">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,12 +42,22 @@ import {
   AlertCircle,
   FileText,
   PlayCircle,
+  ChevronLeft,
+  Filter,
 } from "lucide-react";
 import { mockCampaigns } from "@/lib/mockData";
 import { CampaignDrawer } from "@/components/campaigns/CampaignDrawer";
 import { CampaignDetailDrawer } from "@/components/campaigns/CampaignDetailDrawer";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export default function Campaigns() {
+  const isMobile = useIsMobile();
   const [campaigns, setCampaigns] = useState(mockCampaigns);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
   const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);
@@ -56,6 +66,7 @@ export default function Campaigns() {
   const [searchQuery, setSearchQuery] = useState("");
   const [channelFilter, setChannelFilter] = useState("All Channels");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
 
   const statusConfig = {
     Completed: { color: "bg-success text-success-foreground", icon: CheckCircle },
@@ -178,132 +189,227 @@ export default function Campaigns() {
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Left Sidebar - Filters */}
-      <div className="w-64 border-r border-border bg-card">
-        <ScrollArea className="h-full">
-          <div className="p-4 space-y-6">
-            <div>
-              <h3 className="text-sm font-semibold mb-3 text-foreground">Filters</h3>
-              <div className="space-y-1">
-                {filters.map((filter) => {
-                  const Icon = filter.icon;
-                  return (
-                    <button
-                      key={filter.name}
-                      onClick={() => setActiveFilter(filter.name)}
-                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors ${
-                        activeFilter === filter.name
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:bg-muted"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {filter.name}
-                    </button>
-                  );
-                })}
+      {/* Left Sidebar - Filters (Collapsible on Mobile) */}
+      {isMobile ? (
+        <Collapsible open={sidebarOpen} onOpenChange={setSidebarOpen}>
+          <div className={cn(
+            "fixed inset-0 z-50 bg-background transition-transform",
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          )}>
+            <div className="w-64 h-full border-r border-border bg-card">
+              <div className="p-4 border-b border-border flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Filters</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setSidebarOpen(false)}
+                  className="h-8 w-8"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
               </div>
-            </div>
+              <ScrollArea className="h-[calc(100%-57px)]">
+                <div className="p-4 space-y-6">
+                  <div>
+                    <h3 className="text-sm font-semibold mb-3 text-foreground">Status</h3>
+                    <div className="space-y-1">
+                      {filters.map((filter) => {
+                        const Icon = filter.icon;
+                        return (
+                          <button
+                            key={filter.name}
+                            onClick={() => {
+                              setActiveFilter(filter.name);
+                              setSidebarOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors ${
+                              activeFilter === filter.name
+                                ? "bg-primary text-primary-foreground"
+                                : "text-muted-foreground hover:bg-muted"
+                            }`}
+                          >
+                            <Icon className="h-4 w-4" />
+                            {filter.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-            <Separator />
+                  <Separator />
 
-            <div>
-              <h3 className="text-sm font-semibold mb-3 text-foreground">Audience</h3>
-              <div className="space-y-1">
-                {audienceFilters.map((filter) => (
-                  <button
-                    key={filter}
-                    className="w-full text-left px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-muted transition-colors"
-                  >
-                    <Users className="h-4 w-4 inline mr-2" />
-                    {filter}
-                  </button>
-                ))}
-              </div>
-            </div>
+                  <div>
+                    <h3 className="text-sm font-semibold mb-3 text-foreground">Audience</h3>
+                    <div className="space-y-1">
+                      {audienceFilters.map((filter) => (
+                        <button
+                          key={filter}
+                          className="w-full text-left px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                          <Users className="h-4 w-4 inline mr-2" />
+                          {filter}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-            <Separator />
+                  <Separator />
 
-            <div>
-              <h3 className="text-sm font-semibold mb-3 text-foreground">Date Range</h3>
-              <Button variant="outline" className="w-full justify-start" size="sm">
-                <Calendar className="h-4 w-4 mr-2" />
-                Last 30 days
-              </Button>
+                  <div>
+                    <h3 className="text-sm font-semibold mb-3 text-foreground">Date Range</h3>
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Last 30 days
+                    </Button>
+                  </div>
+                </div>
+              </ScrollArea>
             </div>
           </div>
-        </ScrollArea>
-      </div>
+        </Collapsible>
+      ) : (
+        <div className="w-64 border-r border-border bg-card flex-shrink-0">
+          <ScrollArea className="h-full">
+            <div className="p-4 space-y-6">
+              <div>
+                <h3 className="text-sm font-semibold mb-3 text-foreground">Filters</h3>
+                <div className="space-y-1">
+                  {filters.map((filter) => {
+                    const Icon = filter.icon;
+                    return (
+                      <button
+                        key={filter.name}
+                        onClick={() => setActiveFilter(filter.name)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors ${
+                          activeFilter === filter.name
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {filter.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-sm font-semibold mb-3 text-foreground">Audience</h3>
+                <div className="space-y-1">
+                  {audienceFilters.map((filter) => (
+                    <button
+                      key={filter}
+                      className="w-full text-left px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-muted transition-colors"
+                    >
+                      <Users className="h-4 w-4 inline mr-2" />
+                      {filter}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-sm font-semibold mb-3 text-foreground">Date Range</h3>
+                <Button variant="outline" className="w-full justify-start" size="sm">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Last 30 days
+                </Button>
+              </div>
+            </div>
+          </ScrollArea>
+        </div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="border-b border-border bg-card px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Campaigns</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Multi-channel marketing campaigns and automation flows
-              </p>
+        <div className="border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0">
+          <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              {isMobile && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setSidebarOpen(true)}
+                  className="h-9 w-9 flex-shrink-0"
+                >
+                  <Filter className="h-4 w-4" />
+                </Button>
+              )}
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">Campaigns</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 hidden sm:block">
+                  Multi-channel marketing campaigns and automation flows
+                </p>
+              </div>
             </div>
             <Button
               onClick={() => {
                 setSelectedCampaign(null);
                 setIsCreateDrawerOpen(true);
               }}
-              className="gap-2"
+              className="gap-2 flex-shrink-0 text-xs sm:text-sm"
+              size="sm"
             >
-              <Plus className="h-4 w-4" />
-              New Campaign
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">New Campaign</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
 
           {/* Filters Bar */}
-          <div className="mt-4 flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search campaigns..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-9 sm:h-10"
               />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All Status</SelectItem>
-                <SelectItem value="Draft">Draft</SelectItem>
-                <SelectItem value="Scheduled">Scheduled</SelectItem>
-                <SelectItem value="Running">Running</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-                <SelectItem value="Failed">Failed</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={channelFilter} onValueChange={setChannelFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Channel" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All Channels">All Channels</SelectItem>
-                <SelectItem value="WhatsApp">WhatsApp</SelectItem>
-                <SelectItem value="Instagram">Instagram</SelectItem>
-                <SelectItem value="Email">Email</SelectItem>
-                <SelectItem value="Unified Chat">Unified Chat</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-[150px] h-9 sm:h-10">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All Status</SelectItem>
+                  <SelectItem value="Draft">Draft</SelectItem>
+                  <SelectItem value="Scheduled">Scheduled</SelectItem>
+                  <SelectItem value="Running">Running</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                  <SelectItem value="Failed">Failed</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={channelFilter} onValueChange={setChannelFilter}>
+                <SelectTrigger className="w-full sm:w-[150px] h-9 sm:h-10">
+                  <SelectValue placeholder="Channel" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Channels">All Channels</SelectItem>
+                  <SelectItem value="WhatsApp">WhatsApp</SelectItem>
+                  <SelectItem value="Instagram">Instagram</SelectItem>
+                  <SelectItem value="Email">Email</SelectItem>
+                  <SelectItem value="Unified Chat">Unified Chat</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
-        {/* Table */}
+        {/* Table / Card View */}
         <ScrollArea className="flex-1">
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {filteredCampaigns.length === 0 ? (
-              <Card className="p-12 text-center">
-                <Send className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2 text-foreground">
+              <Card className="p-8 sm:p-12 text-center">
+                <Send className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">
                   No campaigns found
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -318,13 +424,105 @@ export default function Campaigns() {
                       setIsCreateDrawerOpen(true);
                     }}
                     className="gap-2"
+                    size="sm"
                   >
                     <Plus className="h-4 w-4" />
                     Create Campaign
                   </Button>
                 )}
               </Card>
+            ) : isMobile ? (
+              // Mobile Card View
+              <div className="space-y-3">
+                {filteredCampaigns.map((campaign) => {
+                  const StatusIcon = statusConfig[campaign.status as keyof typeof statusConfig]?.icon;
+                  return (
+                    <Card
+                      key={campaign.id}
+                      className="cursor-pointer hover:shadow-md transition-all"
+                      onClick={() => handleViewCampaign(campaign)}
+                    >
+                      <CardHeader className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 min-w-0">
+                            <CardTitle className="text-base mb-1">{campaign.name}</CardTitle>
+                            <p className="text-xs text-muted-foreground mb-2">{campaign.id}</p>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <Badge
+                                className={
+                                  channelColors[campaign.channel as keyof typeof channelColors] || ""
+                                }
+                              >
+                                {campaign.channel}
+                              </Badge>
+                              <Badge
+                                className={`${
+                                  statusConfig[campaign.status as keyof typeof statusConfig]?.color
+                                } gap-1`}
+                              >
+                                {StatusIcon && <StatusIcon className="h-3 w-3" />}
+                                {campaign.status}
+                              </Badge>
+                            </div>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => handleViewCampaign(campaign)}>
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Analytics
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleEditCampaign(campaign)}>
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDuplicate(campaign)}>
+                                <Copy className="h-4 w-4 mr-2" />
+                                Duplicate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(campaign.id)}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-4 pt-0 space-y-2 text-sm">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1">
+                            <Users className="h-3 w-3 text-muted-foreground" />
+                            <span className="font-medium">{campaign.audienceSize}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">{campaign.audienceSegment}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Sent:</span>
+                          <span className="font-medium">{campaign.sent}</span>
+                        </div>
+                        {campaign.scheduledAt && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Scheduled:</span>
+                            <span className="text-xs">{campaign.scheduledAt}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Updated {campaign.updatedAt}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
             ) : (
+              // Desktop Table View
               <Card>
                 <Table>
                   <TableHeader>

@@ -20,6 +20,9 @@ import {
 } from "@/components/ui/table";
 import { MoreHorizontal, ArrowUpDown, Phone, Mail, MessageCircle } from "lucide-react";
 import { format } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -97,9 +100,157 @@ export function LeadsTable({
   });
 
   const allSelected = leads.length > 0 && selectedLeads.length === leads.length;
+  const isMobile = useIsMobile();
 
+  // Mobile Card View
+  if (isMobile) {
+    return (
+      <div className="space-y-3">
+        {sortedLeads.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <p>No leads found</p>
+          </div>
+        ) : (
+          sortedLeads.map((lead) => {
+            const agent = mockAgents.find((a) => a.id === lead.assignedAgentId);
+            return (
+              <Card
+                key={lead.id}
+                className={cn(
+                  "cursor-pointer hover:shadow-md transition-all",
+                  selectedLeads.includes(lead.id) && "ring-2 ring-primary"
+                )}
+                onClick={() => onViewLead(lead)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <Checkbox
+                        checked={selectedLeads.includes(lead.id)}
+                        onCheckedChange={() => onSelectLead(lead.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`Select ${lead.name}`}
+                      />
+                      <Avatar className="h-10 w-10 flex-shrink-0">
+                        <AvatarFallback className="text-xs">
+                          {lead.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold truncate">{lead.name}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge className={stageColors[lead.stage]}>{lead.stage}</Badge>
+                          <Badge
+                            variant="outline"
+                            className={
+                              lead.leadScore >= 70
+                                ? "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
+                                : lead.leadScore >= 40
+                                  ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400"
+                                  : "border-gray-500/20 bg-gray-500/10 text-gray-700 dark:text-gray-400"
+                            }
+                          >
+                            Score: {lead.leadScore}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onViewLead(lead)}>
+                          View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Assign Agent</DropdownMenuItem>
+                        <DropdownMenuItem>Change Stage</DropdownMenuItem>
+                        <DropdownMenuItem>Create Task</DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => onDeleteLead(lead.id)}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Phone className="h-3 w-3" />
+                        <span className="text-xs">{lead.phone}</span>
+                      </div>
+                      {lead.email && (
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Mail className="h-3 w-3" />
+                          <span className="text-xs truncate">{lead.email}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="gap-1 text-xs">
+                          {sourceIcons[lead.source]}
+                          {lead.source}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          ${lead.leadValue.toLocaleString()}
+                        </span>
+                      </div>
+                      {agent && (
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
+                            <AvatarFallback className="text-xs">
+                              {agent.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-xs text-muted-foreground">{agent.name}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {lead.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 pt-2 border-t">
+                        {lead.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {lead.tags.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{lead.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="text-xs text-muted-foreground pt-1">
+                      Created {format(new Date(lead.createdAt), "MMM d, yyyy")}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+    );
+  }
+
+  // Desktop Table View
   return (
-    <div className="rounded-md border bg-card">
+    <div className="rounded-md border bg-card overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>

@@ -117,63 +117,66 @@ export default function Workflows() {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-border bg-card px-6 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Workflows</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+      <div className="border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0">
+        <div className="flex items-center justify-between mb-3 sm:mb-4 gap-3">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">Workflows</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
               Build automation flows for WhatsApp, Instagram, orders, and more
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="gap-2">
-              <Upload className="h-4 w-4" />
+          <div className="flex gap-2 flex-shrink-0">
+            <Button variant="outline" className="gap-2 text-xs sm:text-sm hidden sm:flex" size="sm">
+              <Upload className="h-3 w-3 sm:h-4 sm:w-4" />
               Import Workflow
             </Button>
-            <Button onClick={handleCreateWorkflow} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Create Workflow
+            <Button onClick={handleCreateWorkflow} className="gap-2 text-xs sm:text-sm" size="sm">
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Create Workflow</span>
+              <span className="sm:hidden">Create</span>
             </Button>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search workflows..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-9 sm:h-10"
             />
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Paused">Paused</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="lastUpdated">Last Updated</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="runs">Total Runs</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex gap-2">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-[150px] h-9 sm:h-10">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Paused">Paused</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-full sm:w-[180px] h-9 sm:h-10">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="lastUpdated">Last Updated</SelectItem>
+                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="runs">Total Runs</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
       {/* Content */}
       <ScrollArea className="flex-1">
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {filteredWorkflows.length === 0 ? (
             <Card className="p-12 text-center">
               <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -195,7 +198,7 @@ export default function Workflows() {
               )}
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {filteredWorkflows.map((workflow) => (
                 <WorkflowCard
                   key={workflow.id}

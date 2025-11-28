@@ -394,6 +394,7 @@ export function LeadDrawer({ lead, open, onClose, onUpdateLead, isUpdating }: Le
             </Button>
             <Button variant="outline" className="w-full">
               Start Workflow
+              {/* Placeholder: Would open workflow selection */}
             </Button>
           </div>
         </div>

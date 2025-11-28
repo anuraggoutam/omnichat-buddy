@@ -100,40 +100,41 @@ const Customers = () => {
     <div className="flex-1 flex flex-col bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">Customers</h1>
-              <p className="text-sm text-muted-foreground mt-1">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4 gap-3">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Customers</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 Manage your customer relationships
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline">
-                <Upload className="h-4 w-4 mr-2" />
+            <div className="flex gap-2 flex-shrink-0">
+              <Button variant="outline" size="sm" className="text-xs sm:text-sm hidden sm:flex">
+                <Upload className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Import
               </Button>
-              <Button onClick={() => setIsAddModalOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Customer
+              <Button onClick={() => setIsAddModalOpen(true)} size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Customer</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
 
           {/* Search & Filters */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="relative flex-1 max-w-md">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search customers…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 h-9 sm:h-10"
               />
             </div>
 
             <Select value={sourceFilter} onValueChange={setSourceFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px] h-9 sm:h-10">
                 <SelectValue placeholder="Source Channel" />
               </SelectTrigger>
               <SelectContent>
@@ -164,32 +165,32 @@ const Customers = () => {
 
       {/* Customers Table */}
       <ScrollArea className="flex-1">
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {filteredCustomers.length === 0 ? (
-            <div className="rounded-lg border border-border bg-card p-12 text-center">
-              <UsersIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+            <div className="rounded-lg border border-border bg-card p-8 sm:p-12 text-center">
+              <UsersIcon className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
                 No customers found yet
               </h3>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-sm text-muted-foreground mb-6">
                 Start chatting or import your customer list
               </p>
-              <Button variant="outline" onClick={() => setIsAddModalOpen(true)}>
+              <Button variant="outline" onClick={() => setIsAddModalOpen(true)} size="sm">
                 <Upload className="h-4 w-4 mr-2" />
                 Import Customers
               </Button>
             </div>
           ) : (
-            <div className="rounded-lg border border-border bg-card">
+            <div className="rounded-lg border border-border bg-card overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Profile</TableHead>
-                    <TableHead>Tags</TableHead>
+                    <TableHead className="hidden sm:table-cell">Tags</TableHead>
                     <TableHead>Source</TableHead>
                     <TableHead className="text-right">Orders</TableHead>
-                    <TableHead className="text-right">Lifetime Value</TableHead>
-                    <TableHead>Activity</TableHead>
+                    <TableHead className="text-right hidden md:table-cell">Lifetime Value</TableHead>
+                    <TableHead className="hidden lg:table-cell">Activity</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
                   </TableRow>

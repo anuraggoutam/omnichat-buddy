@@ -22,6 +22,7 @@ import {
   storeHealth,
 } from "@/lib/mockData";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const kpis = [
@@ -74,25 +75,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-[1600px] mx-auto">
+    <div className="flex flex-col gap-4 sm:gap-6 page-padding max-w-[1600px] mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-sm sm:text-base text-muted-foreground mt-1">
           Welcome back! Here's what's happening with your business today.
         </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {kpis.map((kpi) => (
           <Card key={kpi.title} className="hover-lift">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">{kpi.title}</CardTitle>
+              <kpi.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${kpi.color}`} />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{kpi.value}</div>
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{kpi.value}</div>
               <div className="flex items-center text-xs text-muted-foreground mt-1">
                 {kpi.trend === "up" && (
                   <>
@@ -106,7 +107,8 @@ const Dashboard = () => {
                     <span className="text-destructive">-{kpi.change}%</span>
                   </>
                 )}
-                <span className="ml-1">from last week</span>
+                <span className="ml-1 hidden sm:inline">from last week</span>
+                <span className="ml-1 sm:hidden">vs last week</span>
               </div>
             </CardContent>
           </Card>
@@ -114,14 +116,15 @@ const Dashboard = () => {
       </div>
 
       {/* Sales Chart & AI Suggestions */}
-      <div className="grid gap-6 lg:grid-cols-7">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-7">
         <Card className="lg:col-span-4">
-          <CardHeader>
-            <CardTitle>Sales Overview</CardTitle>
-            <CardDescription>Revenue and orders over the last 7 days</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">Sales Overview</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Revenue and orders over the last 7 days</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-4 sm:p-6 pt-0">
+            <div className="w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={250} className="min-w-[300px] sm:min-w-0">
               <AreaChart data={salesChartData}>
                 <defs>
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
@@ -160,18 +163,19 @@ const Dashboard = () => {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-3">
-          <CardHeader>
+          <CardHeader className="p-4 sm:p-6">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-accent" />
-              <CardTitle>AI Suggestions</CardTitle>
+              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+              <CardTitle className="text-base sm:text-lg">AI Suggestions</CardTitle>
             </div>
-            <CardDescription>Smart recommendations to boost your sales</CardDescription>
+            <CardDescription className="text-xs sm:text-sm">Smart recommendations to boost your sales</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
             {aiSuggestions.map((suggestion) => (
               <div
                 key={suggestion.id}
@@ -197,7 +201,14 @@ const Dashboard = () => {
                       )}
                     </div>
                   </div>
-                  <Button size="sm" variant="outline">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => {
+                      // Placeholder: Would apply AI suggestion
+                      toast.success("AI suggestion applied successfully!");
+                    }}
+                  >
                     Apply
                   </Button>
                 </div>
@@ -208,13 +219,13 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Conversations</CardTitle>
-            <CardDescription>Latest customer interactions</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">Recent Conversations</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Latest customer interactions</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <div className="space-y-3">
               {demoConversations.slice(0, 5).map((conv) => (
                 <div
@@ -253,11 +264,11 @@ const Dashboard = () => {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-            <CardDescription>Latest customer orders</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">Recent Orders</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Latest customer orders</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <div className="space-y-3">
               {demoOrders.map((order) => (
                 <div
@@ -285,12 +296,12 @@ const Dashboard = () => {
 
       {/* Store Health */}
       <Card>
-        <CardHeader>
-          <CardTitle>Store Health</CardTitle>
-          <CardDescription>Key performance metrics for your business</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">Store Health</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">Key performance metrics for your business</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+        <CardContent className="p-4 sm:p-6 pt-0">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
             {Object.entries(storeHealth).map(([key, metric]) => (
               <div key={key} className="space-y-2">
                 <div className="flex items-center justify-between">

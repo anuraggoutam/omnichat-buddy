@@ -92,34 +92,35 @@ const Products = () => {
     <div className="flex-1 flex flex-col bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">Products</h1>
-              <p className="text-sm text-muted-foreground mt-1">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4 gap-3">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Products</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 Manage your product catalog
               </p>
             </div>
-            <Button onClick={() => setIsAddModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Product
+            <Button onClick={() => setIsAddModalOpen(true)} size="sm" className="flex-shrink-0 text-xs sm:text-sm">
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Add Product</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
 
           {/* Search & Filters */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="relative flex-1 max-w-md">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search products…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 h-9 sm:h-10"
               />
             </div>
 
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px] h-9 sm:h-10">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -150,15 +151,15 @@ const Products = () => {
 
       {/* Products Table */}
       <ScrollArea className="flex-1">
-        <div className="p-6">
-          <div className="rounded-lg border border-border bg-card">
+        <div className="p-4 sm:p-6">
+          <div className="rounded-lg border border-border bg-card overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px]">Image</TableHead>
                   <TableHead>Product Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Channels</TableHead>
+                  <TableHead className="hidden sm:table-cell">Category</TableHead>
+                  <TableHead className="hidden md:table-cell">Channels</TableHead>
                   <TableHead className="text-right">Price</TableHead>
                   <TableHead>Stock</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
@@ -187,15 +188,15 @@ const Products = () => {
                           </div>
                         </TableCell>
                         <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">{product.category}</Badge>
+                        <TableCell className="hidden sm:table-cell">
+                          <Badge variant="secondary" className="text-xs">{product.category}</Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           <div className="flex flex-wrap gap-1">
                             {product.channel.map((channel) => {
                               const badge = getChannelBadge(channel);
                               return (
-                                <Badge key={channel} className={badge.color}>
+                                <Badge key={channel} className={badge.color + " text-xs"}>
                                   {badge.emoji} {channel}
                                 </Badge>
                               );

@@ -44,30 +44,31 @@ export default function Channels() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="page-padding space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mb-1">
             <span>Dashboard</span>
             <span>/</span>
             <span>Settings</span>
             <span>/</span>
             <span className="text-foreground">Channels</span>
           </div>
-          <h1 className="text-3xl font-bold">Channels</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold">Channels</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Connect all your communication pipelines in one place
           </p>
         </div>
-        <Button onClick={() => setAddModalOpen(true)} size="lg">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Channel
+        <Button onClick={() => setAddModalOpen(true)} size="sm" className="text-xs sm:text-sm">
+          <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Add Channel</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Connected Channels</CardDescription>
@@ -117,12 +118,12 @@ export default function Channels() {
 
       {/* Connected Channels */}
       {connectedChannels.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Connected Channels</h2>
-            <Badge variant="secondary">{connectedChannels.length} active</Badge>
+            <h2 className="text-lg sm:text-xl font-semibold">Connected Channels</h2>
+            <Badge variant="secondary" className="text-xs sm:text-sm">{connectedChannels.length} active</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {connectedChannels.map((channel) => (
               <ChannelCard
                 key={channel.id}
@@ -138,12 +139,12 @@ export default function Channels() {
 
       {/* Available Channels */}
       {disconnectedChannels.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Available to Connect</h2>
-            <Badge variant="outline">{disconnectedChannels.length} channels</Badge>
+            <h2 className="text-lg sm:text-xl font-semibold">Available to Connect</h2>
+            <Badge variant="outline" className="text-xs sm:text-sm">{disconnectedChannels.length} channels</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {disconnectedChannels.map((channel) => (
               <ChannelCard
                 key={channel.id}
