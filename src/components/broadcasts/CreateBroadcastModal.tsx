@@ -44,7 +44,7 @@ import { mockBroadcastTemplates, mockAudienceSegments } from "@/lib/mockData";
 interface CreateBroadcastModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onBroadcastCreated: (broadcast: any) => void;
+  onBroadcastCreated?: (broadcast: any) => void;
 }
 
 export function CreateBroadcastModal({
@@ -111,8 +111,9 @@ export function CreateBroadcastModal({
       createdBy: "You",
     };
 
-    onBroadcastCreated(newBroadcast);
+    onBroadcastCreated?.(newBroadcast);
     handleReset();
+    onOpenChange(false);
   };
 
   const handleReset = () => {

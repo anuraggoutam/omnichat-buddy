@@ -4,76 +4,78 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChannelBadge } from "@/components/conversations/ChannelBadge";
 import { formatDistanceToNow, format } from "date-fns";
+import { Contact } from "@/hooks/useContacts";
 
 interface CustomerDetailDrawerProps {
-  customer: any;
+  customer: Contact | any | null;
   open: boolean;
-  onClose: () => void;
+  onOpenChange?: (open: boolean) => void;
+  onClose?: () => void;
 }
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Active":
-      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-    case "Returning":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-    case "Lead":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-    default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
-  }
-};
-
-const mockOrderHistory = [
-  { id: "ORD-2401-1234", date: "2024-01-18", amount: 850, status: "Delivered" },
-  { id: "ORD-2401-1235", date: "2024-01-15", amount: 1200, status: "Delivered" },
-  { id: "ORD-2401-1220", date: "2024-01-10", amount: 650, status: "Delivered" },
-];
 
 const suggestedTags = ["VIP", "Hot Lead", "Bulk Order", "Repeat Buyer", "Premium"];
 
-export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetailDrawerProps) => {
-  if (!open) return null;
+export const CustomerDetailDrawer = ({ customer, open, onOpenChange, onClose }: CustomerDetailDrawerProps) => {
+  if (!open || !customer) return null;
+
+  const handleClose = () => {
+    onOpenChange?.(false);
+    onClose?.();
+  };
+
+  // Support both old mock data format and new Contact format
+  const name = customer.name || "Unknown";
+  const phone = customer.phone || "";
+  const email = customer.email || "";
+  const channel = customer.channel || customer.source || "whatsapp";
+  const tags = customer.tags || [];
+  const lifetimeValue = customer.lifetime_value || customer.lifetimeValue || 0;
+  const totalOrders = customer.total_orders || customer.totalOrders || 0;
+  const isVip = customer.is_vip || customer.tags?.includes("VIP") || false;
+  const lastActive = customer.last_active || customer.lastActive;
+  const avatarUrl = customer.avatar_url || customer.avatar;
+  const notes = customer.notes || "";
+  const createdAt = customer.created_at || customer.joinedOn;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-[480px] bg-card border-l border-border shadow-xl z-50 flex flex-col animate-slide-in-right">
+    <div className="fixed inset-y-0 right-0 w-[480px] max-w-full bg-card border-l border-border shadow-xl z-50 flex flex-col animate-slide-in-right">
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-3xl">
-              {customer.avatar}
-            </div>
+            <Avatar className="w-16 h-16">
+              <AvatarImage src={avatarUrl} />
+              <AvatarFallback className="text-2xl">
+                {name.split(" ").map((n: string) => n[0]).join("").toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">{customer.name}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{customer.phone}</p>
+              <h2 className="text-lg font-semibold text-foreground">{name}</h2>
+              {phone && <p className="text-sm text-muted-foreground mt-1">{phone}</p>}
+              {email && <p className="text-sm text-muted-foreground">{email}</p>}
               <div className="flex items-center gap-2 mt-2">
-                <ChannelBadge channel={customer.source} />
+                <ChannelBadge channel={channel} />
+                {isVip && <Badge className="bg-warning/10 text-warning">VIP</Badge>}
               </div>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button variant="ghost" size="icon" onClick={handleClose}>
             <X className="h-5 w-5" />
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {customer.tags.map((tag: string) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
-            </Badge>
-          ))}
-        </div>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {tags.map((tag: string) => (
+              <Badge key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
 
         <div className="flex gap-2">
           <Button className="flex-1">
@@ -81,7 +83,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
             Send Message
           </Button>
           <Button variant="outline" className="flex-1">
-            View in Conversations
+            View Conversations
           </Button>
         </div>
       </div>
@@ -96,37 +98,38 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
               <h3 className="font-medium text-foreground">Customer Info</h3>
             </div>
             <div className="space-y-2 text-sm">
+              {customer.id && (
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Customer ID</span>
+                  <span className="font-medium text-foreground font-mono text-xs">
+                    {customer.id.slice(0, 8)}...
+                  </span>
+                </div>
+              )}
+              {createdAt && (
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Joined On</span>
+                  <span className="font-medium text-foreground">
+                    {format(new Date(createdAt), "MMM dd, yyyy")}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Customer ID</span>
-                <span className="font-medium text-foreground">{customer.id}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Language</span>
-                <span className="font-medium text-foreground">{customer.language}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Joined On</span>
-                <span className="font-medium text-foreground">
-                  {format(new Date(customer.joinedOn), "MMM dd, yyyy")}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Status</span>
-                <Badge className={getStatusColor(customer.status)}>{customer.status}</Badge>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Source Channel</span>
-                <ChannelBadge channel={customer.source} />
+                <span className="text-muted-foreground">Channel</span>
+                <ChannelBadge channel={channel} />
               </div>
             </div>
 
-            <div className="mt-4">
-              <label className="text-sm text-muted-foreground mb-2 block">Notes</label>
-              <Textarea
-                placeholder="Add notes about this customer..."
-                className="min-h-[80px]"
-              />
-            </div>
+            {notes && (
+              <div className="mt-4">
+                <label className="text-sm text-muted-foreground mb-2 block">Notes</label>
+                <Textarea
+                  defaultValue={notes}
+                  placeholder="Add notes about this customer..."
+                  className="min-h-[80px]"
+                />
+              </div>
+            )}
           </div>
 
           <Separator />
@@ -141,73 +144,24 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
               <div className="p-4 rounded-lg bg-muted/50">
                 <p className="text-xs text-muted-foreground mb-1">Lifetime Value</p>
                 <p className="text-xl font-bold text-foreground">
-                  ₹{customer.lifetimeValue.toLocaleString()}
+                  ${Number(lifetimeValue).toLocaleString()}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50">
                 <p className="text-xs text-muted-foreground mb-1">Total Orders</p>
-                <p className="text-xl font-bold text-foreground">{customer.totalOrders}</p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50">
-                <p className="text-xs text-muted-foreground mb-1">Total Chats</p>
-                <p className="text-xl font-bold text-foreground">{customer.totalChats}</p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50">
-                <p className="text-xs text-muted-foreground mb-1">Avg Response</p>
-                <p className="text-xl font-bold text-foreground">{customer.avgResponseTime}</p>
+                <p className="text-xl font-bold text-foreground">{totalOrders}</p>
               </div>
             </div>
-            <div className="mt-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Last Active</span>
-                <span className="font-medium text-foreground">
-                  {formatDistanceToNow(new Date(customer.lastActive), { addSuffix: true })}
-                </span>
+            {lastActive && (
+              <div className="mt-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Last Active</span>
+                  <span className="font-medium text-foreground">
+                    {formatDistanceToNow(new Date(lastActive), { addSuffix: true })}
+                  </span>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <Separator />
-
-          {/* Order History */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-              <h3 className="font-medium text-foreground">Order History</h3>
-            </div>
-            <div className="rounded-lg border border-border overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {mockOrderHistory.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium text-xs">{order.id}</TableCell>
-                      <TableCell className="text-xs">
-                        {format(new Date(order.date), "MMM dd")}
-                      </TableCell>
-                      <TableCell className="text-right text-xs font-semibold">
-                        ₹{order.amount}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="secondary"
-                          className="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                        >
-                          {order.status}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            )}
           </div>
 
           <Separator />
@@ -219,7 +173,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
               <h3 className="font-medium text-foreground">Tags</h3>
             </div>
             <div className="flex flex-wrap gap-2 mb-3">
-              {customer.tags.map((tag: string) => (
+              {tags.map((tag: string) => (
                 <Badge key={tag} variant="secondary">
                   {tag}
                   <X className="h-3 w-3 ml-1 cursor-pointer hover:text-destructive" />
@@ -234,7 +188,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
               <p className="text-xs text-muted-foreground mb-2">Suggested tags:</p>
               <div className="flex flex-wrap gap-2">
                 {suggestedTags
-                  .filter((tag) => !customer.tags.includes(tag))
+                  .filter((tag) => !tags.includes(tag))
                   .map((tag) => (
                     <Badge
                       key={tag}
