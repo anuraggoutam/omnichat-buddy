@@ -91,8 +91,13 @@ export const updateLead = async (leadId: string, updatedData: Partial<Lead>): Pr
       stage: "Contacted",
       source: "Website",
       leadScore: 80,
+      leadValue: 0,
       assignedAgentId: "agent_1",
       createdAt: new Date().toISOString(),
+      tags: [],
+      notes: [],
+      timeline: [],
+      tasks: [],
       ...updatedData
   }
   return updatedLead;
