@@ -44,43 +44,34 @@ import {
   Trash2,
   MessageSquare,
   Calendar,
-  Loader2,
+  TrendingUp,
 } from "lucide-react";
+import { mockChatTemplates, templateCategories, templateChannels } from "@/lib/mockData";
 import { TemplateDrawer } from "@/components/templates/TemplateDrawer";
-import { useTemplates, useCreateTemplate, useUpdateTemplate, useDeleteTemplate, MessageTemplate } from "@/hooks/useTemplates";
-import { toast } from "sonner";
-import { format } from "date-fns";
-
-const templateCategories = ["All", "general", "marketing", "support", "sales", "automated"];
-const templateChannels = ["All Channels", "whatsapp", "instagram", "facebook", "email"];
 
 export default function Templates() {
-  const { data: templates = [], isLoading } = useTemplates();
-  const createTemplate = useCreateTemplate();
-  const updateTemplate = useUpdateTemplate();
-  const deleteTemplate = useDeleteTemplate();
-
+  const [templates, setTemplates] = useState(mockChatTemplates);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [channelFilter, setChannelFilter] = useState("All Channels");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<MessageTemplate | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [templateToDelete, setTemplateToDelete] = useState<string | null>(null);
 
   const channelColors: Record<string, string> = {
-    whatsapp: "bg-[hsl(var(--whatsapp))] text-white",
-    instagram: "bg-gradient-to-br from-purple-500 to-pink-500 text-white",
-    facebook: "bg-[hsl(var(--channel-facebook))] text-white",
-    email: "bg-accent text-accent-foreground",
+    WhatsApp: "bg-[hsl(var(--whatsapp))] text-white",
+    Instagram: "bg-gradient-to-br from-purple-500 to-pink-500 text-white",
+    Facebook: "bg-[hsl(var(--channel-facebook))] text-white",
+    "Unified Chat": "bg-accent text-accent-foreground",
   };
 
   const categoryColors: Record<string, string> = {
-    automated: "bg-primary/10 text-primary border-primary/20",
-    general: "bg-success/10 text-success border-success/20",
-    marketing: "bg-accent/10 text-accent border-accent/20",
-    sales: "bg-warning/10 text-warning border-warning/20",
-    support: "bg-muted text-muted-foreground border-border",
+    "Automated Flows": "bg-primary/10 text-primary border-primary/20",
+    "Quick Replies": "bg-success/10 text-success border-success/20",
+    "Broadcast Messages": "bg-accent/10 text-accent border-accent/20",
+    "Sales Script": "bg-warning/10 text-warning border-warning/20",
+    "Support Replies": "bg-muted text-muted-foreground border-border",
   };
 
   const filteredTemplates = templates.filter((template) => {
@@ -100,65 +91,59 @@ export default function Templates() {
     setIsDrawerOpen(true);
   };
 
-  const handleEdit = (template: MessageTemplate) => {
+  const handleEdit = (template: any) => {
     setSelectedTemplate(template);
     setIsDrawerOpen(true);
   };
 
-  const handleDuplicate = async (template: MessageTemplate) => {
-    try {
-      await createTemplate.mutateAsync({
-        name: `${template.name} (Copy)`,
-        category: template.category,
-        content: template.content,
-        variables: template.variables,
-        channel: template.channel,
-        is_approved: false,
-      });
-      toast.success("Template duplicated");
-    } catch (error) {
-      toast.error("Failed to duplicate template");
-    }
+  const handleDuplicate = (template: any) => {
+    const newTemplate = {
+      ...template,
+      id: `TMP-${String(templates.length + 1).padStart(3, "0")}`,
+      name: `${template.name} (Copy)`,
+      createdAt: new Date().toISOString().split("T")[0],
+      updatedAt: new Date().toISOString().split("T")[0],
+      usageCount: 0,
+    };
+    setTemplates([newTemplate, ...templates]);
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = () => {
     if (templateToDelete) {
-      try {
-        await deleteTemplate.mutateAsync(templateToDelete);
-        toast.success("Template deleted");
-      } catch (error) {
-        toast.error("Failed to delete template");
-      }
+      setTemplates(templates.filter((t) => t.id !== templateToDelete));
       setTemplateToDelete(null);
       setDeleteDialogOpen(false);
     }
   };
 
-  const handleSaveTemplate = async (templateData: any) => {
-    try {
-      if (selectedTemplate) {
-        await updateTemplate.mutateAsync({
-          id: selectedTemplate.id,
-          ...templateData,
-        });
-        toast.success("Template updated");
-      } else {
-        await createTemplate.mutateAsync(templateData);
-        toast.success("Template created");
-      }
-      setIsDrawerOpen(false);
-    } catch (error) {
-      toast.error("Failed to save template");
+  const handleSaveTemplate = (templateData: any) => {
+    if (selectedTemplate) {
+      // Update existing
+      setTemplates(
+        templates.map((t) =>
+          t.id === selectedTemplate.id
+            ? {
+                ...t,
+                ...templateData,
+                updatedAt: new Date().toISOString().split("T")[0],
+              }
+            : t
+        )
+      );
+    } else {
+      // Create new
+      const newTemplate = {
+        ...templateData,
+        id: `TMP-${String(templates.length + 1).padStart(3, "0")}`,
+        createdAt: new Date().toISOString().split("T")[0],
+        updatedAt: new Date().toISOString().split("T")[0],
+        createdBy: "You",
+        usageCount: 0,
+      };
+      setTemplates([newTemplate, ...templates]);
     }
+    setIsDrawerOpen(false);
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -195,7 +180,7 @@ export default function Templates() {
             <SelectContent>
               {templateCategories.map((category) => (
                 <SelectItem key={category} value={category}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -207,7 +192,7 @@ export default function Templates() {
             <SelectContent>
               {templateChannels.map((channel) => (
                 <SelectItem key={channel} value={channel}>
-                  {channel.charAt(0).toUpperCase() + channel.slice(1)}
+                  {channel}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -244,7 +229,7 @@ export default function Templates() {
                     <TableHead>Template Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Channel</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Usage</TableHead>
                     <TableHead>Last Updated</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
                   </TableRow>
@@ -273,19 +258,23 @@ export default function Templates() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge className={channelColors[template.channel] || "bg-muted"}>
+                        <Badge className={channelColors[template.channel] || ""}>
                           {template.channel}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={template.is_approved ? "default" : "secondary"}>
-                          {template.is_approved ? "Approved" : "Pending"}
-                        </Badge>
+                        <div className="flex items-center gap-1 text-sm">
+                          <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                          <span className="font-medium text-foreground">
+                            {template.usageCount}
+                          </span>
+                          <span className="text-muted-foreground">times</span>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <Calendar className="h-3 w-3" />
-                          {format(new Date(template.updated_at), "MMM d, yyyy")}
+                          {template.updatedAt}
                         </div>
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>

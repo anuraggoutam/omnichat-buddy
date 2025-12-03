@@ -290,7 +290,7 @@ const Customers = () => {
       )}
 
       {/* Add Customer Modal */}
-      <AddCustomerModal open={isAddModalOpen} onOpenChange={setIsAddModalOpen} />
+      <AddCustomerModal open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
     </div>
   );
 };

@@ -22,8 +22,7 @@ import {
 
 interface AddCustomerModalProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSubmit?: (data: any) => void;
+  onClose: () => void;
 }
 
 const sources = [
@@ -36,15 +35,8 @@ const sources = [
 
 const availableTags = ["VIP", "Hot Lead", "Bulk Order", "Regular", "Repeat Buyer", "Premium"];
 
-export const AddCustomerModal = ({ open, onOpenChange, onSubmit }: AddCustomerModalProps) => {
+export const AddCustomerModal = ({ open, onClose }: AddCustomerModalProps) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    channel: "whatsapp",
-    notes: "",
-  });
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) =>
@@ -53,16 +45,12 @@ export const AddCustomerModal = ({ open, onOpenChange, onSubmit }: AddCustomerMo
   };
 
   const handleSubmit = () => {
-    onSubmit?.({
-      ...formData,
-      tags: selectedTags,
-    });
-    setFormData({ name: "", phone: "", email: "", channel: "whatsapp", notes: "" });
-    setSelectedTags([]);
+    // Mock submit - just close the modal
+    onClose();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Customer</DialogTitle>
@@ -73,44 +61,21 @@ export const AddCustomerModal = ({ open, onOpenChange, onSubmit }: AddCustomerMo
           {/* Full Name */}
           <div className="space-y-2">
             <Label htmlFor="full-name">Full Name *</Label>
-            <Input 
-              id="full-name" 
-              placeholder="e.g., Priya Sharma" 
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-          </div>
-
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              placeholder="email@example.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
+            <Input id="full-name" placeholder="e.g., Priya Sharma" />
           </div>
 
           {/* Phone Number */}
           <div className="space-y-2">
             <Label htmlFor="phone">Phone Number *</Label>
-            <Input 
-              id="phone" 
-              type="tel" 
-              placeholder="+91 98765 43210"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            />
+            <Input id="phone" type="tel" placeholder="+91 98765 43210" />
           </div>
 
           {/* Source */}
           <div className="space-y-2">
             <Label htmlFor="source">Source Channel *</Label>
-            <Select value={formData.channel} onValueChange={(value) => setFormData({ ...formData, channel: value })}>
+            <Select>
               <SelectTrigger id="source">
-                <SelectValue placeholder="Select channel" />
+                <SelectValue placeholder="Select source" />
               </SelectTrigger>
               <SelectContent>
                 {sources.map((source) => (
@@ -151,15 +116,13 @@ export const AddCustomerModal = ({ open, onOpenChange, onSubmit }: AddCustomerMo
               id="notes"
               placeholder="Add any notes about this customer..."
               rows={3}
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             />
           </div>
         </div>
 
         {/* Footer */}
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
           <Button onClick={handleSubmit}>
