@@ -112,25 +112,6 @@ export const OrderDetailDrawer = ({ order, open, onClose }: OrderDetailDrawerPro
                   <p className="text-muted-foreground text-xs">{order.customer.phone}</p>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-1 mt-2">
-                {order.customer.tags.map((tag: string) => (
-                  <Badge key={tag} variant="secondary" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex justify-between pt-2">
-                <span className="text-muted-foreground">Lifetime Value</span>
-                <span className="font-medium text-foreground">
-                  ₹{order.customer.ltv.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Total Orders</span>
-                <span className="font-medium text-foreground">
-                  {order.customer.ltv > 5000 ? "12+" : "4"}
-                </span>
-              </div>
             </div>
           </div>
 
@@ -153,20 +134,17 @@ export const OrderDetailDrawer = ({ order, open, onClose }: OrderDetailDrawerPro
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {order.items.map((item: any, idx: number) => (
+                  {order.items?.map((item: any, idx: number) => (
                     <TableRow key={idx}>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{item.product.image}</span>
-                          <span className="text-sm">{item.product.name}</span>
-                        </div>
+                        <span className="text-sm">{item.name}</span>
                       </TableCell>
                       <TableCell className="text-center">{item.quantity}</TableCell>
                       <TableCell className="text-right">
-                        ₹{item.product.price.toLocaleString()}
+                        ₹{item.price?.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        ₹{(item.product.price * item.quantity).toLocaleString()}
+                        ₹{((item.price || 0) * item.quantity).toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -184,26 +162,31 @@ export const OrderDetailDrawer = ({ order, open, onClose }: OrderDetailDrawerPro
               <h3 className="font-medium text-foreground">Order Timeline</h3>
             </div>
             <div className="space-y-3">
-              {order.timeline.map((event: any, idx: number) => (
-                <div key={idx} className="flex gap-3">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`w-2 h-2 rounded-full ${
-                        idx === 0 ? "bg-primary" : "bg-muted"
-                      }`}
-                    />
-                    {idx !== order.timeline.length - 1 && (
-                      <div className="w-px h-full bg-border mt-1" />
-                    )}
-                  </div>
-                  <div className="flex-1 pb-3">
-                    <p className="text-sm font-medium text-foreground">{event.event}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {formatDistanceToNow(new Date(event.timestamp), { addSuffix: true })}
-                    </p>
-                  </div>
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  <div className="w-px h-full bg-border mt-1" />
                 </div>
-              ))}
+                <div className="flex-1 pb-3">
+                  <p className="text-sm font-medium text-foreground">Order Created</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formatDistanceToNow(new Date(order.createdAt), { addSuffix: true })}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-2 h-2 rounded-full bg-muted" />
+                </div>
+                <div className="flex-1 pb-3">
+                  <p className="text-sm font-medium text-foreground capitalize">
+                    {order.fulfillmentStatus}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formatDistanceToNow(new Date(order.timestamp), { addSuffix: true })}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

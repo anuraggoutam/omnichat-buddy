@@ -129,21 +129,15 @@ export const ProductDetailDrawer = ({ product, open, onClose }: ProductDetailDra
             </div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Lifetime Sales</span>
+                <span className="text-muted-foreground">SKU</span>
                 <span className="font-medium text-foreground">
-                  {product.lifetimeSales} orders
+                  {product.sku || "N/A"}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Monthly Sales</span>
+                <span className="text-muted-foreground">Price</span>
                 <span className="font-medium text-foreground">
-                  {product.monthlySales} orders
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Last Ordered</span>
-                <span className="font-medium text-foreground">
-                  {formatDistanceToNow(new Date(product.lastOrdered), { addSuffix: true })}
+                  ₹{product.price?.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -158,11 +152,11 @@ export const ProductDetailDrawer = ({ product, open, onClose }: ProductDetailDra
               <h3 className="font-medium text-foreground">Connected Channels</h3>
             </div>
             <div className="flex flex-wrap gap-2 mb-3">
-              {product.channels.map((channel: string) => {
-                const badge = getChannelBadge(channel);
+              {(product.channel || []).map((ch: string) => {
+                const badge = getChannelBadge(ch);
                 return (
-                  <Badge key={channel} className={badge.color}>
-                    {badge.emoji} {channel}
+                  <Badge key={ch} className={badge.color}>
+                    {badge.emoji} {ch}
                   </Badge>
                 );
               })}

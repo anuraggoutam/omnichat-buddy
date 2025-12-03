@@ -94,7 +94,7 @@ export function ResponsiveTable<T>({
               </div>
             </CardContent>
           </Card>
-        )}
+        ))}
       </div>
     );
   }
