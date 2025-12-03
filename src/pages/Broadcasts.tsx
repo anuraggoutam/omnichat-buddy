@@ -35,43 +35,48 @@ import {
   FileText,
   ChevronLeft,
   Filter,
+  Loader2,
 } from "lucide-react";
-import { mockBroadcasts } from "@/lib/mockData";
 import { BroadcastDetailDrawer } from "@/components/broadcasts/BroadcastDetailDrawer";
 import { CreateBroadcastModal } from "@/components/broadcasts/CreateBroadcastModal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import {
   Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { useBroadcasts, useCreateBroadcast, useDeleteBroadcast, useSendBroadcast, Broadcast } from "@/hooks/useBroadcasts";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 export default function Broadcasts() {
   const isMobile = useIsMobile();
-  const [selectedBroadcast, setSelectedBroadcast] = useState<any>(null);
+  const { data: broadcasts = [], isLoading } = useBroadcasts();
+  const createBroadcast = useCreateBroadcast();
+  const deleteBroadcast = useDeleteBroadcast();
+  const sendBroadcast = useSendBroadcast();
+
+  const [selectedBroadcast, setSelectedBroadcast] = useState<Broadcast | null>(null);
   const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All Broadcasts");
   const [searchQuery, setSearchQuery] = useState("");
-  const [broadcasts, setBroadcasts] = useState(mockBroadcasts);
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
 
   const statusConfig = {
-    Completed: { color: "bg-success text-success-foreground", icon: CheckCircle },
-    Draft: { color: "bg-muted text-muted-foreground", icon: FileText },
-    Scheduled: { color: "bg-accent text-accent-foreground", icon: Clock },
-    Sending: { color: "bg-warning text-warning-foreground", icon: Send },
-    Failed: { color: "bg-destructive text-destructive-foreground", icon: AlertCircle },
+    sent: { color: "bg-success text-success-foreground", icon: CheckCircle },
+    draft: { color: "bg-muted text-muted-foreground", icon: FileText },
+    scheduled: { color: "bg-accent text-accent-foreground", icon: Clock },
+    sending: { color: "bg-warning text-warning-foreground", icon: Send },
+    failed: { color: "bg-destructive text-destructive-foreground", icon: AlertCircle },
   };
 
   const filters = [
     { name: "All Broadcasts", icon: Send },
-    { name: "Drafts", icon: FileText },
-    { name: "Scheduled", icon: Clock },
-    { name: "Sending", icon: Send },
-    { name: "Completed", icon: CheckCircle },
-    { name: "Failed", icon: AlertCircle },
+    { name: "draft", icon: FileText },
+    { name: "scheduled", icon: Clock },
+    { name: "sending", icon: Send },
+    { name: "sent", icon: CheckCircle },
+    { name: "failed", icon: AlertCircle },
   ];
 
   const audienceFilters = [
@@ -80,48 +85,59 @@ export default function Broadcasts() {
     "Returning Customers",
     "High-Value Customers",
     "VIP Customers",
-    "Abandoned Cart",
   ];
 
   const filteredBroadcasts = broadcasts.filter((broadcast) => {
-    const matchesSearch = broadcast.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      broadcast.messagePreview.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = broadcast.name.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (activeFilter === "All Broadcasts") return matchesSearch;
-    if (activeFilter === "Drafts") return matchesSearch && broadcast.status === "Draft";
-    if (activeFilter === "Scheduled") return matchesSearch && broadcast.status === "Scheduled";
-    if (activeFilter === "Sending") return matchesSearch && broadcast.status === "Sending";
-    if (activeFilter === "Completed") return matchesSearch && broadcast.status === "Completed";
-    if (activeFilter === "Failed") return matchesSearch && broadcast.status === "Failed";
-    
-    return matchesSearch;
+    return matchesSearch && broadcast.status === activeFilter;
   });
 
-  const handleViewBroadcast = (broadcast: any) => {
+  const handleViewBroadcast = (broadcast: Broadcast) => {
     setSelectedBroadcast(broadcast);
     setIsDetailDrawerOpen(true);
   };
 
-  const handleDuplicate = (broadcast: any) => {
-    const newBroadcast = {
-      ...broadcast,
-      id: `BR-${String(broadcasts.length + 1).padStart(3, "0")}`,
-      title: `${broadcast.title} (Copy)`,
-      status: "Draft",
-      sent: 0,
-      delivered: 0,
-      read: 0,
-      clicks: 0,
-      failed: 0,
-      createdAt: new Date().toISOString().split("T")[0],
-      scheduledAt: null,
-    };
-    setBroadcasts([newBroadcast, ...broadcasts]);
+  const handleDuplicate = async (broadcast: Broadcast) => {
+    try {
+      await createBroadcast.mutateAsync({
+        name: `${broadcast.name} (Copy)`,
+        channel: broadcast.channel,
+        template_id: broadcast.template_id || undefined,
+        audience_filter: broadcast.audience_filter,
+      });
+      toast.success("Broadcast duplicated");
+    } catch (error) {
+      toast.error("Failed to duplicate broadcast");
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setBroadcasts(broadcasts.filter((b) => b.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteBroadcast.mutateAsync(id);
+      toast.success("Broadcast deleted");
+    } catch (error) {
+      toast.error("Failed to delete broadcast");
+    }
   };
+
+  const handleSend = async (id: string) => {
+    try {
+      await sendBroadcast.mutateAsync(id);
+      toast.success("Broadcast sent");
+    } catch (error) {
+      toast.error("Failed to send broadcast");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-background">
@@ -165,7 +181,7 @@ export default function Broadcasts() {
                             }`}
                           >
                             <Icon className="h-4 w-4" />
-                            {filter.name}
+                            {filter.name.charAt(0).toUpperCase() + filter.name.slice(1)}
                           </button>
                         );
                       })}
@@ -223,7 +239,7 @@ export default function Broadcasts() {
                         }`}
                       >
                         <Icon className="h-4 w-4" />
-                        {filter.name}
+                        {filter.name.charAt(0).toUpperCase() + filter.name.slice(1)}
                       </button>
                     );
                   })}
@@ -280,7 +296,7 @@ export default function Broadcasts() {
               <div className="min-w-0">
                 <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">Broadcasts</h1>
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1 hidden sm:block">
-                  Manage your WhatsApp broadcast campaigns
+                  Manage your broadcast campaigns
                 </p>
               </div>
             </div>
@@ -306,7 +322,25 @@ export default function Broadcasts() {
         {/* Table / Card View */}
         <ScrollArea className="flex-1">
           <div className="p-4 sm:p-6">
-            {isMobile ? (
+            {filteredBroadcasts.length === 0 ? (
+              <Card className="p-12 text-center">
+                <Send className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-semibold mb-2 text-foreground">
+                  No broadcasts found
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {searchQuery || activeFilter !== "All Broadcasts"
+                    ? "Try adjusting your filters"
+                    : "Create your first broadcast to get started"}
+                </p>
+                {!searchQuery && activeFilter === "All Broadcasts" && (
+                  <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Create Broadcast
+                  </Button>
+                )}
+              </Card>
+            ) : isMobile ? (
               // Mobile Card View
               <div className="space-y-3">
                 {filteredBroadcasts.map((broadcast) => {
@@ -320,8 +354,7 @@ export default function Broadcasts() {
                       <CardHeader className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base mb-1">{broadcast.title}</CardTitle>
-                            <p className="text-xs text-muted-foreground mb-2">{broadcast.id}</p>
+                            <CardTitle className="text-base mb-1">{broadcast.name}</CardTitle>
                             <Badge
                               className={`${statusConfig[broadcast.status as keyof typeof statusConfig]?.color} gap-1 mb-2`}
                             >
@@ -340,6 +373,12 @@ export default function Broadcasts() {
                                 <Eye className="h-4 w-4 mr-2" />
                                 View Details
                               </DropdownMenuItem>
+                              {broadcast.status === "draft" && (
+                                <DropdownMenuItem onClick={() => handleSend(broadcast.id)}>
+                                  <Send className="h-4 w-4 mr-2" />
+                                  Send Now
+                                </DropdownMenuItem>
+                              )}
                               <DropdownMenuItem onClick={() => handleDuplicate(broadcast)}>
                                 <Copy className="h-4 w-4 mr-2" />
                                 Duplicate
@@ -356,30 +395,26 @@ export default function Broadcasts() {
                         </div>
                       </CardHeader>
                       <CardContent className="p-4 pt-0 space-y-2 text-sm">
-                        <div>
-                          <p className="text-muted-foreground text-xs mb-1">Message Preview</p>
-                          <p className="text-sm line-clamp-2">{broadcast.messagePreview}</p>
-                        </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1">
                             <Users className="h-3 w-3 text-muted-foreground" />
-                            <span className="font-medium">{broadcast.audienceCount}</span>
+                            <span className="font-medium">{broadcast.total_recipients || 0}</span>
                           </div>
-                          <span className="text-xs text-muted-foreground">{broadcast.audienceSegment}</span>
+                          <span className="text-xs text-muted-foreground">{broadcast.channel}</span>
                         </div>
                         <div className="space-y-1 text-xs pt-2 border-t">
                           <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Sent:</span>
-                            <span className="font-medium">{broadcast.sent}</span>
+                            <span className="text-muted-foreground">Delivered:</span>
+                            <span className="font-medium">{broadcast.delivered_count || 0}</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-muted-foreground">Read:</span>
-                            <span className="font-medium text-success">{broadcast.read}</span>
+                            <span className="font-medium text-success">{broadcast.read_count || 0}</span>
                           </div>
-                          {broadcast.scheduledAt && (
+                          {broadcast.scheduled_at && (
                             <div className="flex items-center justify-between">
                               <span className="text-muted-foreground">Scheduled:</span>
-                              <span>{broadcast.scheduledAt}</span>
+                              <span>{format(new Date(broadcast.scheduled_at), "MMM d, HH:mm")}</span>
                             </div>
                           )}
                         </div>
@@ -392,131 +427,129 @@ export default function Broadcasts() {
               // Desktop Table View
               <Card>
                 <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Campaign Name</TableHead>
-                    <TableHead>Message Preview</TableHead>
-                    <TableHead>Audience</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Scheduled At</TableHead>
-                    <TableHead>Performance</TableHead>
-                    <TableHead className="w-[50px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredBroadcasts.map((broadcast) => {
-                    const StatusIcon = statusConfig[broadcast.status as keyof typeof statusConfig]?.icon;
-                    return (
-                      <TableRow
-                        key={broadcast.id}
-                        className="cursor-pointer hover:bg-muted/50"
-                        onClick={() => handleViewBroadcast(broadcast)}
-                      >
-                        <TableCell>
-                          <div>
-                            <div className="font-medium text-foreground">{broadcast.title}</div>
-                            <div className="text-xs text-muted-foreground">{broadcast.id}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-xs truncate text-sm text-muted-foreground">
-                            {broadcast.messagePreview}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1 text-sm">
-                            <Users className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-foreground">{broadcast.audienceCount}</span>
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {broadcast.audienceSegment}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            className={`${statusConfig[broadcast.status as keyof typeof statusConfig]?.color} gap-1`}
-                          >
-                            {StatusIcon && <StatusIcon className="h-3 w-3" />}
-                            {broadcast.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-foreground">
-                            {broadcast.scheduledAt || "—"}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            Created {broadcast.createdAt}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1 text-xs">
-                            <div className="flex items-center gap-2">
-                              <span className="text-muted-foreground">Sent:</span>
-                              <span className="font-medium text-foreground">{broadcast.sent}</span>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Campaign Name</TableHead>
+                      <TableHead>Channel</TableHead>
+                      <TableHead>Recipients</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Scheduled At</TableHead>
+                      <TableHead>Performance</TableHead>
+                      <TableHead className="w-[50px]"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredBroadcasts.map((broadcast) => {
+                      const StatusIcon = statusConfig[broadcast.status as keyof typeof statusConfig]?.icon;
+                      return (
+                        <TableRow
+                          key={broadcast.id}
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => handleViewBroadcast(broadcast)}
+                        >
+                          <TableCell>
+                            <div>
+                              <div className="font-medium text-foreground">{broadcast.name}</div>
+                              {broadcast.template?.name && (
+                                <div className="text-xs text-muted-foreground">
+                                  Template: {broadcast.template.name}
+                                </div>
+                              )}
                             </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-muted-foreground">Read:</span>
-                              <span className="font-medium text-success">{broadcast.read}</span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{broadcast.channel}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1 text-sm">
+                              <Users className="h-3 w-3 text-muted-foreground" />
+                              <span className="font-medium">{broadcast.total_recipients || 0}</span>
                             </div>
-                            {broadcast.failed > 0 && (
-                              <div className="flex items-center gap-2">
-                                <span className="text-muted-foreground">Failed:</span>
-                                <span className="font-medium text-destructive">{broadcast.failed}</span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className={statusConfig[broadcast.status as keyof typeof statusConfig]?.color}
+                            >
+                              {StatusIcon && <StatusIcon className="h-3 w-3 mr-1" />}
+                              {broadcast.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {broadcast.scheduled_at ? (
+                              <div className="flex items-center gap-1 text-sm">
+                                <Calendar className="h-3 w-3 text-muted-foreground" />
+                                {format(new Date(broadcast.scheduled_at), "MMM d, HH:mm")}
                               </div>
+                            ) : (
+                              <span className="text-muted-foreground">-</span>
                             )}
-                          </div>
-                        </TableCell>
-                        <TableCell onClick={(e) => e.stopPropagation()}>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleViewBroadcast(broadcast)}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleDuplicate(broadcast)}>
-                                <Copy className="h-4 w-4 mr-2" />
-                                Duplicate
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(broadcast.id)}
-                                className="text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </Card>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-xs space-y-1">
+                              <div className="flex gap-2">
+                                <span className="text-muted-foreground">Delivered:</span>
+                                <span className="font-medium">{broadcast.delivered_count || 0}</span>
+                              </div>
+                              <div className="flex gap-2">
+                                <span className="text-muted-foreground">Read:</span>
+                                <span className="font-medium text-success">{broadcast.read_count || 0}</span>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell onClick={(e) => e.stopPropagation()}>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleViewBroadcast(broadcast)}>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                                {broadcast.status === "draft" && (
+                                  <DropdownMenuItem onClick={() => handleSend(broadcast.id)}>
+                                    <Send className="h-4 w-4 mr-2" />
+                                    Send Now
+                                  </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem onClick={() => handleDuplicate(broadcast)}>
+                                  <Copy className="h-4 w-4 mr-2" />
+                                  Duplicate
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => handleDelete(broadcast.id)}
+                                  className="text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </Card>
             )}
           </div>
         </ScrollArea>
       </div>
 
-      {/* Drawers and Modals */}
+      {/* Broadcast Detail Drawer */}
       <BroadcastDetailDrawer
         broadcast={selectedBroadcast}
         open={isDetailDrawerOpen}
         onOpenChange={setIsDetailDrawerOpen}
       />
 
+      {/* Create Broadcast Modal */}
       <CreateBroadcastModal
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
-        onBroadcastCreated={(newBroadcast) => {
-          setBroadcasts([newBroadcast, ...broadcasts]);
-          setIsCreateModalOpen(false);
-        }}
       />
     </div>
   );
