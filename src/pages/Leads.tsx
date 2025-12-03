@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -57,7 +57,7 @@ export default function Leads() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["leads", filters],
     queryFn: () => leadsApi.getLeads(filters),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const { leads = [], totalCount = 0 } = data || {};
@@ -286,7 +286,7 @@ export default function Leads() {
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "assign" })}
-                disabled={bulkUpdateMutation.isLoading}
+                disabled={bulkUpdateMutation.isPending}
                 className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Assign Agent
@@ -295,7 +295,7 @@ export default function Leads() {
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "stage" })}
-                disabled={bulkUpdateMutation.isLoading}
+                disabled={bulkUpdateMutation.isPending}
                 className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Change Stage
@@ -304,7 +304,7 @@ export default function Leads() {
                 size="sm"
                 variant="outline"
                 onClick={() => setBulkActionModal({ open: true, type: "delete" })}
-                disabled={bulkUpdateMutation.isLoading}
+                disabled={bulkUpdateMutation.isPending}
                 className="text-xs sm:text-sm flex-1 sm:flex-initial"
               >
                 Delete
@@ -367,13 +367,13 @@ export default function Leads() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onUpdateLead={(data) => updateLeadMutation.mutate({ leadId: selectedLead!.id, data })}
-        isUpdating={updateLeadMutation.isLoading}
+        isUpdating={updateLeadMutation.isPending}
       />
       <AddLeadModal
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
         onAddLead={(data) => addLeadMutation.mutate(data as any)}
-        isAdding={addLeadMutation.isLoading}
+        isAdding={addLeadMutation.isPending}
       />
       <BulkActionModal
         open={bulkActionModal.open}
@@ -381,7 +381,7 @@ export default function Leads() {
         selectedCount={selectedLeads.length}
         actionType={bulkActionModal.type}
         onConfirm={handleBulkAction}
-        isLoading={bulkUpdateMutation.isLoading}
+        isLoading={bulkUpdateMutation.isPending}
       />
     </div>
   );
