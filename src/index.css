@@ -518,6 +518,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Float animation for hero elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 /* WhatsApp-like chat background pattern */
 .whatsapp-bg {
   background-color: #e5ddd5;
