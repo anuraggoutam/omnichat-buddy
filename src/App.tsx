@@ -31,6 +31,7 @@ import Billing from "./pages/Billing";
 import UserManagement from "./pages/UserManagement";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ const App = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="/billing" element={<Billing />} />
               <Route path="/user-management" element={<UserManagement />} />
+              <Route path="/admin" element={<Admin />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
