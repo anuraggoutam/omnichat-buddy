@@ -31,8 +31,15 @@ import Billing from "./pages/Billing";
 import UserManagement from "./pages/UserManagement";
 import AppLayout from "./components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
 
+// Admin pages
+import { AdminLayout } from "./components/admin/AdminLayout";
+import AdminOverview from "./pages/admin/Overview";
+import AdminCustomers from "./pages/admin/Customers";
+import AdminUsers from "./pages/admin/Users";
+import AdminTickets from "./pages/admin/Tickets";
+import AdminAnalytics from "./pages/admin/Analytics";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +48,12 @@ const ProtectedLayout = () => (
     <AppLayout>
       <Outlet />
     </AppLayout>
+  </ProtectedRoute>
+);
+
+const ProtectedAdminLayout = () => (
+  <ProtectedRoute>
+    <AdminLayout />
   </ProtectedRoute>
 );
 
@@ -54,6 +67,18 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            
+            {/* Admin routes with separate layout */}
+            <Route path="/admin" element={<ProtectedAdminLayout />}>
+              <Route index element={<AdminOverview />} />
+              <Route path="customers" element={<AdminCustomers />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="tickets" element={<AdminTickets />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+            
+            {/* Main app routes */}
             <Route element={<ProtectedLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/conversations" element={<Conversations />} />
@@ -78,7 +103,6 @@ const App = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="/billing" element={<Billing />} />
               <Route path="/user-management" element={<UserManagement />} />
-              <Route path="/admin" element={<Admin />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
