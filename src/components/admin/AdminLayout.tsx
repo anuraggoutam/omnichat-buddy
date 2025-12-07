@@ -13,6 +13,8 @@ import {
   Menu,
   X,
   ChevronDown,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,7 +27,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const adminNavItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard, end: true },
@@ -39,12 +43,54 @@ const adminNavItems = [
 export const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, signOut } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
+
+  // Show loading state while checking role
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Checking permissions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied if not admin
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
+        <Card className="max-w-md w-full">
+          <CardHeader className="text-center">
+            <div className="mx-auto h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-destructive" />
+            </div>
+            <CardTitle>Access Denied</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center space-y-4">
+            <p className="text-muted-foreground">
+              You don't have permission to access the admin panel. This area is restricted to administrators only.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <Button variant="outline" onClick={() => navigate("/dashboard")}>
+                Go to Dashboard
+              </Button>
+              <Button onClick={() => navigate("/")}>
+                Go Home
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted/30 flex">
