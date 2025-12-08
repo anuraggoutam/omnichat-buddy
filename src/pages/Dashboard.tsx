@@ -1,344 +1,250 @@
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  ArrowUp,
-  ArrowDown,
-  MessageSquare,
-  ShoppingCart,
-  Package,
-  TrendingUp,
   Sparkles,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
+  MessageSquare,
+  TrendingUp,
+  ShoppingCart,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
-import {
-  dashboardKPIs,
-  salesChartData,
-  demoConversations,
-  demoOrders,
-  aiSuggestions,
-  storeHealth,
-} from "@/lib/mockData";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { toast } from "sonner";
+import { AIPromptBox } from "@/components/ai-assistant/AIPromptBox";
+import { AIChatMessage } from "@/components/ai-assistant/AIChatMessage";
+import { QuickActions } from "@/components/ai-assistant/QuickActions";
+import { cn } from "@/lib/utils";
+
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
+const welcomeMessage = `Hello! I'm your Sales AI Assistant. I can help you manage your sales across WhatsApp, Instagram, and other social channels.
+
+Here's what I can do for you:
+• **Reply to customers** - Draft and send responses to pending messages
+• **Analyze trends** - Understand your sales patterns and customer behavior
+• **Create campaigns** - Design promotional offers and broadcasts
+• **Follow up on leads** - Track and nurture potential customers
+• **Generate reports** - Get insights on your business performance
+
+How can I help you today?`;
 
 const Dashboard = () => {
-  const kpis = [
+  const [messages, setMessages] = useState<Message[]>([
     {
-      title: "New Conversations",
-      value: dashboardKPIs.newConversations.value,
-      change: dashboardKPIs.newConversations.change,
-      trend: dashboardKPIs.newConversations.trend,
-      icon: MessageSquare,
-      color: "text-primary",
+      id: "welcome",
+      role: "assistant",
+      content: welcomeMessage,
+      timestamp: new Date(),
     },
-    {
-      title: "Orders",
-      value: dashboardKPIs.orders.value,
-      change: dashboardKPIs.orders.change,
-      trend: dashboardKPIs.orders.trend,
-      icon: ShoppingCart,
-      color: "text-accent",
-    },
-    {
-      title: "Products",
-      value: dashboardKPIs.products.value,
-      change: dashboardKPIs.products.change,
-      trend: dashboardKPIs.products.trend,
-      icon: Package,
-      color: "text-success",
-    },
-    {
-      title: "Revenue",
-      value: `₹${(dashboardKPIs.revenue.value / 1000).toFixed(1)}k`,
-      change: dashboardKPIs.revenue.change,
-      trend: dashboardKPIs.revenue.trend,
-      icon: TrendingUp,
-      color: "text-warning",
-    },
-  ];
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showStats, setShowStats] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; label: string }> = {
-      paid: { variant: "default", label: "Paid" },
-      pending: { variant: "secondary", label: "Pending" },
-      payment_link_sent: { variant: "outline", label: "Link Sent" },
-      delivered: { variant: "default", label: "Delivered" },
-      shipped: { variant: "secondary", label: "Shipped" },
-      processing: { variant: "outline", label: "Processing" },
-      awaiting_payment: { variant: "outline", label: "Awaiting Payment" },
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSendMessage = async (content: string) => {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content,
+      timestamp: new Date(),
     };
-    const config = variants[status] || { variant: "outline", label: status };
-    return <Badge variant={config.variant}>{config.label}</Badge>;
+
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    // Simulate AI response (replace with actual AI integration later)
+    setTimeout(() => {
+      const aiResponses: Record<string, string> = {
+        reply: `I found 5 pending customer messages. Here's a quick summary:
+
+1. **Priya Sharma** - Asking about product availability
+2. **Rahul Kumar** - Payment confirmation needed
+3. **Sneha Patel** - Delivery status inquiry
+4. **Amit Singh** - Product recommendation request
+5. **Kavya Reddy** - Return/exchange query
+
+Would you like me to draft replies for all of them, or should we handle them one by one?`,
+        analyze: `Here's your sales analysis for the last 7 days:
+
+📈 **Revenue**: ₹1,24,500 (+18% vs last week)
+📦 **Orders**: 47 orders (+12%)
+💬 **Conversations**: 156 customer interactions
+⭐ **Conversion Rate**: 32% (excellent!)
+
+**Top Insights:**
+• WhatsApp drives 65% of your sales
+• Peak hours: 10 AM - 1 PM and 6 PM - 9 PM
+• Best selling: Premium Kurta Set (23 units)
+
+**Recommendations:**
+1. Consider a flash sale during peak hours
+2. Stock up on Premium Kurta Set variants
+3. Follow up with 12 abandoned carts from this week`,
+        follow: `I found 8 leads that need follow-up:
+
+**High Priority (No response in 5+ days):**
+• Ananya Gupta - ₹8,500 cart value
+• Vikram Rao - ₹12,000 inquiry
+
+**Medium Priority (3-5 days):**
+• Pooja Mehta, Sanjay Verma, Neha Kapoor
+
+Would you like me to draft personalized follow-up messages for each of them?`,
+        promotional: `Great idea! Let me help you create a promotional offer.
+
+**Suggested Campaign:**
+🎉 "Weekend Special" - 20% off on orders above ₹2,000
+
+**Details:**
+• Duration: Friday 6 PM to Sunday midnight
+• Eligible products: All categories
+• Promo code: WEEKEND20
+
+**Expected Impact:**
+• Reach: ~2,500 customers
+• Estimated additional revenue: ₹35,000 - ₹50,000
+
+Should I help you create the WhatsApp broadcast message for this offer?`,
+        default: `I understand you want help with "${content}". 
+
+Let me analyze your request and provide the best assistance. Could you provide a bit more context about:
+1. Which channels are you focusing on? (WhatsApp, Instagram, etc.)
+2. What's your primary goal? (Sales, support, marketing)
+3. Any specific timeframe or targets?
+
+This will help me give you more actionable recommendations!`,
+      };
+
+      let responseKey = "default";
+      const lowerContent = content.toLowerCase();
+      if (lowerContent.includes("reply") || lowerContent.includes("message")) {
+        responseKey = "reply";
+      } else if (lowerContent.includes("analyz") || lowerContent.includes("trend") || lowerContent.includes("report")) {
+        responseKey = "analyze";
+      } else if (lowerContent.includes("follow") || lowerContent.includes("lead")) {
+        responseKey = "follow";
+      } else if (lowerContent.includes("promotional") || lowerContent.includes("offer") || lowerContent.includes("campaign")) {
+        responseKey = "promotional";
+      }
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: aiResponses[responseKey],
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+      setIsLoading(false);
+    }, 1500);
   };
 
+  const stats = [
+    { label: "Pending Messages", value: "12", icon: MessageSquare, color: "text-primary" },
+    { label: "Today's Orders", value: "8", icon: ShoppingCart, color: "text-accent" },
+    { label: "Revenue Today", value: "₹18.5k", icon: TrendingUp, color: "text-success" },
+  ];
+
   return (
-    <div className="flex flex-col gap-4 sm:gap-6 page-padding max-w-[1600px] mx-auto">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
-          Welcome back! Here's what's happening with your business today.
-        </p>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {kpis.map((kpi) => (
-          <Card key={kpi.title} className="hover-lift">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${kpi.color}`} />
-            </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{kpi.value}</div>
-              <div className="flex items-center text-xs text-muted-foreground mt-1">
-                {kpi.trend === "up" && (
-                  <>
-                    <ArrowUp className="h-3 w-3 text-success mr-1" />
-                    <span className="text-success">+{kpi.change}%</span>
-                  </>
-                )}
-                {kpi.trend === "down" && (
-                  <>
-                    <ArrowDown className="h-3 w-3 text-destructive mr-1" />
-                    <span className="text-destructive">-{kpi.change}%</span>
-                  </>
-                )}
-                <span className="ml-1 hidden sm:inline">from last week</span>
-                <span className="ml-1 sm:hidden">vs last week</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Sales Chart & AI Suggestions */}
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-7">
-        <Card className="lg:col-span-4">
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">Sales Overview</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">Revenue and orders over the last 7 days</CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="w-full overflow-x-auto">
-              <ResponsiveContainer width="100%" height={250} className="min-w-[300px] sm:min-w-0">
-              <AreaChart data={salesChartData}>
-                <defs>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="date"
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  tickFormatter={(value) => `₹${value / 1000}k`}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "var(--radius)",
-                  }}
-                  formatter={(value: any, name: string) =>
-                    name === "revenue" ? [`₹${value}`, "Revenue"] : [value, "Orders"]
-                  }
-                />
-                <Area
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="hsl(var(--primary))"
-                  fill="url(#revenueGradient)"
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-3">
-          <CardHeader className="p-4 sm:p-6">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
-              <CardTitle className="text-base sm:text-lg">AI Suggestions</CardTitle>
-            </div>
-            <CardDescription className="text-xs sm:text-sm">Smart recommendations to boost your sales</CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
-            {aiSuggestions.map((suggestion) => (
-              <div
-                key={suggestion.id}
-                className="p-3 rounded-lg border bg-card hover:bg-accent/5 transition-colors"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none">{suggestion.title}</p>
-                    <p className="text-xs text-muted-foreground">{suggestion.description}</p>
-                    <div className="flex gap-2 text-xs text-muted-foreground mt-2">
-                      {suggestion.expectedReach && (
-                        <span className="text-primary font-medium">
-                          Reach: {suggestion.expectedReach}
-                        </span>
-                      )}
-                      {suggestion.potentialRevenue && (
-                        <span className="text-success font-medium">
-                          {suggestion.potentialRevenue}
-                        </span>
-                      )}
-                      {suggestion.expectedSales && (
-                        <span className="text-accent font-medium">{suggestion.expectedSales}</span>
-                      )}
-                    </div>
-                  </div>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => {
-                      // Placeholder: Would apply AI suggestion
-                      toast.success("AI suggestion applied successfully!");
-                    }}
-                  >
-                    Apply
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">Recent Conversations</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">Latest customer interactions</CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="space-y-3">
-              {demoConversations.slice(0, 5).map((conv) => (
-                <div
-                  key={conv.id}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
-                >
-                  <div className="text-2xl">{conv.customer.avatar}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-medium truncate">{conv.customer.name}</p>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {new Date(conv.timestamp).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground truncate">{conv.lastMessage}</p>
-                    <div className="flex gap-1 mt-1">
-                      {conv.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {conv.unread > 0 && (
-                        <Badge variant="default" className="text-xs">
-                          {conv.unread} new
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">Recent Orders</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">Latest customer orders</CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="space-y-3">
-              {demoOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
-                >
-                  <div className="text-2xl">{order.customer.avatar}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-medium">{order.id}</p>
-                      <span className="text-sm font-semibold">₹{order.total}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{order.customer.name}</p>
-                    <div className="flex gap-2 mt-2">
-                      {getStatusBadge(order.paymentStatus)}
-                      {getStatusBadge(order.fulfillmentStatus)}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Store Health */}
-      <Card>
-        <CardHeader className="p-4 sm:p-6">
-          <CardTitle className="text-base sm:text-lg">Store Health</CardTitle>
-          <CardDescription className="text-xs sm:text-sm">Key performance metrics for your business</CardDescription>
-        </CardHeader>
-        <CardContent className="p-4 sm:p-6 pt-0">
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-            {Object.entries(storeHealth).map(([key, metric]) => (
-              <div key={key} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium capitalize">
-                    {key.replace(/([A-Z])/g, " $1").trim()}
-                  </p>
-                  {metric.status === "excellent" && (
-                    <CheckCircle2 className="h-4 w-4 text-success" />
-                  )}
-                  {metric.status === "good" && <Clock className="h-4 w-4 text-warning" />}
-                  {metric.status === "poor" && <AlertCircle className="h-4 w-4 text-destructive" />}
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold">{metric.value}</span>
-                  <Badge
-                    variant={
-                      metric.status === "excellent"
-                        ? "default"
-                        : metric.status === "good"
-                        ? "secondary"
-                        : "destructive"
-                    }
-                  >
-                    {metric.score}
-                  </Badge>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div
-                    className="bg-primary h-2 rounded-full transition-all"
-                    style={{ width: `${metric.score}%` }}
-                  />
+    <div className="flex flex-col h-[calc(100vh-4rem)]">
+      {/* Collapsible Stats Bar */}
+      <div className="border-b bg-card/50">
+        <button
+          onClick={() => setShowStats(!showStats)}
+          className="w-full flex items-center justify-between px-4 py-2 text-sm text-muted-foreground hover:bg-muted/50 transition-colors"
+        >
+          <span className="font-medium">Quick Stats</span>
+          {showStats ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </button>
+        
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-300",
+            showStats ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="flex items-center justify-center gap-6 px-4 pb-3">
+            {stats.map((stat) => (
+              <div key={stat.label} className="flex items-center gap-2">
+                <stat.icon className={cn("h-4 w-4", stat.color)} />
+                <div>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-sm font-semibold">{stat.value}</p>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-h-0">
+        {messages.length === 1 ? (
+          // Welcome State
+          <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8">
+            {/* Hero Section */}
+            <div className="text-center space-y-4 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                <Sparkles className="h-4 w-4" />
+                AI-Powered Sales Assistant
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                Manage your sales with AI
+              </h1>
+              <p className="text-muted-foreground text-lg">
+                Automate responses, analyze trends, and grow your business across WhatsApp & social media
+              </p>
+            </div>
+
+            {/* AI Prompt Box */}
+            <AIPromptBox onSend={handleSendMessage} isLoading={isLoading} />
+
+            {/* Quick Actions */}
+            <QuickActions onActionClick={handleSendMessage} />
+          </div>
+        ) : (
+          // Chat Mode
+          <>
+            <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+              <div className="max-w-3xl mx-auto space-y-2">
+                {messages.map((message) => (
+                  <AIChatMessage
+                    key={message.id}
+                    role={message.role}
+                    content={message.content}
+                    timestamp={message.timestamp}
+                  />
+                ))}
+                {isLoading && (
+                  <AIChatMessage
+                    role="assistant"
+                    content=""
+                    isLoading={true}
+                  />
+                )}
+              </div>
+            </ScrollArea>
+
+            {/* Fixed Prompt Box at Bottom */}
+            <div className="border-t bg-background/80 backdrop-blur-sm p-4">
+              <AIPromptBox onSend={handleSendMessage} isLoading={isLoading} />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
