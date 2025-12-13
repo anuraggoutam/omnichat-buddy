@@ -32,10 +32,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ChevronDown } from "lucide-react";
 import { demoTenant } from "@/lib/mockData";
 
 const mainNavItems = [
@@ -86,11 +84,19 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
-      <SidebarHeader className="px-4 py-3">
-        <div className="flex items-center justify-center">
+      <SidebarHeader className="border-b border-sidebar-border px-4 py-3">
+        <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-lg">
-            🍰
+            {demoTenant.logo}
           </div>
+          {!isCollapsed && (
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-sidebar-foreground">
+                {demoTenant.name}
+              </span>
+              <span className="text-xs text-muted-foreground">Business</span>
+            </div>
+          )}
         </div>
       </SidebarHeader>
 
@@ -276,22 +282,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter className="border-t border-sidebar-border p-2">
-        <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-sidebar-accent transition-colors">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-sm">
-            {demoTenant.logo}
-          </div>
-          {!isCollapsed && (
-            <>
-              <span className="text-sm font-medium text-sidebar-foreground flex-1 text-left">
-                {demoTenant.name}
-              </span>
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
-            </>
-          )}
-        </button>
-      </SidebarFooter>
     </Sidebar>
   );
 }
