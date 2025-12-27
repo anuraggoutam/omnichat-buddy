@@ -17,9 +17,14 @@ import {
 import { mockPipelineRevenue, mockDealsClosedByAgent, mockDealsWonLost } from "@/lib/mockAnalytics";
 
 export function SalesSection() {
+  const winLostColors = [
+    "hsl(var(--success))",
+    "hsl(var(--destructive))",
+  ]; // Using design system colors for won/lost
+
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Sales Analytics</h2>
+      <h2 className="text-responsive-2xl font-semibold">Sales Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Pipeline Revenue Forecast */}
@@ -31,23 +36,30 @@ export function SalesSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={mockPipelineRevenue}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
                 <Legend />
                 <Area
                   type="monotone"
                   dataKey="forecasted"
-                  stroke="#06B6D4"
-                  fill="#06B6D4"
+                  stroke="hsl(var(--accent))"
+                  fill="hsl(var(--accent))"
                   fillOpacity={0.3}
                 />
                 <Area
                   type="monotone"
                   dataKey="actual"
-                  stroke="#22C55E"
-                  fill="#22C55E"
+                  stroke="hsl(var(--primary))"
+                  fill="hsl(var(--primary))"
                   fillOpacity={0.6}
                 />
               </AreaChart>
@@ -64,11 +76,18 @@ export function SalesSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mockDealsClosedByAgent}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="deals" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
+                <Bar dataKey="deals" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -90,18 +109,24 @@ export function SalesSection() {
                   labelLine={false}
                   label={({ name, value }) => `${name}: ${value}`}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="value"
                 >
                   {mockDealsWonLost.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={winLostColors[index % winLostColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
               </PieChart>
             </ResponsiveContainer>
             <div className="mt-4 text-center">
-              <div className="text-3xl font-bold text-green-600">57%</div>
+              <div className="text-3xl font-bold text-success">57%</div> {/* Using text-success */}
               <div className="text-sm text-muted-foreground">Win Rate</div>
             </div>
           </CardContent>

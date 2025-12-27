@@ -21,9 +21,16 @@ import {
 } from "@/lib/mockAnalytics";
 
 export function ConversationsSection() {
+  const channelColors = {
+    whatsapp: "hsl(var(--channel-whatsapp))",
+    instagram: "hsl(var(--channel-instagram))",
+    facebook: "hsl(var(--channel-facebook))",
+    webchat: "hsl(var(--channel-website))",
+  };
+
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Conversations Analytics</h2>
+      <h2 className="text-responsive-2xl font-semibold">Conversations Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Conversations Over Time */}
@@ -35,15 +42,22 @@ export function ConversationsSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={mockConversationsOverTime}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: "hsl(var(--popover))", 
+                    borderColor: "hsl(var(--border))", 
+                    borderRadius: "var(--radius)" 
+                  }} 
+                  itemStyle={{ color: "hsl(var(--foreground))" }} 
+                />
                 <Legend />
-                <Line type="monotone" dataKey="whatsapp" stroke="#25D366" strokeWidth={2} />
-                <Line type="monotone" dataKey="instagram" stroke="#E4405F" strokeWidth={2} />
-                <Line type="monotone" dataKey="facebook" stroke="#1877F2" strokeWidth={2} />
-                <Line type="monotone" dataKey="webchat" stroke="#3B82F6" strokeWidth={2} />
+                <Line type="monotone" dataKey="whatsapp" stroke={channelColors.whatsapp} strokeWidth={2} />
+                <Line type="monotone" dataKey="instagram" stroke={channelColors.instagram} strokeWidth={2} />
+                <Line type="monotone" dataKey="facebook" stroke={channelColors.facebook} strokeWidth={2} />
+                <Line type="monotone" dataKey="webchat" stroke={channelColors.webchat} strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -63,16 +77,22 @@ export function ConversationsSection() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(entry: any) => `${entry.name} ${(entry.percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="value"
                 >
                   {mockChannelBreakdown.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: "hsl(var(--popover))", 
+                    borderColor: "hsl(var(--border))", 
+                    borderRadius: "var(--radius)" 
+                  }} 
+                  itemStyle={{ color: "hsl(var(--foreground))" }} 
+                />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -87,11 +107,18 @@ export function ConversationsSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mockAgentLoad} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={100} />
-                <Tooltip />
-                <Bar dataKey="conversations" fill="#3B82F6" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis type="number" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis dataKey="name" type="category" width={100} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: "hsl(var(--popover))", 
+                    borderColor: "hsl(var(--border))", 
+                    borderRadius: "var(--radius)" 
+                  }} 
+                  itemStyle={{ color: "hsl(var(--foreground))" }} 
+                />
+                <Bar dataKey="conversations" fill="hsl(var(--primary))" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

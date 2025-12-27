@@ -3,11 +3,17 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { mockLeadFunnel, mockLeadSources } from "@/lib/mockAnalytics";
 
 export function LeadsSection() {
-  const funnelColors = ["#3B82F6", "#06B6D4", "#22C55E", "#FACC15", "#15803D"];
+  const funnelColors = [
+    "hsl(var(--primary))",
+    "hsl(var(--accent))",
+    "hsl(var(--success))",
+    "hsl(var(--warning))",
+    "hsl(var(--destructive))",
+  ]; // Using design system colors
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Lead Analytics</h2>
+      <h2 className="text-responsive-2xl font-semibold">Lead Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Lead Funnel */}
@@ -19,13 +25,20 @@ export function LeadsSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mockLeadFunnel}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="stage" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="stage" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]}>
                   {mockLeadFunnel.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={funnelColors[index]} />
+                    <Cell key={`cell-${index}`} fill={funnelColors[index % funnelColors.length]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -42,11 +55,18 @@ export function LeadsSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mockLeadSources}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="source" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="leads" fill="#06B6D4" radius={[8, 8, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="source" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
+                <Bar dataKey="leads" fill="hsl(var(--accent))" radius={[8, 8, 0, 0]} /> {/* Using accent color */}
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

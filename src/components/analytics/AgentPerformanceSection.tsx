@@ -15,7 +15,7 @@ import { Star } from "lucide-react";
 export function AgentPerformanceSection() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Agent Performance</h2>
+      <h2 className="text-responsive-2xl font-semibold">Agent Performance</h2>
 
       <Card>
         <CardHeader>
@@ -52,7 +52,7 @@ export function AgentPerformanceSection() {
                     <TableCell className="text-right">{agent.avgResolutionTime}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-[hsl(var(--warning))] text-[hsl(var(--warning))]" /> {/* Using design system color */}
                         <span className="font-medium">{agent.csatScore}</span>
                       </div>
                     </TableCell>

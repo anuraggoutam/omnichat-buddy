@@ -14,7 +14,7 @@ import { mockMessageDelivery, mockCampaignPerformance } from "@/lib/mockAnalytic
 export function CampaignsSection() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Broadcast & Campaign Analytics</h2>
+      <h2 className="text-responsive-2xl font-semibold">Broadcast & Campaign Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Message Delivery Report */}
@@ -26,11 +26,18 @@ export function CampaignsSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mockMessageDelivery}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="status" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="status" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
+                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} /> {/* Using primary color */}
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -71,8 +78,8 @@ export function CampaignsSection() {
                         <Badge
                           className={
                             campaign.status === "Active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
+                              ? "bg-success/10 text-success" // Using design system colors
+                              : "bg-muted/60 text-muted-foreground" // Using design system colors
                           }
                         >
                           {campaign.status}

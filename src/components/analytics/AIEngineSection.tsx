@@ -17,7 +17,7 @@ export function AIEngineSection() {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Brain className="h-6 w-6 text-primary" />
-        <h2 className="text-2xl font-semibold">AI Engine Analytics</h2>
+        <h2 className="text-responsive-2xl font-semibold">AI Engine Analytics</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -58,13 +58,20 @@ export function AIEngineSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={mockAIvsHuman}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
                 <Legend />
-                <Bar dataKey="ai" stackId="a" fill="#8B5CF6" name="AI Handled" />
-                <Bar dataKey="human" stackId="a" fill="#3B82F6" name="Human Handled" />
+                <Bar dataKey="ai" stackId="a" fill="hsl(var(--accent))" name="AI Handled" /> {/* Using accent color */}
+                <Bar dataKey="human" stackId="a" fill="hsl(var(--primary))" name="Human Handled" /> {/* Using primary color */}
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

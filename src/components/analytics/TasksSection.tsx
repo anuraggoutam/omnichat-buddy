@@ -14,9 +14,17 @@ import {
 import { mockTaskBreakdown, mockTaskCompletionTrend } from "@/lib/mockAnalytics";
 
 export function TasksSection() {
+  const taskStatusColors = [
+    "hsl(var(--primary))",    // E.g., for "Open"
+    "hsl(var(--accent))",     // E.g., for "In Progress"
+    "hsl(var(--success))",    // E.g., for "Completed"
+    "hsl(var(--destructive))", // E.g., for "Overdue"
+    "hsl(var(--warning))",    // E.g., for "Pending"
+  ];
+
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Task Analytics</h2>
+      <h2 className="text-responsive-2xl font-semibold">Task Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Task Status Breakdown */}
@@ -33,16 +41,22 @@ export function TasksSection() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(entry: any) => `${entry.status}: ${entry.count}`}
+                  label={({ status, count }) => `${status}: ${count}`}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="count"
                 >
                   {mockTaskBreakdown.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={taskStatusColors[index % taskStatusColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -57,16 +71,23 @@ export function TasksSection() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={mockTaskCompletionTrend}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    borderColor: "hsl(var(--border))",
+                    borderRadius: "var(--radius)"
+                  }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                />
                 <Line
                   type="monotone"
                   dataKey="completed"
-                  stroke="#22C55E"
+                  stroke="hsl(var(--success))"
                   strokeWidth={2}
-                  dot={{ fill: "#22C55E" }}
+                  dot={{ fill: "hsl(var(--success))" }}
                 />
               </LineChart>
             </ResponsiveContainer>

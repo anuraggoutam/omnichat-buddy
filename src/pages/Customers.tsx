@@ -30,6 +30,7 @@ import { ChannelBadge } from "@/components/conversations/ChannelBadge";
 import { CustomerDetailDrawer } from "@/components/customers/CustomerDetailDrawer";
 import { AddCustomerModal } from "@/components/customers/AddCustomerModal";
 import { formatDistanceToNow } from "date-fns";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const statusFilters = [
   { id: "all", label: "All" },
@@ -45,13 +46,17 @@ const sourceChannels = ["All", "WhatsApp", "Instagram", "Facebook", "Website", "
 const getStatusColor = (status: string) => {
   switch (status) {
     case "Active":
-      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      return "bg-success/10 text-success";
     case "Returning":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      return "bg-accent/10 text-accent";
     case "Lead":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      return "bg-warning/10 text-warning";
+    case "New User": // Assuming "New Users" or similar maps to this
+      return "bg-primary/10 text-primary";
+    case "VIP": // Assuming "VIP" maps to this
+      return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400"; // Using a different color for VIP
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+      return "bg-muted/60 text-muted-foreground";
   }
 };
 
@@ -103,20 +108,20 @@ const Customers = () => {
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-3 sm:mb-4 gap-3">
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Customers</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              <h1 className="text-responsive-2xl font-bold text-foreground">Customers</h1>
+              <p className="text-responsive-sm text-muted-foreground mt-1">
                 Manage your customer relationships
               </p>
             </div>
             <div className="flex gap-2 flex-shrink-0">
-              <Button variant="outline" size="sm" className="text-xs sm:text-sm hidden sm:flex">
-                <Upload className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <Button variant="secondary" size="sm" className="hidden sm:flex text-sm"> {/* Changed to secondary, text size */}
+                <Upload className="h-4 w-4 mr-2" /> {/* Standardized icon size */}
                 Import
               </Button>
-              <Button onClick={() => setIsAddModalOpen(true)} size="sm" className="text-xs sm:text-sm">
-                <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Add Customer</span>
-                <span className="sm:hidden">Add</span>
+              <Button onClick={() => setIsAddModalOpen(true)} size="sm" className="text-sm"> {/* Standardized text size, default variant */}
+                <Plus className="h-4 w-4 mr-2" /> {/* Standardized icon size */}
+                <span className="hidden xs:inline">Add Customer</span> {/* Added xs:inline for more compact mobile */}
+                <span className="xs:hidden">Add</span>
               </Button>
             </div>
           </div>
@@ -167,19 +172,17 @@ const Customers = () => {
       <ScrollArea className="flex-1">
         <div className="p-4 sm:p-6">
           {filteredCustomers.length === 0 ? (
-            <div className="rounded-lg border border-border bg-card p-8 sm:p-12 text-center">
-              <UsersIcon className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
-                No customers found yet
-              </h3>
-              <p className="text-sm text-muted-foreground mb-6">
-                Start chatting or import your customer list
-              </p>
-              <Button variant="outline" onClick={() => setIsAddModalOpen(true)} size="sm">
-                <Upload className="h-4 w-4 mr-2" />
-                Import Customers
-              </Button>
-            </div>
+            <Card>
+              <EmptyState
+                icon={<UsersIcon className="h-10 w-10 sm:h-12 sm:w-12" />}
+                title="No customers found yet"
+                description="Start chatting or import your customer list"
+                action={{
+                  label: "Import Customers",
+                  onClick: () => setIsAddModalOpen(true),
+                }}
+              />
+            </Card>
           ) : (
             <div className="rounded-lg border border-border bg-card overflow-x-auto">
               <Table>

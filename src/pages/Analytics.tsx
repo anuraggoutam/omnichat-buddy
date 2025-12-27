@@ -33,8 +33,8 @@ export default function Analytics() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div className="min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold">Analytics</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+          <h1 className="text-responsive-3xl font-bold">Analytics</h1>
+          <p className="text-responsive-base text-muted-foreground mt-1">
             Track performance across sales, conversations, leads, and campaigns
           </p>
         </div>
@@ -66,13 +66,13 @@ export default function Analytics() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="sm" onClick={() => handleExport("csv")} className="text-xs sm:text-sm">
+          <Button variant="default" size="sm" onClick={() => handleExport("csv")} className="h-9 text-xs sm:text-sm">
             <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">CSV</span>
+            <span className="hidden sm:inline">Export CSV</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => handleExport("pdf")} className="text-xs sm:text-sm">
+          <Button variant="default" size="sm" onClick={() => handleExport("pdf")} className="h-9 text-xs sm:text-sm">
             <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">PDF</span>
+            <span className="hidden sm:inline">Export PDF</span>
           </Button>
         </div>
       </div>
@@ -146,12 +146,12 @@ export default function Analytics() {
       <TasksSection />
 
       {/* Custom Reports CTA */}
-      <Card className="p-8 text-center">
-        <h3 className="text-xl font-semibold mb-2">Need Custom Reports?</h3>
+      <Card className="p-8 text-center hover-lift"> {/* Added hover-lift */}
+        <h3 className="text-responsive-xl font-semibold mb-2">Need Custom Reports?</h3> {/* Updated to text-responsive-xl */}
         <p className="text-muted-foreground mb-4">
           Create custom analytics reports with your own metrics and dimensions
         </p>
-        <Button>Create Custom Report</Button>
+        <Button variant="default">Create Custom Report</Button> {/* Changed variant to default */}
       </Card>
     </div>
   );

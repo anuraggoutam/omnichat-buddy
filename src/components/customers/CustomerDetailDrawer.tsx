@@ -21,16 +21,21 @@ interface CustomerDetailDrawerProps {
   onClose: () => void;
 }
 
+// Re-using the getStatusColor logic from Customers.tsx
 const getStatusColor = (status: string) => {
   switch (status) {
     case "Active":
-      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      return "bg-success/10 text-success";
     case "Returning":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      return "bg-accent/10 text-accent";
     case "Lead":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      return "bg-warning/10 text-warning";
+    case "New User":
+      return "bg-primary/10 text-primary";
+    case "VIP":
+      return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400";
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+      return "bg-muted/60 text-muted-foreground";
   }
 };
 
@@ -46,7 +51,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
   if (!open) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-[480px] bg-card border-l border-border shadow-xl z-50 flex flex-col animate-slide-in-right">
+    <div className="fixed inset-y-0 right-0 w-full sm:w-[400px] md:w-[480px] bg-card border-l border-border shadow-xl z-50 flex flex-col animate-slide-in-right">
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-start justify-between mb-4">
@@ -55,7 +60,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
               {customer.avatar}
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">{customer.name}</h2>
+              <h2 className="text-responsive-xl font-semibold text-foreground">{customer.name}</h2>
               <p className="text-sm text-muted-foreground mt-1">{customer.phone}</p>
               <div className="flex items-center gap-2 mt-2">
                 <ChannelBadge channel={customer.source} />
@@ -76,11 +81,11 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
         </div>
 
         <div className="flex gap-2">
-          <Button className="flex-1">
+          <Button className="flex-1 text-sm"> {/* Standardized text size */}
             <MessageSquare className="h-4 w-4 mr-2" />
             Send Message
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button variant="outline" className="flex-1 text-sm"> {/* Standardized text size */}
             View in Conversations
           </Button>
         </div>
@@ -197,8 +202,7 @@ export const CustomerDetailDrawer = ({ customer, open, onClose }: CustomerDetail
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant="secondary"
-                          className="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                          className="bg-success/10 text-success" // Using design system colors
                         >
                           {order.status}
                         </Badge>

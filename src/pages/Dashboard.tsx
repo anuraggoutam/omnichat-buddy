@@ -137,13 +137,13 @@ This will help me give you more actionable recommendations!`,
       <div className="flex-1 flex flex-col min-h-0 relative z-10">
         {!hasMessages ? (
           // Welcome State - Centered like Lovable
-          <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8">
+          <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center space-y-6 md:space-y-8">
             {/* Hero Headline */}
-            <div className="text-center space-y-4 max-w-3xl animate-fade-in">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+            <div className="space-y-3 md:space-y-4 max-w-4xl animate-fade-in">
+              <h1 className="text-responsive-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground">
                 How can I help you manage sales today?
               </h1>
-              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              <p className="text-responsive-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Your AI assistant for WhatsApp, Instagram & social media sales
               </p>
             </div>

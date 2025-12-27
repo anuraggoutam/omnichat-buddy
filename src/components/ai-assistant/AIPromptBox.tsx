@@ -8,6 +8,7 @@ import {
   Mic,
   Send,
   Sparkles,
+  Loader2, // Import Loader2 for spinner
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -72,7 +73,8 @@ export const AIPromptBox = ({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 rounded-full hover:bg-muted/80"
+              className="h-8 w-8 rounded-full hover:bg-muted/80 text-muted-foreground" // Added text-muted-foreground
+              aria-label="Add attachments"
             >
               <Plus className="h-4 w-4" />
             </Button>
@@ -80,6 +82,7 @@ export const AIPromptBox = ({
               variant="ghost"
               size="sm"
               className="h-8 rounded-full hover:bg-muted/80 gap-1.5 text-muted-foreground"
+              aria-label="Attach file"
             >
               <Paperclip className="h-4 w-4" />
               <span className="text-xs hidden sm:inline">Attach</span>
@@ -91,6 +94,7 @@ export const AIPromptBox = ({
               variant="ghost"
               size="sm"
               className="h-8 rounded-full hover:bg-muted/80 gap-1.5 text-muted-foreground"
+              aria-label="Start a new chat"
             >
               <MessageSquare className="h-4 w-4" />
               <span className="text-xs hidden sm:inline">Chat</span>
@@ -99,6 +103,7 @@ export const AIPromptBox = ({
               variant="ghost"
               size="icon"
               className="h-8 w-8 rounded-full hover:bg-muted/80 text-muted-foreground"
+              aria-label="Record voice message"
             >
               <Mic className="h-4 w-4" />
             </Button>
@@ -109,11 +114,16 @@ export const AIPromptBox = ({
               className={cn(
                 "h-9 w-9 rounded-full transition-all duration-200",
                 message.trim()
-                  ? "bg-foreground text-background hover:bg-foreground/90"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90" // Changed to use primary brand color
                   : "bg-muted text-muted-foreground"
               )}
+              aria-label="Send message"
             >
-              <Send className="h-4 w-4" />
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>

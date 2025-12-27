@@ -49,20 +49,20 @@ const quickActions = [
 
 export const QuickActions = ({ onActionClick }: QuickActionsProps) => {
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       <p className="text-sm text-muted-foreground text-center mb-4">
         Quick actions to get started
       </p>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {quickActions.map((action) => (
           <Button
             key={action.label}
             variant="outline"
-            className="h-auto py-3 px-4 flex flex-col items-center gap-2 text-center hover:bg-accent/5 hover:border-primary/30 transition-all group"
+            className="h-28 sm:h-24 py-3 px-4 flex flex-col items-center justify-center gap-2 text-center hover:bg-muted transition-all group border-dashed"
             onClick={() => onActionClick(action.prompt)}
           >
             <action.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="text-xs font-medium leading-tight">{action.label}</span>
+            <span className="text-xs font-medium leading-tight text-responsive-xs">{action.label}</span>
           </Button>
         ))}
       </div>

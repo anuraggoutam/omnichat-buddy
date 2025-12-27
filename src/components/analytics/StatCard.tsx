@@ -16,13 +16,13 @@ export function StatCard({ title, value, change, trend, icon: Icon, invertChange
   const trendData = trend.map((value, index) => ({ index, value }));
 
   return (
-    <Card>
+    <Card className="hover-lift"> {/* Added hover-lift class */}
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-2">
           <div className="p-2 bg-primary/10 rounded-lg">
             <Icon className="h-4 w-4 text-primary" />
           </div>
-          <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? "text-green-600" : "text-red-600"}`}>
+          <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? "text-success" : "text-destructive"}`}> {/* Used text-success and text-destructive */}
             {isPositive ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
             {Math.abs(change)}%
           </div>
@@ -37,7 +37,7 @@ export function StatCard({ title, value, change, trend, icon: Icon, invertChange
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke={isPositive ? "#22c55e" : "#ef4444"}
+                stroke={isPositive ? "hsl(var(--success))" : "hsl(var(--destructive))"} // Used CSS variables
                 strokeWidth={1.5}
                 dot={false}
               />
