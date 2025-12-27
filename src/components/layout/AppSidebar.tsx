@@ -21,10 +21,6 @@ import {
   CreditCard,
   Shield,
   Zap,
-  Globe,
-  Layout,
-  Palette,
-  FileCode,
 } from "lucide-react";
 import {
   Sidebar,
@@ -64,13 +60,6 @@ const aiToolsItems = [
 const salesCrmItems = [
   { title: "Leads", url: "/leads", icon: Target },
   { title: "Pipeline", url: "/settings/pipeline", icon: TrendingUp },
-];
-
-const webBuilderItems = [
-  { title: "Pages", url: "/web-builder/pages", icon: FileCode },
-  { title: "Templates", url: "/web-builder/templates", icon: Layout },
-  { title: "Design", url: "/web-builder/design", icon: Palette },
-  { title: "Domains", url: "/web-builder/domains", icon: Globe, badge: "NEW" },
 ];
 
 const integrationsItems = [
@@ -206,34 +195,6 @@ export function AppSidebar() {
                     >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Web Builder */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Web Builder</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {webBuilderItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      className="hover:bg-sidebar-accent"
-                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                      {item.badge && !isCollapsed && (
-                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
-                          {item.badge}
-                        </span>
-                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
